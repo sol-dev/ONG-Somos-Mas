@@ -10,13 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("api/v1/categories")
+@RequestMapping("/categories")
 public class CategoryController {
 
 
-    @PostMapping("/save")
+    @PostMapping
     public ResponseEntity<CategoryDTO> save(@Valid @RequestBody CategoryDTO categoryDTO){
-        
 
         return null;
     }
