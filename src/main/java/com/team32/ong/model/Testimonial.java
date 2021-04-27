@@ -7,6 +7,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
@@ -21,9 +22,11 @@ public class Testimonial {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotEmpty(message = "Name may not be empty")
     @Column(name="name", nullable = false)
     private String name;
 
+    @NotEmpty(message = "Image may not be empty")
     @Column(name="image")
     private String image;
 
