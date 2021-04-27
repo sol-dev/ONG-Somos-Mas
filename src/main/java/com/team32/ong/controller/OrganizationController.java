@@ -5,6 +5,7 @@ import com.team32.ong.model.OrganizationEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -22,18 +23,17 @@ public class OrganizationController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Organization> save(@RequestBody Organization organization){
+    public ResponseEntity<Organization> save(@Valid @RequestBody Organization organization){
         return null;
     }
 
     @PostMapping("{idOrganization}")
-    public ResponseEntity<Organization> edit(@PathVariable("idOrganization") Long idOrganization){
+    public ResponseEntity<Organization> edit(@Valid @PathVariable("idOrganization") Long idOrganization){
         return null;
     }
 
     @DeleteMapping("/{idOrganization}")
     public ResponseEntity delete(@PathVariable("idOrganization") Long idOrganization){
-
         return null;
     }
 
