@@ -1,7 +1,5 @@
 package com.team32.ong.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -9,7 +7,7 @@ import java.sql.Timestamp;
 
 @Entity
 @Table
-@Data @Builder
+@Data
 public class OrganizationEntity {
 
     @Id

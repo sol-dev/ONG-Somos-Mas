@@ -1,6 +1,5 @@
 package com.team32.ong.dto;
 
-import com.team32.ong.model.OrganizationEntity;
 import lombok.Data;
 
 @Data
