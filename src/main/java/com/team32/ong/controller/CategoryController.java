@@ -1,7 +1,9 @@
 package com.team32.ong.controller;
 
 import com.team32.ong.dto.CategoryDTO;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,7 +15,8 @@ public class CategoryController {
 
 
     @PostMapping("/save")
-    public CategoryDTO save(@Valid CategoryDTO categoryDTO){
+    public ResponseEntity<CategoryDTO> save(@Valid @RequestBody CategoryDTO categoryDTO){
+        
 
         return null;
     }
