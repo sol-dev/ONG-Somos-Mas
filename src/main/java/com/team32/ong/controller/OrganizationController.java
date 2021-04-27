@@ -25,6 +25,10 @@ public class OrganizationController {
         return null;
     }
 
+    @PostMapping("{idOrganization}")
+    public ResponseEntity<Organization> edit(@PathVariable("idOrganization") Long idOrganization){
+        return null;
+    }
 
 
     @DeleteMapping("/{idOrganization}")
