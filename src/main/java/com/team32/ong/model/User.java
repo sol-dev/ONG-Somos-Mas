@@ -37,6 +37,7 @@ public class User implements Serializable {
     @Column(length = 60)
     private String password;
     private String photo;
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "roleId", referencedColumnName = "id")
     private Role role;
