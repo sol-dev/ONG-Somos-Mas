@@ -1,6 +1,7 @@
 package com.team32.ong.controller;
 
 import com.team32.ong.dto.Organization;
+import com.team32.ong.model.OrganizationEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,9 +31,11 @@ public class OrganizationController {
         return null;
     }
 
-
     @DeleteMapping("/{idOrganization}")
     public ResponseEntity delete(@PathVariable("idOrganization") Long idOrganization){
+
         return null;
     }
+
+
 }

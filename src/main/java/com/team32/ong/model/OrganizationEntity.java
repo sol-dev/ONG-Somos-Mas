@@ -1,24 +1,26 @@
 package com.team32.ong.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import org.springframework.data.jpa.repository.Temporal;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
 @Table
-@Data
+@Data @Builder
 public class OrganizationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "image")
+    @Column(name = "image", nullable = false)
     private String image;
 
     @Column(name = "address")
@@ -27,7 +29,7 @@ public class OrganizationEntity {
     @Column(name = "phone")
     private Integer phone;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     private String email;
 
     @Column (name = "welcome_text")
@@ -39,6 +41,7 @@ public class OrganizationEntity {
     @Column(name = "deleted")
     private Boolean deleted;
 
-    @Column(name = "date")
+    @Temporal(TemporalType.TIMESTAMP)
     private Timestamp date;
+
 }
