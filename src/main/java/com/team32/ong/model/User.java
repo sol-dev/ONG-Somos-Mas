@@ -41,6 +41,7 @@ public class User implements Serializable {
     @ManyToOne
     @JoinColumn(name = "roleId", referencedColumnName = "id")
     private Role role;
+    private boolean deleted;
 
     public User(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
