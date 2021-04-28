@@ -45,7 +45,7 @@ public class OrganizationEntity {
     @Column(name = "deleted")
     private Boolean deleted;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "date")
     private Timestamp date;
 
 }
