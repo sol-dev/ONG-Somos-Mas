@@ -1,14 +1,16 @@
 package com.team32.ong.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.PrePersist;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -21,6 +23,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "activities")
 @SQLDelete(sql="UPDATE activities SET delete = true WHERE id = ?")
 @Where(clause = "delete = false")
 public class Activities {
@@ -28,17 +31,13 @@ public class Activities {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@NotEmpty
 	private String name;
+	@NotEmpty
+	@Size(min = 15, max = 100)
 	private String content;
 	private String image;
 	private Boolean delete;
-	
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date create_at;
-	
-	@PrePersist
-	private void prePersist() {
-		this.create_at = new Date();
-		this.delete = false;
-	}	
+	private LocalDateTime create_at;	
 }
