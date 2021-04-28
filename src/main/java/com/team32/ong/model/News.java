@@ -40,7 +40,7 @@ public class News implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "news_id")
     private Long id;
 
     @Size(min = MIN_NAME_LENGTH, message = "El nombre debe tener al menos " + MIN_NAME_LENGTH + " caracteres.")
@@ -63,7 +63,7 @@ public class News implements Serializable{
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
-        name = "news-to_category",
+        name = "news_to_category",
         joinColumns = @JoinColumn(name = "news_id", nullable = false),
         inverseJoinColumns = @JoinColumn(name="category_id", nullable = false)
     )

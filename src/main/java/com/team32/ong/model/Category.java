@@ -3,6 +3,7 @@ package com.team32.ong.model;
 
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -42,7 +43,7 @@ public class Category {
 	private String description;
 	private String image;
 	@Temporal(TemporalType.TIMESTAMP)
-	private LocalDateTime regdate;
+	private Date regdate;
 	private boolean deleted;
 	
 	
