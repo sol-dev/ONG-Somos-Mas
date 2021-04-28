@@ -24,7 +24,7 @@ public class CategoryController {
     public ResponseEntity<CategoryDTO> save(@Valid @RequestBody CategoryDTO categoryDTO, BindingResult result){
 
         if (result.hasErrors()){
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }else {
             return new ResponseEntity<>(categoryService.save(categoryDTO), HttpStatus.CREATED);
         }

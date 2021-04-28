@@ -39,7 +39,7 @@ public class Category {
 	private String name;
 	private String description;
 	private String image;
-	@Temporal(TemporalType.TIMESTAMP)
+	//@Temporal(TemporalType.TIMESTAMP)
 	private LocalDateTime regdate;
 	private boolean deleted;
 }
