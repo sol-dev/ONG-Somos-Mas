@@ -1,6 +1,5 @@
 package com.team32.ong.dto;
 
-import com.team32.ong.model.Role;
 import lombok.Getter;
 
 import javax.validation.constraints.Email;
