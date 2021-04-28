@@ -4,6 +4,8 @@ import com.team32.ong.dto.CategoryDTO;
 import com.team32.ong.model.Category;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 public class CategoryMapper {
 
@@ -15,6 +17,7 @@ public class CategoryMapper {
                 .name(categoryDTO.getName())
                 .description(categoryDTO.getDescription())
                 .image(categoryDTO.getImage())
+                .regdate(LocalDateTime.now())
                 .build();
     }
 

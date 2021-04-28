@@ -1,14 +1,17 @@
-package com.team32.ong.service;
+package com.team32.ong.service.impl;
 
 import com.team32.ong.dto.CategoryDTO;
 import com.team32.ong.mapper.CategoryMapper;
 import com.team32.ong.model.Category;
 import com.team32.ong.repository.CategoryRepository;
+import com.team32.ong.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+
 @Service
-public class CategoryImplService implements CategoryService{
+public class CategoryImplService implements CategoryService {
 
     @Autowired
     private CategoryRepository repo;
@@ -19,6 +22,8 @@ public class CategoryImplService implements CategoryService{
     @Override
     public CategoryDTO save(CategoryDTO categoryDTO){
         Category category = repo.save(mapper.toCategoy(categoryDTO));
+
+
         return mapper.toCategoyDTO(category);
     }
 }
