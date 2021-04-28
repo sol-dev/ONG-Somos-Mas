@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,15 +21,23 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
 import org.hibernate.annotations.CreationTimestamp;
-import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
+@Data
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @SQLDelete(sql = "UPDATE posts SET deleted=true WHERE id=?")
 @Where(clause = "deleted = false")
 @Table(name = "news")
@@ -40,7 +49,7 @@ public class News implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "news_id")
     private Long id;
 
     @Size(min = MIN_NAME_LENGTH, message = "El nombre debe tener al menos " + MIN_NAME_LENGTH + " caracteres.")
@@ -63,7 +72,7 @@ public class News implements Serializable{
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
-        name = "news-to_category",
+        name = "news_to_category",
         joinColumns = @JoinColumn(name = "news_id", nullable = false),
         inverseJoinColumns = @JoinColumn(name="category_id", nullable = false)
     )
