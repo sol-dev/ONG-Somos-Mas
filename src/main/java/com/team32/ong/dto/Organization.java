@@ -1,11 +1,13 @@
 package com.team32.ong.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
-@Data
+@Data @AllArgsConstructor @NoArgsConstructor
 public class Organization {
 
     private Long id;

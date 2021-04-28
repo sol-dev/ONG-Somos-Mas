@@ -1,13 +1,19 @@
 package com.team32.ong.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table
-@Data
+@Table(name = "organization")
+@Data @AllArgsConstructor @NoArgsConstructor
+@SQLDelete(sql = "UPDATE organization SET deleted=true WHERE id = ?")
+@Where(clause = "deleted = false")
 public class OrganizationEntity {
 
     @Id
