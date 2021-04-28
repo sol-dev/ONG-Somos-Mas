@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Optional;
 
@@ -20,11 +21,21 @@ public class TestimonialController {
     TestimonialService testimonialService;
 
     @PostMapping("/testimonials")
-    public ResponseEntity<TestimonialDto> saveNewTestimonial(@Valid @RequestBody TestimonialDto newTestimonialDto) {
+    public ResponseEntity<TestimonialDto> saveNewTestimonial(@Valid @RequestBody TestimonialDto newTestimonialDto,
+
+                                                             BindingResult result) {
+        if (result.hasErrors()){
+            return new ResponseEntity(result.getFieldError().toString(), HttpStatus.BAD_REQUEST);
+        }
+
         TestimonialDto dtoSaved = null;
+
         try{
+
             dtoSaved = testimonialService.save(newTestimonialDto);
+
             return ResponseEntity.of(Optional.of(dtoSaved));
+
         }catch (Exception e){
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
