@@ -25,7 +25,5 @@ public class CategoryController {
         }else{
             return new ResponseEntity(categoryDTO, HttpStatus.CREATED);
         }
-
-
     }
 }
