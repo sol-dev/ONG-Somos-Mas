@@ -11,6 +11,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/organization")
 public class OrganizationController {
-    
+
 
 }
