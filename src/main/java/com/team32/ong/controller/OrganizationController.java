@@ -11,31 +11,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/organization")
 public class OrganizationController {
-
-    @GetMapping()
-    public ResponseEntity<List<Organization>> getAll(){
-        return null;
-    }
-
-    @GetMapping("/{idOrganization}")
-    public ResponseEntity<Organization> getById(@PathVariable("idOrganization") Long idOrganization){
-        return null;
-    }
-
-    @PostMapping("/create")
-    public ResponseEntity<Organization> save(@Valid @RequestBody Organization organization){
-        return null;
-    }
-
-    @PostMapping("{idOrganization}")
-    public ResponseEntity<Organization> edit(@Valid @PathVariable("idOrganization") Long idOrganization){
-        return null;
-    }
-
-    @DeleteMapping("/{idOrganization}")
-    public ResponseEntity delete(@PathVariable("idOrganization") Long idOrganization){
-        return null;
-    }
-
+    
 
 }
