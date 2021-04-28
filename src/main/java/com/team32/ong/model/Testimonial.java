@@ -36,7 +36,6 @@ public class Testimonial {
     @Column(name="deleted")
     private Boolean deleted;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="registDate")
     private LocalDateTime registDate;
 
