@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
@@ -42,6 +43,9 @@ public class User implements Serializable {
     @JoinColumn(name = "roleId", referencedColumnName = "id")
     private Role role;
     private boolean deleted;
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime create_at;
+
 
     public User(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;

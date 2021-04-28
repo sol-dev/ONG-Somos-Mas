@@ -3,19 +3,20 @@ package com.team32.ong.dto;
 import lombok.Getter;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Getter
 public class NewuserDto {
 
-    @NotNull
+    @NotEmpty
     private String firstName;
-    @NotNull
+    @NotEmpty
     private String lastName;
-    @NotNull
+    @NotEmpty
     @Email
     private String email;
-    @NotNull
+    @NotEmpty
     private String password;
     @NotNull
     private Role role;
