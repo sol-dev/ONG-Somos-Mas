@@ -6,7 +6,13 @@ import com.team32.ong.model.Testimonial;
 import com.team32.ong.repository.TestimonialRepository;
 import com.team32.ong.service.TestimonialService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
+@Service
+@Transactional
 public class TestimonialServiceImpl implements TestimonialService {
 
     @Autowired
@@ -17,8 +23,10 @@ public class TestimonialServiceImpl implements TestimonialService {
 
     @Override
     public TestimonialDto save(TestimonialDto testimonialDto) {
+        Testimonial testimonialToSave =testimonialMapper.dtoToEntity(testimonialDto);
+        testimonialToSave.setRegistDate(LocalDateTime.now());
 
-        Testimonial testimonial = testimonialRepository.save(testimonialMapper.dtoToEntity(testimonialDto));
+        Testimonial testimonial = testimonialRepository.save(testimonialToSave);
 
         TestimonialDto testimonialDtoSaved = testimonialMapper.modelToDto(testimonial);
 
