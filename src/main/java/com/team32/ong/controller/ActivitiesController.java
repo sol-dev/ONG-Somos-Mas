@@ -45,7 +45,7 @@ public class ActivitiesController {
         }catch (Exception e){
             response.put("message", "Error al Guardar Actividad");
             response.put("error", e.getMessage());
-            return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         response.put("message", "Actividad Guardada con exito!");
         response.put("activity", activityNew);
