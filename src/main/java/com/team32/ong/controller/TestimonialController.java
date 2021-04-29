@@ -21,6 +21,7 @@ public class TestimonialController {
     @Autowired
     TestimonialService testimonialService;
 
+    @PostMapping
     public ResponseEntity<TestimonialDto> saveNewTestimonial(@Valid @RequestBody TestimonialDto newTestimonialDto,
                                                              BindingResult result) {
         if (result.hasErrors()){
