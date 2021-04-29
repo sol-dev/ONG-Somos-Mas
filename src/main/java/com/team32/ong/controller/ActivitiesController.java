@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/activities/")
+@RequestMapping("/api/v1/activities")
 @CrossOrigin
 public class ActivitiesController {
 
