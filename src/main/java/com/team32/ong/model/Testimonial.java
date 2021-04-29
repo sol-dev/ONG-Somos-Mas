@@ -8,7 +8,7 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Table (name = "Testimonials")
 @SQLDelete(sql = "UPDATE categories SET deleted=true WHERE id = ?")
 @Where(clause = "deleted = false")
-public class Testimonial {
+public class Testimonial extends Auditable<Date>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,8 +35,5 @@ public class Testimonial {
 
     @Column(name="deleted")
     private Boolean deleted;
-
-    @Column(name="registDate")
-    private LocalDateTime registDate;
-
+    
 }
