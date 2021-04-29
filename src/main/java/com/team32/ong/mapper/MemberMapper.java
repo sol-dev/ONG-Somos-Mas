@@ -1,33 +1,23 @@
 package com.team32.ong.mapper;
 
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
+
 import com.team32.ong.dto.MemberDTO;
 import com.team32.ong.model.Member;
 
+@Component
 public class MemberMapper {
 
-	public Member toMember(MemberDTO member) {
-		return Member
-				.builder()
-				.memberId(member.getMemberId())
-				.name(member.getName())
-				.facebookUrl(member.getFacebookUrl())
-				.instagramUrl(member.getInstagramUrl())
-				.linkedinUrl(member.getLinkedinUrl())
-				.image(member.getImage())
-				.description(member.getDescription())
-				.build();
+	public Member toMember(MemberDTO memberDTO) {
+		ModelMapper mapper = new ModelMapper();
+		Member member = mapper.map(memberDTO, Member.class);
+		return member;
 	}
 	
 	public MemberDTO toMemberDTO(Member member) {
-		return MemberDTO
-				.builder()
-				.memberId(member.getMemberId())
-				.name(member.getName())
-				.facebookUrl(member.getFacebookUrl())
-				.instagramUrl(member.getInstagramUrl())
-				.linkedinUrl(member.getLinkedinUrl())
-				.image(member.getImage())
-				.description(member.getDescription())
-				.build();
+		ModelMapper mapper = new ModelMapper();
+		MemberDTO memberDTO = mapper.map(member, MemberDTO.class);
+		return null;
 	}
 }

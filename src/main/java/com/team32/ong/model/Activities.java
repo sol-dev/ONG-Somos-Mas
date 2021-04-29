@@ -24,8 +24,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "activities")
-@SQLDelete(sql="UPDATE activities SET delete = true WHERE id = ?")
-@Where(clause = "delete = false")
+@SQLDelete(sql="UPDATE activities SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
 public class Activities {
 
 	@Id
@@ -37,7 +37,7 @@ public class Activities {
 	@Size(min = 15, max = 100)
 	private String content;
 	private String image;
-	private Boolean delete;
+	private Boolean deleted;
 	@Temporal(TemporalType.TIMESTAMP)
 	private LocalDateTime create_at;	
 }
