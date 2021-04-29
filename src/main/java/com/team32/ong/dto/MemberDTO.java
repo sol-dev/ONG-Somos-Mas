@@ -11,22 +11,22 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-@Data @Builder
+@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class MemberDTO {
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long memberId;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long memberId;
 	@NotEmpty
 	@Size(min = 3, max = 10)
 	private String name;
-    private String facebookUrl;
-    private String instagramUrl;
-    @NotEmpty
-    private String linkedinUrl;
-    private String image;
-    private String description;
+	private String facebookUrl;
+	private String instagramUrl;
+	@NotEmpty
+	private String linkedinUrl;
+	private String image;
+	private String description;
 }
