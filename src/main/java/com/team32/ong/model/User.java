@@ -11,6 +11,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "users")
@@ -19,7 +20,7 @@ import java.time.LocalDateTime;
 @Setter
 @SQLDelete(sql = "UPDATE posts SET deleted=true WHERE id=?")
 @Where(clause = "deleted = false")
-public class User implements Serializable {
+public class User implements Serializable extends Auditable<Date>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,8 +44,6 @@ public class User implements Serializable {
     @JoinColumn(name = "roleId", referencedColumnName = "id")
     private Role role;
     private boolean deleted;
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime create_at;
 
 
     public User(String firstName, String lastName, String email, String password) {
