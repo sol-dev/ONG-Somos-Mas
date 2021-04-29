@@ -36,11 +36,8 @@ public class MemberController {
 		
 		if(result.hasErrors()) {
 			List<String> errores = result.getFieldErrors()
-				//Se convierte en stream
 				.stream()
-				//Cada error se convierte en un string
 				.map(err -> "El campo '"+err.getField()+"' "+err.getDefaultMessage())
-				//Se convierte en una lista
 				.collect(Collectors.toList());
 			response.put("errores", errores);
 			return new ResponseEntity<Map<String, Object>>(response,HttpStatus.BAD_REQUEST);
