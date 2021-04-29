@@ -1,7 +1,8 @@
 package com.team32.ong.model;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,36 +13,32 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 @Entity
 @Table(name = "activities")
-@SQLDelete(sql="UPDATE activities SET delete = true WHERE id = ?")
-@Where(clause = "delete = false")
-public class Activities {
+@Data @AllArgsConstructor @NoArgsConstructor @Builder
+@SQLDelete(sql="UPDATE activities SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
+public class Activities extends Auditable<Date>{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
 	@NotEmpty
+	@Column(name = "name", nullable = false)
 	private String name;
 	@NotEmpty
-	@Size(min = 15, max = 100)
+	@Column(name = "content")
 	private String content;
+	@NotEmpty
+	@Column(name = "image", nullable = false)
 	private String image;
-	private Boolean delete;
-	@CreatedDate
-	private LocalDateTime create_at;
-	@LastModifiedDate
-	private LocalDateTime update_at;
+	@Column(name = "deleted")
+	private Boolean deleted;
 }
