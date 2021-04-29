@@ -1,20 +1,21 @@
 package com.team32.ong.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 @Table(name = "organization")
-@Data @AllArgsConstructor @NoArgsConstructor
+@Data @AllArgsConstructor @NoArgsConstructor @Builder
 @SQLDelete(sql = "UPDATE organization SET deleted=true WHERE id = ?")
 @Where(clause = "deleted = false")
-public class OrganizationEntity {
+public class OrganizationEntity extends Auditable<Date>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,7 +46,5 @@ public class OrganizationEntity {
     @Column(name = "deleted")
     private Boolean deleted;
 
-    @Column(name = "date")
-    private Timestamp date;
 
 }
