@@ -10,6 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,8 +24,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 @Table(name="member")
-public class Member {
-	
+public class Member extends Auditable<Date>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
@@ -46,10 +48,7 @@ public class Member {
 
     @Column(name = "description", nullable = true)
     private String description;
-
-    @Column(name = "createdAt", nullable = false)
-    private Date createdAt;
-
+    
     @NotEmpty
     @Column(name = "deleted", nullable = false)
     private boolean deleted;
