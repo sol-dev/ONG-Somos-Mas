@@ -1,5 +1,6 @@
 package com.team32.ong.controller;
 
+import com.team32.ong.exception.custom.InvalidDataException;
 import com.team32.ong.service.impl.ActivitieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,9 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/activities/")
@@ -32,23 +31,14 @@ public class ActivitiesController {
         Activities activityNew = null;
 
         if (result.hasErrors()){
-            List<String> errors = result.getFieldErrors()
-                    .stream()
-                    .map(err -> "El Campo " + err.getField() + " " + err.getDefaultMessage())
-                    .collect(Collectors.toList());
-            response.put("errors", errors);
-            return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+            throw new InvalidDataException(result);
         }
 
-        try {
+
             activityNew = activitieService.save(activities, file);
-        }catch (Exception e){
-            response.put("message", "Error al Guardar Actividad");
-            response.put("error", e.getMessage());
-            return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        response.put("message", "Actividad Guardada con exito!");
+
+                response.put("message", "Actividad Guardada con exito!");
         response.put("activity", activityNew);
-        return new ResponseEntity(response, HttpStatus.OK);
+        return new ResponseEntity(response, HttpStatus.CREATED);
     }
 }
