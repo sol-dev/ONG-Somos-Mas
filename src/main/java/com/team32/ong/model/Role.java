@@ -6,13 +6,14 @@ import org.hibernate.annotations.GeneratorType;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Table(name = "roles")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Role {
+public class Role implements Serializable extends Auditable<Date>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +23,7 @@ public class Role {
     private String name;
     @Column(length = 50)
     private String description;
+
 
     public Role(String name, String description) {
         this.name = name;
