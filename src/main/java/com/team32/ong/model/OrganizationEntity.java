@@ -6,9 +6,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+<<<<<<< HEAD
 import java.util.Date;
+=======
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+>>>>>>> 8726a148dd0cb51ad74f45c845927570edfc1011
 
 @Entity
 @Table(name = "organization")
@@ -45,6 +52,6 @@ public class OrganizationEntity extends Auditable<Date>{
 
     @Column(name = "deleted")
     private Boolean deleted;
-
+    
 
 }
