@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/categories")
+@RequestMapping("api/v1/categories")
 public class CategoryController {
 
     @Autowired
@@ -24,7 +24,7 @@ public class CategoryController {
     public ResponseEntity<CategoryDTO> save(@Valid @RequestBody CategoryDTO categoryDTO, BindingResult result){
 
         if (result.hasErrors()){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }else {
             return new ResponseEntity<>(categoryService.save(categoryDTO), HttpStatus.CREATED);
         }
