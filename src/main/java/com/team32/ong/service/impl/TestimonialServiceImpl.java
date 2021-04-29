@@ -1,6 +1,7 @@
 package com.team32.ong.service.impl;
 
 import com.team32.ong.dto.TestimonialDto;
+import com.team32.ong.exception.EmptyInputException;
 import com.team32.ong.mapper.TestimonialMapper;
 import com.team32.ong.model.Testimonial;
 import com.team32.ong.repository.TestimonialRepository;
@@ -23,6 +24,12 @@ public class TestimonialServiceImpl implements TestimonialService {
 
     @Override
     public TestimonialDto save(TestimonialDto testimonialDto) {
+
+        if(testimonialDto.getName().isEmpty() || testimonialDto.getName().length() == 0 ||
+                testimonialDto.getImage().length() == 0 || testimonialDto.getImage().isEmpty()){
+            throw new EmptyInputException("601", "Input Fields are empty");
+        }
+
         Testimonial testimonialToSave =testimonialMapper.dtoToEntity(testimonialDto);
 
         Testimonial testimonial = testimonialRepository.save(testimonialToSave);

@@ -22,23 +22,13 @@ public class TestimonialController {
     TestimonialService testimonialService;
 
     @PostMapping
-    public ResponseEntity<TestimonialDto> saveNewTestimonial(@Valid @RequestBody TestimonialDto newTestimonialDto,
-                                                             BindingResult result) {
-        if (result.hasErrors()){
-            return new ResponseEntity(result.getFieldError().toString(), HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<TestimonialDto> saveNewTestimonial(@Valid @RequestBody TestimonialDto newTestimonialDto) {
+
 
         TestimonialDto dtoSaved = null;
-
-        try{
 
             dtoSaved = testimonialService.save(newTestimonialDto);
 
             return ResponseEntity.of(Optional.of(dtoSaved));
-
-        }catch (Exception e){
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
     }
 }
