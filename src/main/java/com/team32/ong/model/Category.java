@@ -48,8 +48,5 @@ public class Category {
 	
 	@ManyToMany(mappedBy = "categories")
 	private Set<News> news;
-	    
-	public Category() {
-	    this.news = new HashSet<>();    	
-	}
+
 }

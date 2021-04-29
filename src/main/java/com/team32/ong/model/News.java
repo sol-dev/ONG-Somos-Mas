@@ -21,7 +21,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import org.hibernate.annotations.CreationTimestamp;
+
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -29,6 +32,8 @@ import org.hibernate.annotations.Where;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @SQLDelete(sql = "UPDATE posts SET deleted=true WHERE id=?")
 @Where(clause = "deleted = false")
 @Table(name = "news")
@@ -64,9 +69,5 @@ public class News  extends Auditable<Date> implements Serializable{
     private Set<Category> categories;
 
     private boolean deleted;
-
-    public News() {
-        this.categories = new HashSet<Category>();
-    }
     
 }
