@@ -1,4 +1,4 @@
-package com.team32.config;
+package com.team32.ong.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
