@@ -24,7 +24,6 @@ public class TestimonialServiceImpl implements TestimonialService {
     @Override
     public TestimonialDto save(TestimonialDto testimonialDto) {
         Testimonial testimonialToSave =testimonialMapper.dtoToEntity(testimonialDto);
-        testimonialToSave.setRegistDate(LocalDateTime.now());
 
         Testimonial testimonial = testimonialRepository.save(testimonialToSave);
 

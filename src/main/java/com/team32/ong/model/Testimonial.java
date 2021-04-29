@@ -35,5 +35,5 @@ public class Testimonial extends Auditable<Date>{
 
     @Column(name="deleted")
     private Boolean deleted;
-    
+
 }
