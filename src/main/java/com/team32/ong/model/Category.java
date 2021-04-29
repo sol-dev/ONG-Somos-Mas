@@ -1,8 +1,6 @@
 package com.team32.ong.model;
 
 
-
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -28,7 +26,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "categories")
 @Data
-//@NoArgsConstructor
+@NoArgsConstructor
 @AllArgsConstructor
 @SQLDelete(sql = "UPDATE categories SET deleted=true WHERE id = ?")
 @Where(clause = "deleted = false")
