@@ -10,9 +10,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
 
-import lombok.Builder;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -22,7 +23,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "categories")
-@Data @Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @SQLDelete(sql = "UPDATE categories SET deleted=true WHERE id = ?")
@@ -37,7 +38,7 @@ public class Category {
 	private String name;
 	private String description;
 	private String image;
-	
+	@Temporal(TemporalType.TIMESTAMP)
 	private LocalDateTime regdate;
 	private boolean deleted;
 }
