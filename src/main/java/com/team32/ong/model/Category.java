@@ -3,6 +3,7 @@ package com.team32.ong.model;
 
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,7 +29,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @SQLDelete(sql = "UPDATE categories SET deleted=true WHERE id = ?")
 @Where(clause = "deleted = false")
-public class Category {
+public class Category extends Auditable<Date> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,7 +39,6 @@ public class Category {
 	private String name;
 	private String description;
 	private String image;
-	@Temporal(TemporalType.TIMESTAMP)
-	private LocalDateTime regdate;
+
 	private boolean deleted;
 }
