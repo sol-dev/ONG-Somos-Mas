@@ -14,14 +14,18 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "activities")
 @SQLDelete(sql="UPDATE activities SET delete = true WHERE id = ?")
@@ -38,6 +42,8 @@ public class Activities {
 	private String content;
 	private String image;
 	private Boolean delete;
-	@Temporal(TemporalType.TIMESTAMP)
-	private LocalDateTime create_at;	
+	@CreatedDate
+	private LocalDateTime create_at;
+	@LastModifiedDate
+	private LocalDateTime update_at;
 }
