@@ -5,9 +5,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "organization")
@@ -45,7 +48,10 @@ public class OrganizationEntity {
     @Column(name = "deleted")
     private Boolean deleted;
 
-    @Column(name = "date")
-    private Timestamp date;
+    @CreatedDate
+    private LocalDateTime dateReg;
+
+    @LastModifiedDate
+    private LocalDateTime dateUpd;
 
 }
