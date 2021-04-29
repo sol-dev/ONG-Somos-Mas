@@ -11,6 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 
+
 @Data @AllArgsConstructor @NoArgsConstructor
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
