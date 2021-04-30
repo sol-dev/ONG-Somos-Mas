@@ -5,6 +5,7 @@ import com.team32.ong.mapper.CategoryMapper;
 import com.team32.ong.model.Category;
 import com.team32.ong.repository.CategoryRepository;
 import com.team32.ong.service.CategoryService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,5 +23,14 @@ public class CategoryImplService implements CategoryService {
         Category category = categoryDTO.convertToEntity(categoryDTO);
 
         return mapper.toCategoyDTO(category);
+    }
+
+
+
+    private Category dtoToEntity(CategoryDTO categoryDTO) {
+
+
+        ModelMapper mapper = new ModelMapper();
+        return mapper.map(categoryDTO, Category.class);
     }
 }
