@@ -21,6 +21,7 @@ public class MemberServiceImp implements MemberService {
 	@Override
 	public MemberDTO createMember(MemberDTO memberDTO) {
 		Member member = repositoryMember.save(mapper.toMember(memberDTO));
+		member.setDeleted(false);
 		return mapper.toMemberDTO(member);
 	}
 

@@ -18,6 +18,6 @@ public class MemberMapper {
 	public MemberDTO toMemberDTO(Member member) {
 		ModelMapper mapper = new ModelMapper();
 		MemberDTO memberDTO = mapper.map(member, MemberDTO.class);
-		return null;
+		return memberDTO;
 	}
 }

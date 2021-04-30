@@ -15,14 +15,14 @@ import javax.persistence.MappedSuperclass;
 @Data @AllArgsConstructor @NoArgsConstructor
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class Auditable<U> {
+public class Auditable<Timestamp> {
 
-    @CreatedDate
-    @Column(name = "created_date")
-    private U createDate;
+	@CreatedDate
+    @Column(name = "created_at")
+    private Timestamp createDate;
 
     @LastModifiedDate
     @Column(name = "last_modified_date")
-    private U lastModifiedDate;
+    private Timestamp lastModifiedDate;
 
 }
