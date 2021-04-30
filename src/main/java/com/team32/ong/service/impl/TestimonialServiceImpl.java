@@ -1,6 +1,8 @@
 package com.team32.ong.service.impl;
 
 import com.team32.ong.dto.TestimonialDto;
+import com.team32.ong.exception.custom.EmptyInputException;
+import com.team32.ong.exception.custom.InvalidDataException;
 import com.team32.ong.model.Testimonial;
 import com.team32.ong.repository.TestimonialRepository;
 import com.team32.ong.service.TestimonialService;
@@ -19,6 +21,10 @@ public class TestimonialServiceImpl implements TestimonialService {
 
     @Override
     public TestimonialDto save(TestimonialDto testimonialDto) {
+
+        if(testimonialDto.getContent().isEmpty() || testimonialDto.getContent().length() == 0){
+            throw new EmptyInputException("601" ,"Input can not be empty");
+        }
 
         Testimonial testimonialToCreate = this.dtoToModel(testimonialDto);
 
