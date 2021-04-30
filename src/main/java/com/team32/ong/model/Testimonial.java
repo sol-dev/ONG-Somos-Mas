@@ -5,9 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
 @NoArgsConstructor
@@ -22,11 +20,9 @@ public class Testimonial extends Auditable<Date>{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty(message = "Name may not be empty")
     @Column(name="name", nullable = false)
     private String name;
 
-    @NotEmpty(message = "Image may not be empty")
     @Column(name="image")
     private String image;
 
