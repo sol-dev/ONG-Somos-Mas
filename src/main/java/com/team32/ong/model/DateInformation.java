@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class DateInformation {
 
+
     @CreatedDate
     @Column(name = "created_date")
     private Timestamp createDate;
@@ -26,5 +27,4 @@ public class DateInformation {
     @LastModifiedDate
     @Column(name = "last_modified_date")
     private Timestamp lastModifiedDate;
-
 }
