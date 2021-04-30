@@ -22,7 +22,7 @@ public class TestimonialController {
     TestimonialService testimonialService;
 
     @PostMapping
-    public ResponseEntity<TestimonialDto> saveNewTestimonial(@Valid @RequestBody TestimonialDto newTestimonialDto) {
+    public ResponseEntity<TestimonialDto> saveNewTestimonial(@Valid @RequestBody TestimonialDto newTestimonialDto, BindingResult result) {
 
         TestimonialDto dtoSaved = testimonialService.save(newTestimonialDto);
 
