@@ -14,8 +14,8 @@ import java.util.Date;
 @Entity
 @Table(name = "organization")
 @Data @AllArgsConstructor @NoArgsConstructor @Builder
-@SQLDelete(sql = "UPDATE organization SET deleted=true WHERE id = ?")
-@Where(clause = "deleted = false")
+//@SQLDelete(sql = "UPDATE organization SET deleted=true WHERE id = ?")
+//@Where(clause = "deleted = false")
 public class OrganizationEntity extends Auditable<Date>{
 
     @Id
