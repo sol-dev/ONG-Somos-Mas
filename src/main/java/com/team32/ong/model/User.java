@@ -3,7 +3,9 @@ package com.team32.ong.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -11,6 +13,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import com.team32.ong.model.Role;
+
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -20,7 +24,7 @@ import java.util.Date;
 @Setter
 @SQLDelete(sql = "UPDATE posts SET deleted=true WHERE id=?")
 @Where(clause = "deleted = false")
-public class User implements Serializable extends Auditable<Date>{
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,6 +48,10 @@ public class User implements Serializable extends Auditable<Date>{
     @JoinColumn(name = "roleId", referencedColumnName = "id")
     private Role role;
     private boolean deleted;
+    @CreationTimestamp
+    private LocalDateTime created_time;
+    @UpdateTimestamp
+    private LocalDateTime updated_time;
 
 
     public User(String firstName, String lastName, String email, String password) {
