@@ -9,7 +9,6 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import java.util.Date;
 
 
 @Entity
@@ -17,7 +16,7 @@ import java.util.Date;
 @Data @AllArgsConstructor @NoArgsConstructor @Builder
 @SQLDelete(sql = "UPDATE organization SET deleted=true WHERE id = ?")
 @Where(clause = "deleted = false")
-public class OrganizationEntity extends Auditable<Date>{
+public class OrganizationEntity extends DateInformation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

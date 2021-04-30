@@ -11,19 +11,20 @@ import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Data @AllArgsConstructor @NoArgsConstructor
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class Auditable<U> {
+public class DateInformation {
 
     @CreatedDate
     @Column(name = "created_date")
-    private U createDate;
+    private Timestamp createDate;
 
     @LastModifiedDate
     @Column(name = "last_modified_date")
-    private U lastModifiedDate;
+    private Timestamp lastModifiedDate;
 
 }
