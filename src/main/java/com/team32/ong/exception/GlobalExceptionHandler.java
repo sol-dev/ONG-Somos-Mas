@@ -1,4 +1,4 @@
-package com.team32.ong.advice;
+package com.team32.ong.exception;
 
 import com.team32.ong.exception.EmptyInputException;
 import org.springframework.http.HttpStatus;
@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class MyControllerAdvice {
+public class GlobalExceptionHandler {
 
     @ExceptionHandler(EmptyInputException.class)
     public ResponseEntity<String> handleEmptyInput(EmptyInputException emptyInputException){
