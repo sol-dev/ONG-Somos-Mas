@@ -8,6 +8,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.Date;
 
 
@@ -36,6 +37,7 @@ public class OrganizationEntity extends Auditable<Date>{
     private Integer phone;
 
     @Column(name = "email", nullable = false)
+    @Email
     private String email;
 
     @Column (name = "welcome_text")
