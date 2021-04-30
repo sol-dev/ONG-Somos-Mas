@@ -1,5 +1,6 @@
 package com.team32.ong.model;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -12,8 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -68,15 +67,14 @@ public class News implements Serializable{
     private Set<Category> categories;
     
     @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="created_at")
-     private Date createdAt;
+    @Column(name="created_date")
+     private LocalDateTime createDate;
     
     @UpdateTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="last_updated_at")
-    private Date lastUpdatedAt;
+    @Column(name="last_modified_date")
+    private Date modifiedDate;
 
+    @Column(name="deleted")
     private boolean deleted;
     
 }
