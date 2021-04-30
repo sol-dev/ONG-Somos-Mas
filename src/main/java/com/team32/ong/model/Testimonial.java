@@ -36,7 +36,7 @@ public class Testimonial{
 
     @CreationTimestamp
     @Column(name = "created_date")
-    private LocalDateTime createDate;
+    private LocalDateTime createdDate;
 
     @UpdateTimestamp
     @Column(name = "last_modified_date")
