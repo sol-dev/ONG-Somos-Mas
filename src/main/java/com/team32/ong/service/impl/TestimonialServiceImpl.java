@@ -18,37 +18,18 @@ public class TestimonialServiceImpl implements TestimonialService {
     @Autowired
     private TestimonialRepository testimonialRepository;
 
-    @Override
-    public TestimonialDto save(TestimonialDto testimonialDto) {
 
-        if(testimonialDto.getName().isEmpty() || testimonialDto.getName().length() == 0 ||
-                testimonialDto.getImage().length() == 0 || testimonialDto.getImage().isEmpty()){
+
+    @Override
+    public Testimonial save(Testimonial testimonial) {
+        if(testimonial.getName().isEmpty() || testimonial.getName().length() == 0 ||
+                testimonial.getImage().length() == 0 || testimonial.getImage().isEmpty()){
             throw new EmptyInputException("601", "Input Fields are empty");
         }
 
-        Testimonial testimonialToSave =this.dtoToEntity(testimonialDto);
-        testimonialToSave.setDeleted(false);
+        testimonial.setDeleted(false);
+        Testimonial testimonialSaved = testimonialRepository.save(testimonial);
 
-        Testimonial testimonial = testimonialRepository.save(testimonialToSave);
-
-        TestimonialDto testimonialDtoSaved = this.modelToDto(testimonial);
-
-        return testimonialDtoSaved;
-    }
-
-    private TestimonialDto modelToDto(Testimonial testimonial){
-
-        ModelMapper mapper = new ModelMapper();
-        TestimonialDto map = mapper.map(testimonial, TestimonialDto.class);
-
-        return map;
-    }
-
-    private Testimonial dtoToEntity(TestimonialDto testimonialDto){
-
-        ModelMapper mapper = new ModelMapper();
-        Testimonial map = mapper.map(testimonialDto, Testimonial.class);
-
-        return map;
+        return testimonialSaved;
     }
 }
