@@ -1,8 +1,6 @@
 package com.team32.ong.model;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -21,23 +19,24 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import org.hibernate.annotations.CreationTimestamp;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 
 @Entity
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@DynamicUpdate
 @SQLDelete(sql = "UPDATE posts SET deleted=true WHERE id=?")
 @Where(clause = "deleted = false")
 @Table(name = "news")
-public class News  extends Auditable<Date> implements Serializable{
+public class News implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	private static final int MIN_NAME_LENGTH = 5;
@@ -47,16 +46,16 @@ public class News  extends Auditable<Date> implements Serializable{
     @Column(name = "news_id")
     private Long id;
 
-    @Size(min = MIN_NAME_LENGTH, message = "El nombre debe tener al menos " + MIN_NAME_LENGTH + " caracteres.")
+    @Size(min = MIN_NAME_LENGTH, message = "Name must be at least " + MIN_NAME_LENGTH + " characters long")
     @NotNull(message = "El nombre no puede estar vacío.")
     @Column(name = "name", nullable = false)
     private String name;
 
-    @NotEmpty(message = "El artículo debe tener algún contenido.")
+    @NotEmpty(message = "The news must have some content.")
     @Column(name = "content", length=500, nullable = false)
     private String content;
 
-    @Pattern(regexp="([^\\s]+(\\.(?i)(jpe?g|png))$)", message="El archivo tiene que ser del tipo jpg/jpeg o png")
+    @Pattern(regexp="([^\\s]+(\\.(?i)(jpe?g|png))$)", message="The file must be type jpg/jpeg or png")
     @Column(name = "image")
     private String image;
 
@@ -67,6 +66,16 @@ public class News  extends Auditable<Date> implements Serializable{
         inverseJoinColumns = @JoinColumn(name="category_id", nullable = false)
     )
     private Set<Category> categories;
+    
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="created_at")
+     private Date createdAt;
+    
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="last_updated_at")
+    private Date lastUpdatedAt;
 
     private boolean deleted;
     
