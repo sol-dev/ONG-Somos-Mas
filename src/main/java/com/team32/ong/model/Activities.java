@@ -1,6 +1,6 @@
 package com.team32.ong.model;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,13 +24,14 @@ import lombok.NoArgsConstructor;
 @Data @AllArgsConstructor @NoArgsConstructor @Builder
 @SQLDelete(sql="UPDATE activities SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
-public class Activities extends Auditable<Date>{
+public class Activities extends Auditable<Timestamp>{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
 	@NotEmpty
+	@Size(min = 3, max = 15)
 	@Column(name = "name", nullable = false)
 	private String name;
 	@NotEmpty
