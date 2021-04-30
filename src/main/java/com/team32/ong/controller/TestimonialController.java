@@ -24,11 +24,8 @@ public class TestimonialController {
     @PostMapping
     public ResponseEntity<TestimonialDto> saveNewTestimonial(@Valid @RequestBody TestimonialDto newTestimonialDto) {
 
+        TestimonialDto dtoSaved = testimonialService.save(newTestimonialDto);
 
-        TestimonialDto dtoSaved = null;
-
-            dtoSaved = testimonialService.save(newTestimonialDto);
-
-            return ResponseEntity.of(Optional.of(dtoSaved));
+        return ResponseEntity.of(Optional.of(dtoSaved));
     }
 }
