@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class TestimonialDto {
-
     private String name;
 
     private String image;

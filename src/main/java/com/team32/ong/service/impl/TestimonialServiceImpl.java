@@ -1,8 +1,10 @@
 package com.team32.ong.service.impl;
 
+import com.team32.ong.dto.TestimonialDto;
 import com.team32.ong.model.Testimonial;
 import com.team32.ong.repository.TestimonialRepository;
 import com.team32.ong.service.TestimonialService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,11 +18,30 @@ public class TestimonialServiceImpl implements TestimonialService {
     private TestimonialRepository testimonialRepository;
 
     @Override
-    public Testimonial save(Testimonial testimonial) {
+    public TestimonialDto save(TestimonialDto testimonialDto) {
 
-        testimonial.setDeleted(false);
-        Testimonial testimonialSaved = testimonialRepository.save(testimonial);
+        Testimonial testimonialToCreate = this.dtoToModel(testimonialDto);
 
-        return testimonialSaved;
+        testimonialToCreate.setDeleted(false);
+        Testimonial testimonialCreated = testimonialRepository.save(testimonialToCreate);
+
+        return modelToDto(testimonialCreated);
+    }
+
+    private TestimonialDto modelToDto(Testimonial testimonial){
+
+        ModelMapper mapper = new ModelMapper();
+        TestimonialDto map = mapper.map(testimonial, TestimonialDto.class);
+
+        return map;
+    }
+
+
+    private Testimonial dtoToModel(TestimonialDto testimonialDto){
+
+        ModelMapper mapper = new ModelMapper();
+        Testimonial map = mapper.map(testimonialDto, Testimonial.class);
+
+        return map;
     }
 }

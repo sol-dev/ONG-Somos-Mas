@@ -1,8 +1,8 @@
 package com.team32.ong.service;
 
 
-import com.team32.ong.model.Testimonial;
+import com.team32.ong.dto.TestimonialDto;
 
 public interface TestimonialService {
-    public Testimonial save(Testimonial testimonial);
+    public TestimonialDto save(TestimonialDto testimonialDto);
 }

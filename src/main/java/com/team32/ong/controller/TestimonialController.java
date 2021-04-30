@@ -1,18 +1,14 @@
 package com.team32.ong.controller;
 
 import com.team32.ong.dto.TestimonialDto;
-import com.team32.ong.model.Testimonial;
 import com.team32.ong.service.TestimonialService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
@@ -23,29 +19,10 @@ public class TestimonialController {
     TestimonialService testimonialService;
 
     @PostMapping
-    public ResponseEntity<TestimonialDto> saveNewTestimonial(@Valid @RequestBody TestimonialDto newTestimonialDto, BindingResult result) {
+    public ResponseEntity<TestimonialDto> createNewTestimonial(@RequestBody TestimonialDto newTestimonialDto) {
 
-        Testimonial testimonial = dtoToModel(newTestimonialDto);
+        TestimonialDto testimonialDtoCreated = testimonialService.save(newTestimonialDto);
 
-        Testimonial testimonialCreated = testimonialService.save(testimonial);
-
-        return ResponseEntity.of(Optional.of(modelToDto(testimonialCreated)));
-    }
-
-    private TestimonialDto modelToDto(Testimonial testimonial){
-
-        ModelMapper mapper = new ModelMapper();
-        TestimonialDto map = mapper.map(testimonial, TestimonialDto.class);
-
-        return map;
-    }
-
-
-    private Testimonial dtoToModel(TestimonialDto testimonialDto){
-
-        ModelMapper mapper = new ModelMapper();
-        Testimonial map = mapper.map(testimonialDto, Testimonial.class);
-
-        return map;
+        return ResponseEntity.of(Optional.of(testimonialDtoCreated));
     }
 }
