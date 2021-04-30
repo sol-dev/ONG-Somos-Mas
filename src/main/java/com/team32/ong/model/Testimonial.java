@@ -17,7 +17,7 @@ import java.util.Date;
 @Table (name = "Testimonials")
 @SQLDelete(sql = "UPDATE categories SET deleted=true WHERE id = ?")
 @Where(clause = "deleted = false")
-public class Testimonial extends Auditable<Date>{
+public class Testimonial{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
