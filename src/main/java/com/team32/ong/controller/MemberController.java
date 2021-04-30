@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -31,7 +32,7 @@ public class MemberController {
 	@PostMapping
 	public ResponseEntity<?> saveMember(@Valid @RequestBody MemberDTO memberDTO, BindingResult result){
 		
-		MemberDTO member = null;
+		Member member = toMember(memberDTO);
 		Map<String, Object> response = new HashMap<>();
 		
 		if(result.hasErrors()) {
@@ -42,18 +43,29 @@ public class MemberController {
 			response.put("errores", errores);
 			return new ResponseEntity<Map<String, Object>>(response,HttpStatus.BAD_REQUEST);
 		}
-		
 		try {
-			member = memberService.createMember(memberDTO);
+			member = memberService.createMember(member);
 		} catch (DataAccessException e) {
-			response.put("msj", "Failed to save user.");
+			response.put("msj", "Error al guardar miembro.");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		response.put("mensaje","The customer has registered.");
-		response.put("member", member);
+		response.put("mensaje","El miembro ha sido registrado.");
+		response.put("member", toMemberDTO(member));
 		
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+	}
+	
+	public Member toMember(MemberDTO memberDTO) {
+		ModelMapper mapper = new ModelMapper();
+		Member member = mapper.map(memberDTO, Member.class);
+		return member;
+	}
+	
+	public MemberDTO toMemberDTO(Member member) {
+		ModelMapper mapper = new ModelMapper();
+		MemberDTO memberDTO = mapper.map(member, MemberDTO.class);
+		return memberDTO;
 	}
 	
 }
