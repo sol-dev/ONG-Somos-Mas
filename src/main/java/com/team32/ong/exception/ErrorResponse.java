@@ -11,10 +11,10 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ErrorResponse{
-	
+public class ErrorResponse {
+
 	private Date timestamp;
 	private String message;
     private String details;
-    
+
 }

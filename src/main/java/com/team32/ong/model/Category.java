@@ -1,9 +1,7 @@
 package com.team32.ong.model;
 
 
-
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -22,11 +20,12 @@ import org.hibernate.annotations.Where;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "categories")
 @Data
-//@NoArgsConstructor
+@NoArgsConstructor
 @AllArgsConstructor
 @SQLDelete(sql = "UPDATE categories SET deleted=true WHERE id = ?")
 @Where(clause = "deleted = false")
@@ -52,8 +51,5 @@ public class Category {
 	
 	@ManyToMany(mappedBy = "categories")
 	private Set<News> news;
-	    
-	public Category() {
-	    this.news = new HashSet<>();    	
-	}
+
 }

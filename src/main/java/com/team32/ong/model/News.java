@@ -1,9 +1,7 @@
 package com.team32.ong.model;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -44,7 +42,6 @@ public class News implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	private static final int MIN_NAME_LENGTH = 5;
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,21 +53,13 @@ public class News implements Serializable{
     @Column(name = "name", nullable = false)
     private String name;
 
-    @NotEmpty(message = "El artículo debe tener algún contenido.")
+    @NotEmpty(message = "The news must have some content.")
     @Column(name = "content", length=500, nullable = false)
     private String content;
 
-    @Pattern(regexp="([^\\s]+(\\.(?i)(jpe?g|png))$)", message="El archivo tiene que ser del tipo jpg/jpeg o png")
+    @Pattern(regexp="([^\\s]+(\\.(?i)(jpe?g|png))$)", message="The file must be type jpg/jpeg or png")
     @Column(name = "image")
     private String image;
-    
-    @CreationTimestamp
-    @Column(name = "creation_date")
-    private LocalDateTime creationDate;
-    
-    @UpdateTimestamp
-    @Column(name = "modified_date")
-    private LocalDateTime modifiedDate;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
@@ -79,30 +68,16 @@ public class News implements Serializable{
         inverseJoinColumns = @JoinColumn(name="category_id", nullable = false)
     )
     private Set<Category> categories;
-
-    private boolean deleted;
-
-    public News() {
-        this.categories = new HashSet<Category>();
-    }
     
-	/**
-	 * @param id
-	 * @param name
-	 * @param content
-	 * @param image
-     * @param categories
-	 */
-	public News(Long id, String name, String content, String image, Set<Category> categories) {
-		this.id = id;
-		this.name = name;
-		this.content = content;
-		this.image = image;
-        this.categories = categories;
-	}
+    @CreationTimestamp
+    @Column(name="created_date")
+     private LocalDateTime createDate;
+    
+    @UpdateTimestamp
+    @Column(name="last_modified_date")
+    private Date modifiedDate;
 
-	public String Date(Date date){
-	    String str = "Publicado el " + dateFormat.format(date); 
-	    return str;
-	}
+    @Column(name="deleted")
+    private boolean deleted;
+    
 }
