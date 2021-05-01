@@ -3,12 +3,14 @@ package com.team32.ong.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,7 +19,7 @@ import java.util.Date;
 @Table (name = "Testimonials")
 @SQLDelete(sql = "UPDATE categories SET deleted=true WHERE id = ?")
 @Where(clause = "deleted = false")
-public class Testimonial extends Auditable<Date>{
+public class Testimonial{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,6 +34,14 @@ public class Testimonial extends Auditable<Date>{
 
     @Column(name="content")
     private String content;
+
+    @CreationTimestamp
+    @Column(name = "created_date")
+    private LocalDateTime createDate;
+
+    @UpdateTimestamp
+    @Column(name = "last_modified_date")
+    private LocalDateTime modifiedDate;
 
     @Column(name="deleted")
     private Boolean deleted;
