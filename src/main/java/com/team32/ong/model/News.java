@@ -1,6 +1,7 @@
 package com.team32.ong.model;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,15 +16,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
 
 import lombok.AllArgsConstructor;
@@ -53,7 +52,7 @@ public class News implements Serializable{
     private Long id;
 
     @Size(min = MIN_NAME_LENGTH, message = "El nombre debe tener al menos " + MIN_NAME_LENGTH + " caracteres.")
-    @NotNull(message = "El nombre no puede estar vacío.")
+    @NotEmpty(message = "El nombre no puede estar vacío.")
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -66,9 +65,12 @@ public class News implements Serializable{
     private String image;
     
     @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "creation_date", nullable = false, updatable = false)
-    private Date creationDate;
+    @Column(name = "creation_date")
+    private LocalDateTime creationDate;
+    
+    @UpdateTimestamp
+    @Column(name = "modified_date")
+    private LocalDateTime modifiedDate;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(

@@ -2,7 +2,7 @@ package com.team32.ong.model;
 
 
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,11 +13,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
 
 import lombok.AllArgsConstructor;
@@ -41,8 +41,12 @@ public class Category {
 	private String name;
 	private String description;
 	private String image;
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date regdate;
+	@CreationTimestamp
+    @Column(name = "creation_date")
+    private LocalDateTime creationDate;   
+    @UpdateTimestamp
+    @Column(name = "modified_date")
+    private LocalDateTime modifiedDate;
 	private boolean deleted;
 	
 	

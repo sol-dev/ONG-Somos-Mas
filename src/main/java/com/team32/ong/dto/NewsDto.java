@@ -17,7 +17,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class NewsDTO {
+public class NewsDto {
 	
 	private Long id;
 	private String name;
