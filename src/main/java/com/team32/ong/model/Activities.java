@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Data @AllArgsConstructor @NoArgsConstructor @Builder
 @SQLDelete(sql="UPDATE activities SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
-public class Activities extends Auditable<Date>{
+public class Activities{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

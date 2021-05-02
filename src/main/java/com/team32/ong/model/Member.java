@@ -1,6 +1,8 @@
 package com.team32.ong.model;
 
-import java.sql.Timestamp;
+
+import java.sql.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,8 +12,13 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,7 +33,7 @@ import lombok.NoArgsConstructor;
 @Table(name="member")
 @SQLDelete(sql="UPDATE activities SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
-public class Member extends Auditable<Timestamp>{
+public class Member{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
@@ -50,6 +57,14 @@ public class Member extends Auditable<Timestamp>{
 
     @Column(name = "description", nullable = true)
     private String description;
+    
+    @CreationTimestamp
+    @Column(name = "created_date")
+    private LocalDateTime createDate;
+
+    @UpdateTimestamp
+    @Column(name = "last_modified_date")
+    private LocalDateTime lastModifiedDate;
 
     @Column(name = "deleted", nullable = false)
     private boolean deleted;
