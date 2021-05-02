@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.team32.ong.dto.NewsDto;
@@ -16,6 +17,7 @@ import com.team32.ong.repository.NewsRepository;
 import com.team32.ong.service.NewsService;
 
 @Service
+@Transactional
 public class NewsServiceImpl implements NewsService{
 	
 	@Autowired
@@ -38,7 +40,6 @@ public class NewsServiceImpl implements NewsService{
 	}
 	
 	private NewsDto modelToDto(News news){
-
         ModelMapper mapper = new ModelMapper();
         NewsDto map = mapper.map(news, NewsDto.class);
 
@@ -47,7 +48,6 @@ public class NewsServiceImpl implements NewsService{
 
 
     private News dtoToModel(NewsDto newsDto){
-
         ModelMapper mapper = new ModelMapper();
         News map = mapper.map(newsDto, News.class);
 
