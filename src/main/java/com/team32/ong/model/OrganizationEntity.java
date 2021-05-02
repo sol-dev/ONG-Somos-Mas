@@ -11,12 +11,16 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 
 
 @Entity
 @Table(name = "organization")
-@Data @AllArgsConstructor @NoArgsConstructor @Builder
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @SQLDelete(sql = "UPDATE organization SET deleted=true WHERE id = ?")
 @Where(clause = "deleted = false")
 public class OrganizationEntity {
@@ -26,9 +30,11 @@ public class OrganizationEntity {
     @Column(name = "id")
     private Long id;
 
+    @NotEmpty
     @Column(name = "name", nullable = false)
     private String name;
 
+    @NotEmpty
     @Column(name = "image", nullable = false)
     private String image;
 
@@ -39,6 +45,7 @@ public class OrganizationEntity {
     private Integer phone;
 
     @Column(name = "email", nullable = false)
+    @NotEmpty
     @Email
     private String email;
 
