@@ -1,6 +1,7 @@
 package com.team32.ong.controller;
 
 import com.team32.ong.dto.CategoryDTO;
+import com.team32.ong.exception.custom.InvalidDataException;
 import com.team32.ong.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ public class CategoryController {
 
 
         if (result.hasErrors()){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new InvalidDataException(result);
         }else {
             return new ResponseEntity<>(categoryService.save(categoryDTO), HttpStatus.CREATED);
         }
