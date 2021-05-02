@@ -11,7 +11,9 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
 
 import lombok.AllArgsConstructor;
@@ -24,7 +26,7 @@ import lombok.NoArgsConstructor;
 @Data @AllArgsConstructor @NoArgsConstructor @Builder
 @SQLDelete(sql="UPDATE activities SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
-public class Activities extends Auditable<Timestamp>{
+public class Activities{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,6 +42,12 @@ public class Activities extends Auditable<Timestamp>{
 	@NotEmpty
 	@Column(name = "image", nullable = false)
 	private String image;
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private Timestamp create_at;
+    @UpdateTimestamp
+    @Column(name = "last_modified_date")
+    private Timestamp lastModifiedDate;
 	@Column(name = "deleted")
 	private Boolean deleted;
 }
