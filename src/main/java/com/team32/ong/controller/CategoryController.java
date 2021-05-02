@@ -26,9 +26,13 @@ public class CategoryController {
 
 
         if (result.hasErrors()){
+
             throw new InvalidDataException(result);
+
         }else {
+
             return new ResponseEntity<>(categoryService.save(categoryDTO), HttpStatus.CREATED);
+
         }
     }
 

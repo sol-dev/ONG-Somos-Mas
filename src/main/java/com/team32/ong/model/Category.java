@@ -49,6 +49,7 @@ public class Category {
 	@Column(name = "last_modified_date")
 	private LocalDateTime modifiedDate;
 
+	@Column(columnDefinition = "boolean default false")
 	private boolean deleted;
 
 	@ManyToMany(mappedBy = "categories")
