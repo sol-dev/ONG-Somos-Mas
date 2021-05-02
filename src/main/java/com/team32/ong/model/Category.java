@@ -14,7 +14,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
 
 import lombok.AllArgsConstructor;
@@ -38,7 +40,14 @@ public class Category {
 	private String name;
 	private String description;
 	private String image;
-	@Temporal(TemporalType.TIMESTAMP)
-	private LocalDateTime regdate;
+
+	@CreationTimestamp
+	@Column(name = "created_date")
+	private LocalDateTime createDate;
+
+	@UpdateTimestamp
+	@Column(name = "last_modified_date")
+	private LocalDateTime modifiedDate;
+
 	private boolean deleted;
 }
