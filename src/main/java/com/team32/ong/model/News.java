@@ -34,7 +34,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @DynamicUpdate
-@SQLDelete(sql = "UPDATE posts SET deleted=true WHERE id=?")
+@SQLDelete(sql = "UPDATE news SET deleted=true WHERE id=?")
 @Where(clause = "deleted = false")
 @Table(name = "news")
 public class News implements Serializable{
@@ -81,5 +81,11 @@ public class News implements Serializable{
 
     @Column(name="deleted")
     private boolean deleted;
-    
+
+	public News(String name, String content, String image) {
+		this.name = name;
+		this.content = content;
+		this.image = image;
+	}
+
 }
