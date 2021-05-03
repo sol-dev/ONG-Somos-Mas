@@ -1,6 +1,8 @@
 package com.team32.ong.repository;
 
 import java.io.Serializable;
+import java.util.List;
+
 import com.team32.ong.model.OrganizationEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -16,5 +18,8 @@ public interface IOrganizationRepository extends JpaRepository<OrganizationEntit
     @Transactional
     @Query("UPDATE OrganizationEntity o SET o.deleted = true WHERE o.id = :_id")
     public abstract void softDelete(@Param("_id") Long id);
+
+    @Query("SELECT o FROM OrganizationEntity o WHERE o.deleted= FALSE")
+    public abstract List<OrganizationEntity> findActives();
 
 }
