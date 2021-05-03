@@ -39,4 +39,6 @@ public class ActivitieService implements IActivitiesServices {
             throw  new Exception(e.getMessage());
         }
     }
+
+ 
 }
