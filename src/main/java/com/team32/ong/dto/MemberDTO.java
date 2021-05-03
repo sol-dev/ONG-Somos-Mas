@@ -15,12 +15,9 @@ import lombok.NoArgsConstructor;
 public class MemberDTO {
 
 	private Long memberId;
-	@NotEmpty
-	@Size(min = 3, max = 10)
 	private String name;
 	private String facebookUrl;
 	private String instagramUrl;
-	@NotEmpty
 	private String linkedinUrl;
 	private String image;
 	private String description;
