@@ -1,10 +1,13 @@
 package com.team32.ong.service;
 
-import com.team32.ong.dto.NewsDTO;
-import com.team32.ong.model.News;
+import java.io.IOException;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import com.team32.ong.dto.NewsDto;
 
 public interface NewsService {
 	
-	News save(NewsDTO newsDto);
+	NewsDto save(NewsDto newsDto, MultipartFile image)throws IOException;
 
 }

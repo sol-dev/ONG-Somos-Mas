@@ -2,13 +2,13 @@ package com.team32.ong.mapper;
 
 import org.springframework.stereotype.Component;
 
-import com.team32.ong.dto.NewsDTO;
+import com.team32.ong.dto.NewsDto;
 import com.team32.ong.model.News;
 
 @Component
 public class NewsMapper {
 	
-	public News toNews(NewsDTO newsDTO){
+	public News toNews(NewsDto newsDTO){
 		return News
 				.builder()
                 .id(newsDTO.getId())
@@ -19,9 +19,9 @@ public class NewsMapper {
                 .build();
     }
 
-	public NewsDTO toNewsDTO(News news){
+	public NewsDto toNewsDTO(News news){
 
-        return NewsDTO
+        return NewsDto
                 .builder()
                 .id(news.getId())
                 .name(news.getName())

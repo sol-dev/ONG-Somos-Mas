@@ -1,8 +1,7 @@
 package com.team32.ong.model;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -15,8 +14,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -24,12 +21,14 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -38,6 +37,7 @@ import lombok.Setter;
 @Setter
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 @SQLDelete(sql = "UPDATE posts SET deleted=true WHERE id=?")
 @Where(clause = "deleted = false")
 @Table(name = "news")
@@ -45,30 +45,24 @@ public class News implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	private static final int MIN_NAME_LENGTH = 5;
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "news_id")
     private Long id;
 
-    @Size(min = MIN_NAME_LENGTH, message = "El nombre debe tener al menos " + MIN_NAME_LENGTH + " caracteres.")
+    @Size(min = MIN_NAME_LENGTH, message = "Name must be at least " + MIN_NAME_LENGTH + " characters long")
     @NotNull(message = "El nombre no puede estar vacío.")
     @Column(name = "name", nullable = false)
     private String name;
 
-    @NotEmpty(message = "El artículo debe tener algún contenido.")
+    @NotEmpty(message = "The news must have some content.")
     @Column(name = "content", length=500, nullable = false)
     private String content;
 
-    @Pattern(regexp="([^\\s]+(\\.(?i)(jpe?g|png))$)", message="El archivo tiene que ser del tipo jpg/jpeg o png")
+    @Pattern(regexp="([^\\s]+(\\.(?i)(jpe?g|png))$)", message="The file must be type jpg/jpeg or png")
     @Column(name = "image")
     private String image;
-    
-    @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "creation_date", nullable = false, updatable = false)
-    private Date creationDate;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
@@ -77,30 +71,16 @@ public class News implements Serializable{
         inverseJoinColumns = @JoinColumn(name="category_id", nullable = false)
     )
     private Set<Category> categories;
-
-    private boolean deleted;
-
-    public News() {
-        this.categories = new HashSet<Category>();
-    }
     
-	/**
-	 * @param id
-	 * @param name
-	 * @param content
-	 * @param image
-     * @param categories
-	 */
-	public News(Long id, String name, String content, String image, Set<Category> categories) {
-		this.id = id;
-		this.name = name;
-		this.content = content;
-		this.image = image;
-        this.categories = categories;
-	}
+    @CreationTimestamp
+    @Column(name="created_date")
+     private LocalDateTime createDate;
+    
+    @UpdateTimestamp
+    @Column(name="last_modified_date")
+    private Date modifiedDate;
 
-	public String Date(Date date){
-	    String str = "Publicado el " + dateFormat.format(date); 
-	    return str;
-	}
+    @Column(name="deleted")
+    private boolean deleted;
+    
 }
