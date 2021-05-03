@@ -22,7 +22,7 @@ public class ActivitiesController {
     @Autowired
     private ActivitieService activitieService;
 
-    /*
+
 
     @PostMapping
     public ResponseEntity<?> createActivity(@Valid @RequestBody Activities activities,
@@ -43,5 +43,5 @@ public class ActivitiesController {
         response.put("activity", activityNew);
         return new ResponseEntity(response, HttpStatus.CREATED);
     }
-     */
+
 }

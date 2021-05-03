@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Service
 public class ActivitieService implements IActivitiesServices {
-/*
+
     @Autowired
     private ActivitiesRepository activitiesRepository;
 
@@ -38,5 +38,5 @@ public class ActivitieService implements IActivitiesServices {
         }
     }
 
- */
+ 
 }
