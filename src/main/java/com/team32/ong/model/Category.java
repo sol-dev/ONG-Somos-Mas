@@ -2,7 +2,6 @@ package com.team32.ong.model;
 
 
 
-
 import java.time.LocalDateTime;
 import java.util.Set;
 import javax.persistence.Column;
