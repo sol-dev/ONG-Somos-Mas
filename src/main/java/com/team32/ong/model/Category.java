@@ -41,6 +41,7 @@ public class Category {
 	private String description;
 	private String image;
 
+
 	@CreationTimestamp
 	@Column(name = "created_date")
 	private LocalDateTime createDate;
@@ -48,6 +49,7 @@ public class Category {
 	@UpdateTimestamp
 	@Column(name = "last_modified_date")
 	private LocalDateTime modifiedDate;
+
 
 	@Column(columnDefinition = "boolean default false")
 	private boolean deleted;
