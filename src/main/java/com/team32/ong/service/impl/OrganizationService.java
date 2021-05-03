@@ -1,4 +1,4 @@
-package com.team32.ong.service.implementation;
+package com.team32.ong.service.impl;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,6 +36,7 @@ public class OrganizationService implements IOrganizationService{
     //controller methods
     public OrganizationDTO save(OrganizationDTO dto) {
         OrganizationEntity entity = convertToEntity(dto);
+        entity.setDeleted(false);
         return convertToDto(organizationRepository.save(entity));
     }
 

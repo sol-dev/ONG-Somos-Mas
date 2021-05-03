@@ -1,14 +1,21 @@
 package com.team32.ong.controller;
 
 import com.team32.ong.dto.OrganizationDTO;
+import com.team32.ong.exception.custom.InvalidDataException;
 import com.team32.ong.service.IOrganizationService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import javax.validation.Valid;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -27,9 +34,17 @@ public class OrganizationController {
     }
 
     @PostMapping(value = "/new", consumes = "application/json")
-    public Object newOrganization(@RequestBody OrganizationDTO organization){
-        System.out.println("Nueva organizacion: "+ organization.toString());
-        return organizationService.save(organization);
+    public ResponseEntity<OrganizationDTO> newOrganization(@Valid @RequestBody OrganizationDTO organization, BindingResult result){
+        Map<String, Object> response = new HashMap<>();
+        OrganizationDTO newDto = null;
+
+        if (result.hasErrors()){
+            throw new InvalidDataException(result);
+        }
+        newDto = organizationService.save(organization);
+        response.put("message", "Organizacion Guardada con exito!");
+        response.put("organization", newDto);
+        return new ResponseEntity(response, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/id")
