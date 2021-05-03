@@ -3,15 +3,14 @@ package com.team32.ong.model;
 
 
 import java.time.LocalDateTime;
-
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -41,6 +40,7 @@ public class Category {
 	private String description;
 	private String image;
 
+
 	@CreationTimestamp
 	@Column(name = "created_date")
 	private LocalDateTime createDate;
@@ -50,4 +50,10 @@ public class Category {
 	private LocalDateTime modifiedDate;
 
 	private boolean deleted;
+	
+	
+	
+	@ManyToMany(mappedBy = "categories")
+	private Set<News> news;
+
 }
