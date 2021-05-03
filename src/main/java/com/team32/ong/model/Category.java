@@ -1,9 +1,7 @@
 package com.team32.ong.model;
 
-
 import java.time.LocalDateTime;
 import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -40,14 +38,17 @@ public class Category {
 	private String name;
 	private String description;
 	private String image;
+
 	@CreationTimestamp
-    @Column(name = "creation_date")
-    private LocalDateTime creationDate;   
-    @UpdateTimestamp
-    @Column(name = "modified_date")
-    private LocalDateTime modifiedDate;
+	@Column(name = "created_date")
+	private LocalDateTime createDate;
+
+	@UpdateTimestamp
+	@Column(name = "last_modified_date")
+	private LocalDateTime modifiedDate;
+
+	@Column(columnDefinition = "boolean default false")
 	private boolean deleted;
-	
 	@ManyToMany(mappedBy = "categories")
 	private Set<News> news;
 
