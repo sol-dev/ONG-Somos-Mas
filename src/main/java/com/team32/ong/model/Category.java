@@ -41,11 +41,11 @@ public class Category {
 	private String description;
 	private String image;
 	@CreationTimestamp
-    @Column(name = "created_date")
-    private LocalDateTime createDate;
+    @Column(name = "creation_date")
+    private LocalDateTime creationDate;   
     @UpdateTimestamp
-    @Column(name = "last_modified_date")
-    private LocalDateTime lastModifiedDate;
+    @Column(name = "modified_date")
+    private LocalDateTime modifiedDate;
 	private boolean deleted;
 	
 	@ManyToMany(mappedBy = "categories")

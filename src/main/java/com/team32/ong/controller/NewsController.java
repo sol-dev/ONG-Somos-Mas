@@ -17,7 +17,6 @@ import com.team32.ong.dto.NewsDto;
 import com.team32.ong.exception.custom.InvalidDataException;
 import com.team32.ong.service.NewsService;
 
-
 @RestController
 @RequestMapping("api/v1/news")
 public class NewsController {
