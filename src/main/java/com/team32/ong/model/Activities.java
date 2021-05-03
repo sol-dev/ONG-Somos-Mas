@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 @SQLDelete(sql="UPDATE activities SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
 public class Activities{
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
