@@ -22,6 +22,8 @@ public class ActivitiesController {
     @Autowired
     private ActivitieService activitieService;
 
+
+
     @PostMapping
     public ResponseEntity<?> createActivity(@Valid @RequestBody Activities activities,
                                             BindingResult result, @RequestParam("file")
@@ -41,4 +43,5 @@ public class ActivitiesController {
         response.put("activity", activityNew);
         return new ResponseEntity(response, HttpStatus.CREATED);
     }
+
 }

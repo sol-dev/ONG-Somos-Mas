@@ -2,6 +2,7 @@ package com.team32.ong.model;
 
 
 
+
 import java.time.LocalDateTime;
 import java.util.Set;
 import javax.persistence.Column;
@@ -49,10 +50,10 @@ public class Category {
 	@Column(name = "last_modified_date")
 	private LocalDateTime modifiedDate;
 
+
+	@Column(columnDefinition = "boolean default false")
 	private boolean deleted;
-	
-	
-	
+
 	@ManyToMany(mappedBy = "categories")
 	private Set<News> news;
 
