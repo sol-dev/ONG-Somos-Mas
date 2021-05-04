@@ -1,6 +1,8 @@
 package com.team32.ong.controller;
 
+
 import com.team32.ong.exception.custom.InvalidDataException;
+import com.team32.ong.model.Activities;
 import com.team32.ong.service.impl.ActivitieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,7 +29,7 @@ public class ActivitiesController {
     @PostMapping
     public ResponseEntity<?> createActivity(@Valid @RequestBody Activities activities,
                                             BindingResult result, @RequestParam("file")
-                                            MultipartFile file){
+                                            MultipartFile file) throws Exception{
 
         Map<String, Object> response = new HashMap<>();
         Activities activityNew = null;
