@@ -34,6 +34,14 @@ public class TestimonialServiceImpl implements TestimonialService {
         return modelToDto(testimonialCreated);
     }
 
+    @Override
+    public void deleteById(Long id) {
+        if(!testimonialRepository.existsById(id)){
+            //throw new InvalidDataException();
+        }
+        testimonialRepository.deleteById(id);
+    }
+
     private TestimonialDto modelToDto(Testimonial testimonial){
 
         ModelMapper mapper = new ModelMapper();
