@@ -6,10 +6,7 @@ import com.team32.ong.service.TestimonialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Optional;
@@ -32,4 +29,13 @@ public class TestimonialController {
 
         return ResponseEntity.of(Optional.of(testimonialDtoCreated));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTestimonial(@PathVariable Long id){
+
+        testimonialService.deleteById(id);
+
+        return ResponseEntity.noContent().build();
+    }
+
 }
