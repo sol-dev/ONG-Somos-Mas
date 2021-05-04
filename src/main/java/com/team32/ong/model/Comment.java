@@ -54,14 +54,3 @@ public class Comment implements Serializable {
     private News news;
        
 }
-
-
-/*
-Description
-COMO usuario 
-QUIERO agregar un nuevo comentario a un post
-PARA opinar acerca de dicho post.
-
-Criterios de aceptación:
-Se agregará la posibilidad de agregar comentarios a un Post. Los campos de un comentario serán user_id, body y news_id
-*/
