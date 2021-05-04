@@ -43,8 +43,4 @@ public class ActivitiesController {
         response.put("activity", activityNew);
         return new ResponseEntity(response, HttpStatus.CREATED);
     }
-<<<<<<< HEAD
-=======
-
->>>>>>> b636bd9ae6365a376fd271c2031a44791e125feb
 }
