@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 
 @Service
 @Transactional
@@ -32,6 +34,25 @@ public class TestimonialServiceImpl implements TestimonialService {
         Testimonial testimonialCreated = testimonialRepository.save(testimonialToCreate);
 
         return modelToDto(testimonialCreated);
+    }
+
+    @Override
+    public TestimonialDto updateById(TestimonialDto testimonialDtoToUpdate, Long id) {
+
+        if(!testimonialRepository.existsById(id)){
+            //throw new exception;
+        }
+
+        Optional<Testimonial> testimonials = testimonialRepository.findById(id);
+
+        Testimonial testimonialToUpdate = testimonials.get();
+        testimonialToUpdate.setName(testimonialDtoToUpdate.getName());
+        testimonialToUpdate.setImage(testimonialDtoToUpdate.getImage());
+        testimonialToUpdate.setContent(testimonialDtoToUpdate.getContent());
+
+        testimonialRepository.save(testimonialToUpdate);
+
+        return modelToDto(testimonialToUpdate);
     }
 
     private TestimonialDto modelToDto(Testimonial testimonial){
