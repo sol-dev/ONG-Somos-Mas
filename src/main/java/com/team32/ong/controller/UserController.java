@@ -1,6 +1,7 @@
 package com.team32.ong.controller;
 
-import com.team32.ong.dto.UserDto;
+import com.team32.ong.dto.UserRequest;
+import com.team32.ong.dto.UserResponse;
 import com.team32.ong.exception.custom.InvalidDataException;
 import com.team32.ong.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,18 +34,29 @@ public class UserController {
         return null;
     }
 
+    @PostMapping("/login")
+    public UserRequest login(@RequestParam("email") String email,
+                             @RequestParam("password") String password){
+
+        return UserRequest
+                .builder()
+                .email(email)
+                .password(password)
+                .build();
+    }
+
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto nuserDto, BindingResult result){
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest userRequest, BindingResult result){
 
         if (result.hasErrors()){
             throw new InvalidDataException(result);
         }else {
-            return new ResponseEntity<>(userService.save(nuserDto), HttpStatus.CREATED);
+            return new ResponseEntity<>(userService.save(userRequest), HttpStatus.CREATED);
         }
     }
 
     @PutMapping
-    public ResponseEntity<?> modifyUser(@Valid @RequestBody UserDto newuserDto, BindingResult
+    public ResponseEntity<?> modifyUser(@Valid @RequestBody UserRequest newuserRequest, BindingResult
                                         result, MultipartFile image){
         return null;
     }
