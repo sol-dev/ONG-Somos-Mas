@@ -1,8 +1,5 @@
 package com.team32.ong.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +24,11 @@ public class MemberController {
 	
 	@PostMapping
     public ResponseEntity<MemberDTO> createActivity(@Valid @RequestBody MemberDTO newMemberDTO, BindingResult result){
-        Map<String, Object> response = new HashMap<>();
         if (result.hasErrors()){
             throw new InvalidDataException(result);
         }
-    	MemberDTO memberCreate = memberService.save(newMemberDTO);
-        response.put("message", "Miembro Guardado con exito!");
-        response.put("member", memberCreate);
-        return new ResponseEntity(response, HttpStatus.CREATED);
+    	
+        return new ResponseEntity<MemberDTO>(memberService.save(newMemberDTO), HttpStatus.CREATED);
     }
 	
 }
