@@ -1,5 +1,6 @@
 package com.team32.ong.exception;
 
+import com.team32.ong.exception.custom.EmptyInputException;
 import com.team32.ong.exception.custom.InvalidDataException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
@@ -63,6 +64,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleexception(Exception exc){
         HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         return buildResponseEntity(httpStatus, new RuntimeException("Error Interno - Reporte"));
+    }
+
+    @ExceptionHandler(EmptyInputException.class)
+   public ResponseEntity<String> handleEmptyInput(EmptyInputException emptyInputException){
+        return new ResponseEntity<String>("Input field is Empty, Please look into it", HttpStatus.BAD_REQUEST);
     }
 
     private ResponseEntity<ErrorResponse> buildResponseEntity(HttpStatus httpStatus, Exception exc){

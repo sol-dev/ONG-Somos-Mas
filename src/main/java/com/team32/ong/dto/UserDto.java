@@ -1,8 +1,9 @@
 package com.team32.ong.dto;
 
 import lombok.Getter;
+import lombok.Setter;
 
-@Getter
+@Getter @Setter
 public class UserDto {
 
     private long id;
@@ -11,5 +12,5 @@ public class UserDto {
     private String email;
     private String password;
     private String photo;
-    private Role role;
+    private RoleDto role;
 }
