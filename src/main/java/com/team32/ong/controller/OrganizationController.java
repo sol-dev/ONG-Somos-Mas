@@ -37,10 +37,6 @@ public class OrganizationController {
     public ResponseEntity<OrganizationDTO> newOrganization(@Valid @RequestBody OrganizationDTO organization, BindingResult result){
         Map<String, Object> response = new HashMap<>();
         OrganizationDTO newDto = null;
-
-        if (result.hasErrors()){
-            throw new InvalidDataException(result);
-        }
         newDto = organizationService.save(organization);
         response.put("message", "Organizacion Guardada con exito!");
         response.put("organization", newDto);
@@ -48,8 +44,8 @@ public class OrganizationController {
     }
 
     @GetMapping(value = "/id")
-    public Object findById(@RequestParam("id") Long id){
-        return organizationService.findById(id);
+    public ResponseEntity<OrganizationDTO> findById( @RequestParam("id") Long id){
+       return new ResponseEntity<OrganizationDTO>(organizationService.findById(id), HttpStatus.FOUND);
     }
  
     @GetMapping(value = "/all")

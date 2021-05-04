@@ -41,9 +41,14 @@ public class OrganizationService implements IOrganizationService{
     }
 
     public OrganizationDTO findById(Long id) {
+        //throws IllegalArgumentException 
         OrganizationEntity entity = organizationRepository.findById(id).get();
         return convertToDto(entity);
     }
+    /*public OrganizationDTO findById(Long id) {
+        OrganizationEntity entity = organizationRepository.findById(id).get();
+        return convertToDto(entity);
+    } */
 
     public List<OrganizationDTO> findAll() {
         //list of entities
