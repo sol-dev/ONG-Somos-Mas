@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -46,11 +47,13 @@ public class Comment implements Serializable {
     // ManyToOne to table user
     @ManyToOne()
     @JoinColumn(name="user_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @NotEmpty(message = "The comment must be linked to a user.")
     private User user;
     
     // ManyToOne to table news
     @ManyToOne()
     @JoinColumn(name="news_id", referencedColumnName = "news_id", insertable = false, updatable = false)
+    @NotEmpty(message = "The comment must be linked to a news.")
     private News news;
        
 }
