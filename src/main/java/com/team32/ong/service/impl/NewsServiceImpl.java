@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +27,10 @@ public class NewsServiceImpl implements NewsService{
 	@Override
 	public NewsDto save(NewsDto newsDto, MultipartFile image)throws IOException {
 		if(image != null) {
-			String absolutePath = "RUTA QUE VAMOS A USAR";
-			byte[] bytes = image.getBytes();			
-			Path completePath = Paths.get(absolutePath + "//" + image.getOriginalFilename());
-			Files.write(completePath, bytes);
+			String uniqueFilename = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
+            Path rootPath = Paths.get("upload").resolve(uniqueFilename);
+            Path rootAbsolutepath = rootPath.toAbsolutePath();
+            Files.copy(image.getInputStream(), rootAbsolutepath);
 			newsDto.setImage(image.getOriginalFilename());		
 		}
 		News newsToCreate = this.dtoToModel(newsDto);
