@@ -1,5 +1,7 @@
 package com.team32.ong.controller;
 
+
+
 import com.team32.ong.exception.custom.InvalidDataException;
 import com.team32.ong.model.Activities;
 import com.team32.ong.service.impl.ActivitieService;
@@ -44,6 +46,5 @@ public class ActivitiesController {
         response.put("activity", activityNew);
         return new ResponseEntity(response, HttpStatus.CREATED);
     }
-
 
 }
