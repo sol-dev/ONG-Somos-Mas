@@ -1,5 +1,8 @@
 package com.team32.ong.service.impl;
 
+import java.util.Optional;
+
+import com.team32.ong.dto.NewUserDto;
 import com.team32.ong.dto.RoleDto;
 import com.team32.ong.dto.UserDto;
 import com.team32.ong.model.Role;
@@ -42,14 +45,41 @@ public class UserImplService implements UserService {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(userDto, User.class);
     }
+    
+    private User newDtoToEntity(NewUserDto newUserDto){
+        ModelMapper mapper = new ModelMapper();
+        return mapper.map(newUserDto, User.class);
+    }
 
     private UserDto entityToDto(User user){
         ModelMapper mapper = new ModelMapper();
         return mapper.map(user, UserDto.class);
+    }
+    
+    private NewUserDto entityToNewDto(User user){
+        ModelMapper mapper = new ModelMapper();
+        return mapper.map(user, NewUserDto.class);
     }
 
     private RoleDto roleEntityToDto(Role role){
         ModelMapper mapper = new ModelMapper();
         return mapper.map(role, RoleDto.class);
     }
+
+	@Override
+	public UserDto findById(Long id) {
+		Optional<User> userFound = userRepo.findById(id);
+		return entityToDto(userFound.get());
+	}
+	
+	@Override
+	public NewUserDto update(UserDto userDtoFound, NewUserDto newUserDto) {
+		Role roleEntity = roleRepo.findByName(newUserDto.getRole().getName());
+		User userEntity = newDtoToEntity(newUserDto);
+		userEntity.setId(userDtoFound.getId());
+		userEntity.setRole(roleEntity);
+		userEntity.setPassword(userDtoFound.getPassword());
+		userRepo.save(userEntity);
+		return entityToNewDto(userEntity);
+	}
 }
