@@ -5,13 +5,11 @@ import java.util.stream.Collectors;
 
 import org.springframework.validation.BindingResult;
 
-import lombok.Data;
+public class BadRequestException extends RuntimeException{
 
-@Data
-public class EmptyInputException extends RuntimeException{
-    private static final long serialVersionUID = 1L;
-    
-    public EmptyInputException(BindingResult result) {
+	private static final long serialVersionUID = 1L;
+	
+	public BadRequestException(BindingResult result) {
 		super(getAllErrors(result));
 	}
 
