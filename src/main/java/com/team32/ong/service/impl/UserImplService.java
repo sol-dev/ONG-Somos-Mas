@@ -1,7 +1,7 @@
 package com.team32.ong.service.impl;
 
-import com.team32.ong.dto.RoleDto;
-import com.team32.ong.dto.UserDto;
+import com.team32.ong.dto.UserRequest;
+import com.team32.ong.dto.UserResponse;
 import com.team32.ong.model.Role;
 import com.team32.ong.model.User;
 import com.team32.ong.repository.RoleRepository;
@@ -9,11 +9,19 @@ import com.team32.ong.repository.UserRepository;
 import com.team32.ong.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
-public class UserImplService implements UserService {
+public class UserImplService implements UserService, UserDetailsService {
 
     @Autowired
     private UserRepository userRepo;
@@ -25,31 +33,42 @@ public class UserImplService implements UserService {
     private RoleRepository roleRepo;
 
     @Override
-    public UserDto save(UserDto user) {
+    public UserResponse save(UserRequest userRequest) {
 
-        user.setPassword(encoder.encode(user.getPassword()));
+        userRequest.setPassword(encoder.encode(userRequest.getPassword()));
 
         Role role = roleRepo.findByName("USER");
-        user.setRole(roleEntityToDto(role));
 
-        User userEntity = userRepo.save(dtoToEntity(user));
+        User userEntity = dtoToEntity(userRequest);
+        userEntity.setRole(role);
+        User userSave = userRepo.save(userEntity);
 
-        return entityToDto(userEntity);
+        return entityToDto(userSave);
     }
 
 
-    private User dtoToEntity(UserDto userDto){
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+
+        User user = userRepo.findByEmail(email);
+
+        List<GrantedAuthority> rol = new ArrayList<>();
+        rol.add(new SimpleGrantedAuthority(user.getRole().getName()));
+
+        return new org.springframework.security.core.userdetails.
+                User(user.getEmail(), user.getPassword(), rol);
+    }
+
+
+    private User dtoToEntity(UserRequest userRequest){
         ModelMapper mapper = new ModelMapper();
-        return mapper.map(userDto, User.class);
+        return mapper.map(userRequest, User.class);
     }
 
-    private UserDto entityToDto(User user){
+    private UserResponse entityToDto(User user){
         ModelMapper mapper = new ModelMapper();
-        return mapper.map(user, UserDto.class);
+        return mapper.map(user, UserResponse.class);
     }
 
-    private RoleDto roleEntityToDto(Role role){
-        ModelMapper mapper = new ModelMapper();
-        return mapper.map(role, RoleDto.class);
-    }
+
 }
