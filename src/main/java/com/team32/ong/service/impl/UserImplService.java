@@ -18,8 +18,8 @@ public class UserImplService implements UserService {
     @Autowired
     private UserRepository userRepo;
 
-    @Autowired
-    private BCryptPasswordEncoder encoder;
+    //@Autowired
+    //private BCryptPasswordEncoder encoder;
 
     @Autowired
     private RoleRepository roleRepo;
@@ -27,7 +27,7 @@ public class UserImplService implements UserService {
     @Override
     public UserDto save(UserDto user) {
 
-        user.setPassword(encoder.encode(user.getPassword()));
+        //user.setPassword(encoder.encode(user.getPassword()));
 
         Role role = roleRepo.findByName("USER");
         user.setRole(roleEntityToDto(role));
@@ -36,14 +36,20 @@ public class UserImplService implements UserService {
 
         return entityToDto(userEntity);
     }
+    
+    @Override
+    public UserDto getOne(Long id) {
+    	User user = userRepo.getOne(id);
+		return entityToDto(user);
+    }
+    
 
-
-    private User dtoToEntity(UserDto userDto){
+    public User dtoToEntity(UserDto userDto){
         ModelMapper mapper = new ModelMapper();
         return mapper.map(userDto, User.class);
     }
 
-    private UserDto entityToDto(User user){
+    public UserDto entityToDto(User user){
         ModelMapper mapper = new ModelMapper();
         return mapper.map(user, UserDto.class);
     }

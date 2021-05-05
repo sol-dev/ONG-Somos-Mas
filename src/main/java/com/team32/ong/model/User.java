@@ -13,10 +13,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import com.team32.ong.model.Role;
-
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.Set;
+
 
 @Entity
 @Table(name = "users")
@@ -27,7 +25,10 @@ import java.util.Set;
 @Where(clause = "deleted = false")
 public class User implements Serializable {
 
-    @Id
+	private static final long serialVersionUID = 1L;
+	
+	
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
@@ -53,10 +54,6 @@ public class User implements Serializable {
     private LocalDateTime created_time;
     @UpdateTimestamp
     private LocalDateTime updated_time;
-    
-    @OneToMany(mappedBy="user", fetch = FetchType.LAZY, cascade=CascadeType.ALL)
-	private Set<Comment> comments;
-
 
     public User(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;

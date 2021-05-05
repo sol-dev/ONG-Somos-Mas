@@ -1,7 +1,6 @@
 package com.team32.ong.dto;
 
-import com.team32.ong.model.News;
-import com.team32.ong.model.User;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,11 +11,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentDto{
+public class AddCommentDto{
 	
-	private long id;
+	private Long id;
 	private String body;
-	private User user;
-	private News news;
+	private Long userId;
+	private Long newsId;
 
 }
