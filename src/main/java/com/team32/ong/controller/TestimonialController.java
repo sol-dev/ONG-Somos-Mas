@@ -10,7 +10,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/testimonials")
@@ -28,7 +27,7 @@ public class TestimonialController {
 
         TestimonialDto testimonialDtoCreated = testimonialService.save(newTestimonialDto);
 
-        return ResponseEntity.of(Optional.of(testimonialDtoCreated));
+        return new ResponseEntity(testimonialDtoCreated, HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
