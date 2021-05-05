@@ -34,19 +34,10 @@ public class UserController {
         return null;
     }
 
-    @PostMapping("/login")
-    public UserRequest login(@RequestParam("email") String email,
-                             @RequestParam("password") String password){
-
-        return UserRequest
-                .builder()
-                .email(email)
-                .password(password)
-                .build();
-    }
 
     @PostMapping
-    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest userRequest, BindingResult result){
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest userRequest,
+                                                   BindingResult result){
 
         if (result.hasErrors()){
             throw new InvalidDataException(result);
