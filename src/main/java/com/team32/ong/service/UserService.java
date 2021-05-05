@@ -8,5 +8,4 @@ import org.springframework.stereotype.Service;
 public interface UserService {
 
     UserResponse save(UserRequest user);
-    UserResponse login(UserRequest user);
 }

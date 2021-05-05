@@ -1,6 +1,5 @@
 package com.team32.ong.service.impl;
 
-import com.team32.ong.dto.RoleDto;
 import com.team32.ong.dto.UserRequest;
 import com.team32.ong.dto.UserResponse;
 import com.team32.ong.model.Role;
@@ -34,28 +33,17 @@ public class UserImplService implements UserService, UserDetailsService {
     private RoleRepository roleRepo;
 
     @Override
-    public UserResponse save(UserRequest user) {
+    public UserResponse save(UserRequest userRequest) {
 
-        user.setPassword(encoder.encode(user.getPassword()));
+        userRequest.setPassword(encoder.encode(userRequest.getPassword()));
 
         Role role = roleRepo.findByName("USER");
-        user.setRole(roleEntityToDto(role));
 
-        User userEntity = userRepo.save(dtoToEntity(user));
+        User userEntity = dtoToEntity(userRequest);
+        userEntity.setRole(role);
+        User userSave = userRepo.save(userEntity);
 
-        return entityToDto(userEntity);
-    }
-
-    @Override
-    public UserResponse login(UserRequest user) {
-
-        User userEntity = userRepo.findByEmail(user.getEmail());
-
-        
-
-        loadUserByUsername(user.getEmail());
-
-        return null;
+        return entityToDto(userSave);
     }
 
 
@@ -67,7 +55,8 @@ public class UserImplService implements UserService, UserDetailsService {
         List<GrantedAuthority> rol = new ArrayList<>();
         rol.add(new SimpleGrantedAuthority(user.getRole().getName()));
 
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), rol);
+        return new org.springframework.security.core.userdetails.
+                User(user.getEmail(), user.getPassword(), rol);
     }
 
 
@@ -79,11 +68,6 @@ public class UserImplService implements UserService, UserDetailsService {
     private UserResponse entityToDto(User user){
         ModelMapper mapper = new ModelMapper();
         return mapper.map(user, UserResponse.class);
-    }
-
-    private RoleDto roleEntityToDto(Role role){
-        ModelMapper mapper = new ModelMapper();
-        return mapper.map(role, RoleDto.class);
     }
 
 
