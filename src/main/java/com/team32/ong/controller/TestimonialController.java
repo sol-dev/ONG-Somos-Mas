@@ -19,14 +19,8 @@ public class TestimonialController {
     TestimonialService testimonialService;
 
     @PostMapping
-    public ResponseEntity<TestimonialDto> createNewTestimonial(@Valid @RequestBody TestimonialDto newTestimonialDto, BindingResult result) {
-
-        if (result.hasErrors()){
-            throw new InvalidDataException(result);
-        }
-
+    public ResponseEntity<TestimonialDto> createNewTestimonial(@RequestBody TestimonialDto newTestimonialDto) {
         TestimonialDto testimonialDtoCreated = testimonialService.save(newTestimonialDto);
-
         return new ResponseEntity(testimonialDtoCreated, HttpStatus.CREATED);
     }
 
