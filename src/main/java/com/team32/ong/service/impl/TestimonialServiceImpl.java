@@ -2,10 +2,10 @@ package com.team32.ong.service.impl;
 
 import com.team32.ong.dto.TestimonialDto;
 import com.team32.ong.exception.custom.EmptyInputException;
-import com.team32.ong.exception.custom.InvalidDataException;
 import com.team32.ong.model.Testimonial;
 import com.team32.ong.repository.TestimonialRepository;
 import com.team32.ong.service.TestimonialService;
+import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,10 +45,22 @@ public class TestimonialServiceImpl implements TestimonialService {
     }
 
     @Override
-    public TestimonialDto updateById(TestimonialDto testimonialDtoToUpdate, Long id) {
+    public TestimonialDto updateById(TestimonialDto testimonialDtoToUpdate, Long id) throws NotFoundException {
 
         if(!testimonialRepository.existsById(id)){
-            //throw new exception;
+            throw new NotFoundException("No es posible actualizar un testimonio con el id " + id);
+        }
+
+        if(testimonialDtoToUpdate.getName().isEmpty() || testimonialDtoToUpdate.getName().length() == 0){
+            throw new EmptyInputException("Debe completar el campo nombre");
+        }
+
+        if(testimonialDtoToUpdate.getContent().isEmpty() || testimonialDtoToUpdate.getContent().length() == 0){
+            throw new EmptyInputException("Debe completar el campo contenido");
+        }
+
+        if(testimonialDtoToUpdate.getImage().isEmpty() || testimonialDtoToUpdate.getImage().length() == 0){
+            throw new EmptyInputException("Debe completar el campo imagen");
         }
 
         Optional<Testimonial> testimonials = testimonialRepository.findById(id);
