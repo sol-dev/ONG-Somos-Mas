@@ -1,5 +1,7 @@
 package com.team32.ong.controller;
 
+import java.util.Optional;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +19,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.team32.ong.dto.NewUserDto;
 import com.team32.ong.dto.UserDto;
+import com.team32.ong.dto.UserDtoRequestForUser;
 import com.team32.ong.exception.custom.InvalidDataException;
 import com.team32.ong.service.UserService;
 
 import javassist.NotFoundException;
 
 @RestController
-@RequestMapping("api/v1/users")
+@RequestMapping("/api/v1/users")
 @CrossOrigin
 public class UserController {
 
@@ -46,8 +48,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto nuserDto, BindingResult result){
-
+    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto nuserDto, BindingResult result) throws Exception{
         if (result.hasErrors()){
             throw new InvalidDataException(result);
         }else {
@@ -55,15 +56,18 @@ public class UserController {
         }
     }
 
-    @PutMapping("update/{id}")
-    public ResponseEntity<?> modifyUser(@Valid @RequestBody NewUserDto newUserDto, BindingResult result,
+    @PutMapping("/admin/update/{id}")
+    public ResponseEntity<?> modifyUserAdminOnly(@Valid @RequestBody UserDto newUserDto, BindingResult result,
                                          @PathVariable Long id) throws NotFoundException{
-    	UserDto userFound =  userService.findById(id);
-    	if (userFound == null){
-            throw new NotFoundException("The user with id " + id + "does not exist");
-        }
-        System.out.println("save");
-        return new ResponseEntity<>(userService.update(userFound, newUserDto), HttpStatus.OK);
+    	Optional<UserDto> userDtoFound =  Optional.of(userService.findById(id));
+        return new ResponseEntity<>(userService.updateAdminOnly(userDtoFound, newUserDto), HttpStatus.OK);
+    }
+    
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> modifyUserAll(@Valid @RequestBody UserDtoRequestForUser userDto, BindingResult result,
+                                         @PathVariable Long id) throws NotFoundException{
+    	Optional<UserDto> userDtoFound =  Optional.of(userService.findById(id));
+        return new ResponseEntity<>(userService.updateForUser(userDtoFound, userDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

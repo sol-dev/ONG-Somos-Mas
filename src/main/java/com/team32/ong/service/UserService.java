@@ -1,16 +1,23 @@
 package com.team32.ong.service;
 
-import com.team32.ong.dto.UserDto;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import com.team32.ong.dto.NewUserDto;
+import com.team32.ong.dto.UserDto;
+import com.team32.ong.dto.UserDtoRequestForUser;
+
+import javassist.NotFoundException;
 
 @Service
 public interface UserService {
 
     UserDto save(UserDto user);
 
-	UserDto findById(Long id);
+    UserDto findById(Long id) throws NotFoundException;
 	
-	NewUserDto update(UserDto userDtoFound, NewUserDto newUserDto);
+	NewUserDto updateAdminOnly(Optional<UserDto> userDtoFound, UserDto newUserDto) throws NotFoundException;
+
+	NewUserDto updateForUser(Optional<UserDto> userDtoFound, UserDtoRequestForUser userDto) throws NotFoundException;
 }
