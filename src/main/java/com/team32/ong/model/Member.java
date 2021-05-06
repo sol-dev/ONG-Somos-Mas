@@ -1,5 +1,6 @@
 package com.team32.ong.model;
 
+
 import java.sql.Date;
 import java.time.LocalDateTime;
 
@@ -10,23 +11,32 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+
+
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name="member")
+@SQLDelete(sql="UPDATE activities SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
 public class Member{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int memberId;
+    private Long memberId;
 
     @NotEmpty
     @Column(name = "name", nullable = false)
@@ -56,11 +66,6 @@ public class Member{
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate;
 
-    @NotEmpty
     @Column(name = "deleted", nullable = false)
     private boolean deleted;
-
-   
-
-
 }
