@@ -27,7 +27,7 @@ public class CategoryController {
     public ResponseEntity<CategoryDTO> save(@RequestBody CategoryDTO categoryDTO) throws BadRequestException {
 
         return new ResponseEntity<>(categoryService.save(categoryDTO), HttpStatus.CREATED);
-            
+
     }
 
 }
