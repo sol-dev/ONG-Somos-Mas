@@ -25,11 +25,13 @@ public class CommentController {
 	@PostMapping("/addComment")
 	public ResponseEntity<CommentDto> addComment(@RequestParam(name="newsId") Optional<Long> newsId,
 												 @RequestParam("userId") Optional<Long> userId,
-												 @RequestBody AddCommentBody commentBody) {		
+												 @RequestBody(required = false) AddCommentBody commentBody) {		
 		
-		if(commentBody.getBody() == null | commentBody.getBody().length() == 0) {
-			throw new EmptyInputException("El comentario no puede estar vacío");
-		} 
+		if(commentBody == null) {
+			throw new EmptyInputException("Tiene que existir un comentario");
+		} else if(commentBody.getBody().isBlank() | commentBody.getBody().isEmpty()) {
+			throw new EmptyInputException("El cuerpo del comentario no puede estar vacío");
+		}
 		
     	return commentService.createNewComment(newsId, userId, commentBody.getBody());
     	
