@@ -23,7 +23,7 @@ public class TestimonialServiceImpl implements TestimonialService {
     public TestimonialDto save(TestimonialDto testimonialDto) {
 
         if(testimonialDto.getContent().isEmpty() || testimonialDto.getContent().length() == 0){
-            throw new EmptyInputException("601" ,"Input can not be empty");
+            throw new EmptyInputException("Input can not be empty");
         }
 
         Testimonial testimonialToCreate = this.dtoToModel(testimonialDto);

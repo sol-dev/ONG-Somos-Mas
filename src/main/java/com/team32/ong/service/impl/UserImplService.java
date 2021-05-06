@@ -40,9 +40,14 @@ public class UserImplService implements UserService, UserDetailsService {
         if (userRepo.existsByEmail(userRequest.getEmail())){
             throw new NotFoundException("Este email ya esta registrado");
         }else if (userRequest.getEmail() == null){
-            throw new BadRequestException("Se necesita definir un mail");
+            throw new BadRequestException("Se necesita definir un Email");
+        }else if (userRequest.getFirstName() == null){
+            throw new BadRequestException("Se necesita definir un Nombre");
+        }else if (userRequest.getLastName() == null){
+            throw new BadRequestException("Se necesita definir un Apellido");
+        }else if (userRequest.getPassword() == null){
+            throw new BadRequestException("Se necesita definir una Contraseña");
         }
-
         userRequest.setPassword(encoder.encode(userRequest.getPassword()));
 
         Role role = roleRepo.findByName("USER");
