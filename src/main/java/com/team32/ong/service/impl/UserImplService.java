@@ -4,13 +4,14 @@ import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.team32.ong.dto.NewUserDto;
 import com.team32.ong.dto.RoleDto;
 import com.team32.ong.dto.UserDto;
 import com.team32.ong.dto.UserDtoRequestForUser;
+import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.model.Role;
 import com.team32.ong.model.User;
 import com.team32.ong.repository.RoleRepository;
@@ -80,7 +81,7 @@ public class UserImplService implements UserService {
 	}
 	
 	@Override
-	public NewUserDto updateAdminOnly(Optional<UserDto> userDtoFound, UserDto userDto) throws NotFoundException {
+	public NewUserDto updateAdminOnly(Optional<UserDto> userDtoFound, UserDto userDto) {
 		StringBuffer errorsFound = new StringBuffer();
 		if(userDto.getFirstName().isEmpty()) {
 			errorsFound.append("El nombre no puede estar vacio. ");
@@ -95,8 +96,7 @@ public class UserImplService implements UserService {
 			errorsFound.append("La contraseña no puede estar vacia.");
 		}
 		if(errorsFound.length() > 0) {
-			throw new NotFoundException(errorsFound.toString());
-			//throw new BadRequestException(errorsFound.toString());
+			throw new BadRequestException(errorsFound.toString());
 		}
 		Role roleEntity = roleRepo.findByName(userDto.getRole().getName());
 		User userEntity = dtoToEntity(userDto);
@@ -107,7 +107,7 @@ public class UserImplService implements UserService {
 	}
 	
 	@Override
-	public NewUserDto updateForUser(Optional<UserDto> userDtoFound, UserDtoRequestForUser userDto) throws NotFoundException {
+	public NewUserDto updateForUser(Optional<UserDto> userDtoFound, UserDtoRequestForUser userDto) {
 		StringBuffer errorsFound = new StringBuffer();
 		if(userDto.getFirstName().isEmpty()) {
 			errorsFound.append("El nombre no puede estar vacio. ");
@@ -122,8 +122,7 @@ public class UserImplService implements UserService {
 			errorsFound.append("La contraseña no puede estar vacia.");
 		}
 		if(errorsFound.length() > 0) {
-			throw new NotFoundException(errorsFound.toString());
-			//throw new BadRequestException(errorsFound.toString());
+			throw new BadRequestException(errorsFound.toString());
 		}
 		Role roleEntity = roleRepo.findByName(userDtoFound.get().getRole().getName());
 		User userEntity = UserDtoRequestForUserToEntity(userDto);

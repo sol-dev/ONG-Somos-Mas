@@ -1,88 +1,72 @@
 package com.team32.ong.exception;
 
-import java.util.Date;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
-import org.springframework.dao.DataAccessException;
+import java.nio.file.AccessDeniedException;
+import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.client.HttpClientErrorException.Conflict;
+import org.springframework.web.client.HttpClientErrorException.Forbidden;
+import org.springframework.web.client.HttpClientErrorException.Unauthorized;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.exception.custom.EmptyInputException;
-import com.team32.ong.exception.custom.InvalidDataException;
+
+import javassist.NotFoundException;
+
 
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler
-    protected ResponseEntity<ErrorResponse> handleException(NoSuchElementException exc){
-        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
-        return buildResponseEntity(httpStatus, exc);
+    @ExceptionHandler(NotFoundException.class)
+    protected ResponseEntity<?> notFoundException(Exception e, HttpServletRequest req){
+    	ErrorResponse errorFound = new ErrorResponse(404, new Date(), e.getMessage(), req.getRequestURI());
+        return new ResponseEntity<>(errorFound, HttpStatus.NOT_FOUND);
     }
-
-    @ExceptionHandler
-    protected ResponseEntity<ErrorResponse> handleException(DuplicateKeyException exc){
-        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
-        return buildResponseEntity(httpStatus, exc);
+    
+    @ExceptionHandler({
+    	BadRequestException.class,
+    	DuplicateKeyException.class,
+    	MethodArgumentTypeMismatchException.class,
+    	EmptyInputException.class
+    })
+    protected ResponseEntity<?> badRequestException(Exception e, HttpServletRequest req){
+    	ErrorResponse errorFound = new ErrorResponse(400, new Date(), e.getMessage(), req.getRequestURI());
+        return new ResponseEntity<>(errorFound, HttpStatus.BAD_REQUEST);
     }
-
-    @ExceptionHandler
-    protected ResponseEntity<ErrorResponse> handleException(IllegalArgumentException exc){
-        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
-        return buildResponseEntity(httpStatus, exc);
+    
+    @ExceptionHandler(Forbidden.class)
+    protected ResponseEntity<?> forbiddenException(Exception e, HttpServletRequest req){
+    	ErrorResponse errorFound = new ErrorResponse(403, new Date(), e.getMessage(), req.getRequestURI());
+        return new ResponseEntity<>(errorFound, HttpStatus.FORBIDDEN);
     }
-
-    @ExceptionHandler
-    protected ResponseEntity<ErrorResponse> handleException(DataAccessException exc){
-        HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-        return buildResponseEntity(httpStatus, exc);
+    
+    @ExceptionHandler(Conflict.class)
+    protected ResponseEntity<?> conflictException(Exception e, HttpServletRequest req){
+    	ErrorResponse errorFound = new ErrorResponse(409, new Date(), e.getMessage(), req.getRequestURI());
+        return new ResponseEntity<>(errorFound, HttpStatus.CONFLICT);
     }
-
-    @ExceptionHandler
-    protected ResponseEntity<ErrorResponse> handleException(InvalidDataException exc){
-        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
-        List<String> errors =  exc.getResult().getFieldErrors()
-                .stream()
-                .map(FieldError::getDefaultMessage)
-                .collect(Collectors.toList());
-        return buildResponseEntity(httpStatus, new RuntimeException("Data Enviada Invalida"));
+    
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler({
+    	Unauthorized.class,
+    	AccessDeniedException.class
+    })
+    protected void unauthorizedException(Exception e, HttpServletRequest req){
     }
-
-    @ExceptionHandler
-    protected  ResponseEntity<ErrorResponse> handleException(MethodArgumentTypeMismatchException exc){
-        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
-        return buildResponseEntity(httpStatus, new RuntimeException("tipo de Argumento invalido"));
-    }
-
-    @ExceptionHandler
-    protected ResponseEntity<ErrorResponse> handleexception(Exception exc){
-        HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-        return buildResponseEntity(httpStatus, new RuntimeException("Error Interno - Reporte"));
-    }
-
-    @ExceptionHandler(EmptyInputException.class)
-   public ResponseEntity<String> handleEmptyInput(EmptyInputException emptyInputException){
-        return new ResponseEntity<String>("Input field is Empty, Please look into it", HttpStatus.BAD_REQUEST);
-    }
-
-    private ResponseEntity<ErrorResponse> buildResponseEntity(HttpStatus httpStatus, Exception exc){
-       return buildResponseEntity(httpStatus, exc, null);
-    }
-
-    private ResponseEntity<ErrorResponse> buildResponseEntity(HttpStatus httpStatus, Exception exc,
-                                                           List<String> errors){
-       ErrorResponse error = new ErrorResponse();
-       error.setMessage("Error - " + exc.getMessage());
-       error.setStatus(httpStatus.value());
-       error.setTimestamp(new Date());
-       error.setErrors(errors);
-     return new ResponseEntity(error,httpStatus);
+    
+    @ExceptionHandler(Exception.class)
+    protected ResponseEntity<?> exception(Exception e, HttpServletRequest req){
+    	ErrorResponse errorFound = new ErrorResponse(500, new Date(), e.getMessage(), req.getRequestURI());
+        return new ResponseEntity<>(errorFound, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
