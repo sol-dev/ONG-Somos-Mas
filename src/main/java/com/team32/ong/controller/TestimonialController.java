@@ -25,14 +25,9 @@ public class TestimonialController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<TestimonialDto> updateTestimonial( @PathVariable Long id, @Valid @RequestBody TestimonialDto testimonialDtoToUpdate , BindingResult result){
-
-        if (result.hasErrors()){
-            throw new InvalidDataException(result);
-        }
-
+    public ResponseEntity<TestimonialDto> updateTestimonial( @PathVariable Long id,
+                                                             @RequestBody TestimonialDto testimonialDtoToUpdate){
         TestimonialDto updatedTestimonial = testimonialService.updateById(testimonialDtoToUpdate, id);
-
-        return new ResponseEntity(updatedTestimonial, HttpStatus.OK);
+        return new ResponseEntity<>(updatedTestimonial, HttpStatus.OK);
     }
 }
