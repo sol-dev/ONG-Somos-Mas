@@ -1,5 +1,6 @@
 package com.team32.ong.service.impl;
 
+import com.team32.ong.dto.ActivitiesDTO;
 import com.team32.ong.model.Activities;
 import com.team32.ong.repository.ActivitiesRepository;
 import com.team32.ong.service.IActivitiesServices;
@@ -21,19 +22,9 @@ public class ActivitieService implements IActivitiesServices {
 
     @Override
     @Transactional
-    public Activities save(Activities activities, MultipartFile image) throws Exception {
+    public Activities save(ActivitiesDTO activitiesDTO, MultipartFile image) throws Exception {
         try {
-            if (!image.isEmpty()){
-                String uniqueFilename = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
-                Path rootPath = Paths.get("upload").resolve(uniqueFilename);
-                Path rootAbsolutepath = rootPath.toAbsolutePath();
-                Files.copy(image.getInputStream(), rootAbsolutepath);
-                activities.setImage(uniqueFilename);
-            }else {
-                activities.setImage("");
-            }
 
-            return activitiesRepository.save(activities);
 
         }catch (Exception e){
             throw  new Exception(e.getMessage());

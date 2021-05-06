@@ -2,6 +2,7 @@ package com.team32.ong.controller;
 
 
 
+import com.team32.ong.dto.ActivitiesDTO;
 import com.team32.ong.exception.custom.InvalidDataException;
 import com.team32.ong.model.Activities;
 import com.team32.ong.service.impl.ActivitieService;
@@ -28,16 +29,16 @@ public class ActivitiesController {
 
 
     @PostMapping
-    public ResponseEntity<?> createActivity(@Valid @RequestBody Activities activities,
+    public ResponseEntity<?> createActivity(@Valid @RequestBody ActivitiesDTO activitiesDTO,
                                             BindingResult result, @RequestParam("file")
                                             MultipartFile file) throws Exception{
 
         Map<String, Object> response = new HashMap<>();
         Activities activityNew = null;
 
-        if (result.hasErrors()){
-            throw new InvalidDataException(result);
-        }
+       if (activitiesDTO == null){
+
+       }
 
 
             activityNew = activitieService.save(activities, file);
