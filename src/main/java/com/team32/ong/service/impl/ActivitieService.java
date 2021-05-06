@@ -1,18 +1,17 @@
 package com.team32.ong.service.impl;
 
 import com.team32.ong.dto.ActivitiesDTO;
+import com.team32.ong.exception.custom.EmptyInputException;
 import com.team32.ong.model.Activities;
 import com.team32.ong.repository.ActivitiesRepository;
 import com.team32.ong.service.IActivitiesServices;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.UUID;
+
 
 @Service
 public class ActivitieService implements IActivitiesServices {
@@ -22,13 +21,36 @@ public class ActivitieService implements IActivitiesServices {
 
     @Override
     @Transactional
-    public Activities save(ActivitiesDTO activitiesDTO, MultipartFile image) throws Exception {
+    public ActivitiesDTO save(ActivitiesDTO activitiesDTO, MultipartFile image) throws Exception {
         try {
+            if (activitiesDTO.getName() == null || activitiesDTO.getName() == "") {
+                throw new EmptyInputException("El Nombre es Requerido");
+            }
+            if (activitiesDTO.getContent() == null || activitiesDTO.getContent() == ""){
+                throw new EmptyInputException("La Actividad No tiene Contenido");
+            }
 
+            //todo: capturar imagen
+            activitiesDTO.setImage("default.jpg");
+
+            activitiesRepository.save(dtoToModel(activitiesDTO));
+            return activitiesDTO;
 
         }catch (Exception e){
             throw  new Exception(e.getMessage());
         }
+    }
+
+    private ActivitiesDTO modelToDTO(Activities activities){
+        ModelMapper modelMapper = new ModelMapper();
+        ActivitiesDTO map = modelMapper.map(activities, ActivitiesDTO.class);
+        return map;
+    }
+
+    private Activities dtoToModel(ActivitiesDTO activitiesDTO){
+        ModelMapper modelMapper = new ModelMapper();
+        Activities map = modelMapper.map(activitiesDTO, Activities.class);
+        return map;
     }
 
  

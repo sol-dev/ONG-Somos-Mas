@@ -7,5 +7,5 @@ import com.team32.ong.model.Activities;
 
 public interface IActivitiesServices {
 
-    public Activities save(ActivitiesDTO activitiesDTO, MultipartFile image) throws Exception;
+    public ActivitiesDTO save(ActivitiesDTO activitiesDTO, MultipartFile image) throws Exception;
 }
