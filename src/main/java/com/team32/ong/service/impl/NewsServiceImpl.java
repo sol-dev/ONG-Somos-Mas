@@ -4,16 +4,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import com.team32.ong.dto.NewsDto;
+import com.team32.ong.exception.custom.InvalidDataException;
 import com.team32.ong.model.News;
 import com.team32.ong.repository.NewsRepository;
 import com.team32.ong.service.NewsService;
@@ -57,6 +55,12 @@ public class NewsServiceImpl implements NewsService {
 		News news = newsRepository.getOne(id);
 		return modelToDto(news);
 	}	
+	
+	@Override
+	public NewsDto findById(Long id) {
+		News news = newsRepository.findById(id).orElseThrow(() -> new InvalidDataException("No existe una noticia con ese id"));
+    	return modelToDto(news);
+	}
 	
 	
 	public NewsDto modelToDto(News news) {

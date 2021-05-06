@@ -1,5 +1,8 @@
 package com.team32.ong.service;
 
+import java.util.Optional;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.team32.ong.dto.CommentDto;
@@ -9,6 +12,7 @@ public interface CommentService {
 	
 	CommentDto save(CommentDto commentDto);
 	CommentDto getOne(Long id);
-	CommentDto createNewComment(Long newsId, Long userId, String body);
+	CommentDto findById(Long id);
+	ResponseEntity<CommentDto> createNewComment(Optional<Long> newsId, Optional<Long> userId, String body);
 
 }

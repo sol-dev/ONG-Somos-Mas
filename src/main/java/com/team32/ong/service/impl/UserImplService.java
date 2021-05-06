@@ -2,6 +2,7 @@ package com.team32.ong.service.impl;
 
 import com.team32.ong.dto.UserRequest;
 import com.team32.ong.dto.UserResponse;
+import com.team32.ong.exception.custom.InvalidDataException;
 import com.team32.ong.model.Role;
 import com.team32.ong.model.User;
 import com.team32.ong.repository.RoleRepository;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserImplService implements UserService, UserDetailsService {
@@ -50,6 +52,12 @@ public class UserImplService implements UserService, UserDetailsService {
     public UserResponse getOne(Long id) {
     	User user = userRepo.getOne(id);
 		return entityToDto(user);
+    }
+    
+    @Override
+    public UserResponse findById(Long id) {
+    	User user = userRepo.findById(id).orElseThrow(() -> new InvalidDataException("No existe un usuario con ese id"));
+    	return entityToDto(user);
     }
 
     @Override

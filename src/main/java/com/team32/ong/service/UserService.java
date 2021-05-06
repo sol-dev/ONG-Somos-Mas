@@ -10,6 +10,7 @@ public interface UserService {
     
     UserResponse save(UserRequest user);
 	UserResponse getOne(Long id);
+	UserResponse findById(Long id);
 
     public User dtoToEntity(UserResponse userResponse);
     public UserResponse entityToDto(User user);
