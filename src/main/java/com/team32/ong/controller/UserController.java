@@ -37,14 +37,8 @@ public class UserController {
 
 
     @PostMapping
-    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest userRequest,
-                                                   BindingResult result) throws NotFoundException {
-
-        if (result.hasErrors()){
-            throw new InvalidDataException(result);
-        }else {
-            return new ResponseEntity<>(userService.save(userRequest), HttpStatus.CREATED);
-        }
+    public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest userRequest) throws NotFoundException {
+        return new ResponseEntity<>(userService.save(userRequest), HttpStatus.CREATED);
     }
 
     @PutMapping
