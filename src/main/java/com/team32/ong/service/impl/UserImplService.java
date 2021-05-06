@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserImplService implements UserService, UserDetailsService {
@@ -48,9 +49,9 @@ public class UserImplService implements UserService, UserDetailsService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        User user = userRepo.findByEmail(email);
+        User user = userRepo.findByUsername(username);
 
         List<GrantedAuthority> rol = new ArrayList<>();
         rol.add(new SimpleGrantedAuthority(user.getRole().getName()));
@@ -59,7 +60,18 @@ public class UserImplService implements UserService, UserDetailsService {
                 User(user.getEmail(), user.getPassword(), rol);
     }
 
-
+	@Override
+	public Boolean rolValidation(UserRequest userRequest) {
+		Optional<User> userOpt = userRepo.findById(userRequest.getId());
+		if (userOpt.isPresent()) {
+			User user = userOpt.get();
+			if (user.getRole().getId() == 1) {
+				return true;
+			}
+		}
+		return false;
+	}
+    
     private User dtoToEntity(UserRequest userRequest){
         ModelMapper mapper = new ModelMapper();
         return mapper.map(userRequest, User.class);
@@ -69,6 +81,4 @@ public class UserImplService implements UserService, UserDetailsService {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(user, UserResponse.class);
     }
-
-
 }
