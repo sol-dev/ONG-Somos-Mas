@@ -2,11 +2,13 @@ package com.team32.ong.service.impl;
 
 import com.team32.ong.dto.UserRequest;
 import com.team32.ong.dto.UserResponse;
+import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.model.Role;
 import com.team32.ong.model.User;
 import com.team32.ong.repository.RoleRepository;
 import com.team32.ong.repository.UserRepository;
 import com.team32.ong.service.UserService;
+import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -33,7 +35,13 @@ public class UserImplService implements UserService, UserDetailsService {
     private RoleRepository roleRepo;
 
     @Override
-    public UserResponse save(UserRequest userRequest) {
+    public UserResponse save(UserRequest userRequest) throws NotFoundException, BadRequestException {
+
+        if (userRepo.existsByEmail(userRequest.getEmail())){
+            throw new NotFoundException("Este email ya esta registrado");
+        }else if (userRequest.getEmail() == null){
+            throw new BadRequestException("Se necesita definir un mail");
+        }
 
         userRequest.setPassword(encoder.encode(userRequest.getPassword()));
 
@@ -44,12 +52,15 @@ public class UserImplService implements UserService, UserDetailsService {
         User userSave = userRepo.save(userEntity);
 
         return entityToDto(userSave);
-    }
 
+    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
+        if (!userRepo.existsByEmail(email)){
+            throw new UsernameNotFoundException("Este mail no es un usuario registrado");
+        }
         User user = userRepo.findByEmail(email);
 
         List<GrantedAuthority> rol = new ArrayList<>();
