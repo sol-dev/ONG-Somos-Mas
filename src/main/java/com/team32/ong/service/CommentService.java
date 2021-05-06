@@ -9,5 +9,6 @@ public interface CommentService {
 	
 	CommentDto save(CommentDto commentDto);
 	CommentDto getOne(Long id);
+	CommentDto createNewComment(Long newsId, Long userId, String body);
 
 }

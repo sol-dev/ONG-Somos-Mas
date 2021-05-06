@@ -11,11 +11,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddCommentDto{
-	
-	private Long id;
+public class AddCommentBody{
+
 	private String body;
-	private Long userId;
-	private Long newsId;
 
 }
