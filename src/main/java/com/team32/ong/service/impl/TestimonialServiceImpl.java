@@ -6,6 +6,7 @@ import com.team32.ong.exception.custom.InvalidDataException;
 import com.team32.ong.model.Testimonial;
 import com.team32.ong.repository.TestimonialRepository;
 import com.team32.ong.service.TestimonialService;
+import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,9 +36,9 @@ public class TestimonialServiceImpl implements TestimonialService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Long id) throws NotFoundException {
         if(!testimonialRepository.existsById(id)){
-            //throw new InvalidDataException();
+            throw new NotFoundException("No es posible borrar un testimonio con el id " + id);
         }
         testimonialRepository.deleteById(id);
     }

@@ -3,6 +3,7 @@ package com.team32.ong.controller;
 import com.team32.ong.dto.TestimonialDto;
 import com.team32.ong.exception.custom.InvalidDataException;
 import com.team32.ong.service.TestimonialService;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,7 @@ public class TestimonialController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteTestimonial(@PathVariable Long id){
+    public ResponseEntity<?> deleteTestimonial(@PathVariable Long id) throws NotFoundException {
         testimonialService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
