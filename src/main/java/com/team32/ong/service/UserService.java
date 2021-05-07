@@ -8,5 +8,5 @@ import org.springframework.stereotype.Service;
 public interface UserService {
 
     UserResponse save(UserRequest user);
-    public Boolean rolValidation(UserRequest user);
+    public Boolean rolValidation(Long id);
 }

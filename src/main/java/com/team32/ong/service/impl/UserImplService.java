@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,9 +50,9 @@ public class UserImplService implements UserService, UserDetailsService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        User user = userRepo.findByUsername(username);
+        User user = userRepo.findByEmail(email);
 
         List<GrantedAuthority> rol = new ArrayList<>();
         rol.add(new SimpleGrantedAuthority(user.getRole().getName().name()));
@@ -61,8 +62,8 @@ public class UserImplService implements UserService, UserDetailsService {
     }
 
 	@Override
-	public Boolean rolValidation(UserRequest userRequest) {
-		Optional<User> userOpt = userRepo.findById(userRequest.getId());
+	public Boolean rolValidation(Long id) {
+		Optional<User> userOpt = userRepo.findById(id);
 		if (userOpt.isPresent()) {
 			User user = userOpt.get();
 			if (user.getRole().getId() == 1) {
