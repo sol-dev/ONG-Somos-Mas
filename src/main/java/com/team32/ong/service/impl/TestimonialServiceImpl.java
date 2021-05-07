@@ -1,5 +1,6 @@
 package com.team32.ong.service.impl;
 
+import com.team32.ong.constant.ConstantMessage;
 import com.team32.ong.dto.TestimonialDto;
 import com.team32.ong.exception.custom.EmptyInputException;
 import com.team32.ong.model.Testimonial;
@@ -25,15 +26,15 @@ public class TestimonialServiceImpl implements TestimonialService {
     public TestimonialDto save(TestimonialDto testimonialDto) {
 
         if(testimonialDto.getName().isEmpty() || testimonialDto.getName().length() == 0){
-            throw new EmptyInputException("Debe completar el campo nombre");
+            throw new EmptyInputException(ConstantMessage.MSG_EMPTY_INPUT + "nombre");
         }
 
         if(testimonialDto.getContent().isEmpty() || testimonialDto.getContent().length() == 0){
-            throw new EmptyInputException("Debe completar el campo contenido");
+            throw new EmptyInputException(ConstantMessage.MSG_EMPTY_INPUT + "contenido");
         }
 
         if(testimonialDto.getImage().isEmpty() || testimonialDto.getImage().length() == 0){
-            throw new EmptyInputException("Debe completar el campo imagen");
+            throw new EmptyInputException(ConstantMessage.MSG_EMPTY_INPUT + "imagen");
         }
 
         Testimonial testimonialToCreate = this.dtoToModel(testimonialDto);
