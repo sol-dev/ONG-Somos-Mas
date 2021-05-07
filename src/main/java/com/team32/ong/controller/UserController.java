@@ -70,8 +70,9 @@ public class UserController {
         return new ResponseEntity<>(userService.updateForUser(userDtoFound, userDto), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id){
-        return null;
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) throws NotFoundException{
+    	userService.delete(id);
+    	return new ResponseEntity<>("The user with id " + id + " was deleted",HttpStatus.OK);
     }
 }

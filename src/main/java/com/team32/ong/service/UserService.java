@@ -20,4 +20,6 @@ public interface UserService {
 	NewUserDto updateAdminOnly(Optional<UserDto> userDtoFound, UserDto newUserDto) throws NotFoundException;
 
 	NewUserDto updateForUser(Optional<UserDto> userDtoFound, UserDtoRequestForUser userDto) throws NotFoundException;
+
+	void delete(Long id) throws NotFoundException;
 }

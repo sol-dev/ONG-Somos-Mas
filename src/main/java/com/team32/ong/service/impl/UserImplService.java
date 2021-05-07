@@ -131,4 +131,13 @@ public class UserImplService implements UserService {
 		userRepo.save(userEntity);
 		return entityToNewDto(userEntity);
 	}
+
+	@Override
+	public void delete(Long id) throws NotFoundException {
+		boolean userExists = userRepo.existsById(id);
+		if(!userExists) {
+			throw new NotFoundException("The user with id " + id + " does not exist");
+		}
+		userRepo.deleteById(id);
+	}
 }
