@@ -1,5 +1,6 @@
 package com.team32.ong.dto;
 
+import java.util.List;
 import java.util.Set;
 import com.team32.ong.model.Category;
 import com.team32.ong.model.Comment;
@@ -20,6 +21,6 @@ public class NewsDto{
 	private String content;
 	private String image;
 	private Set<Category> categories;
-	private Set<Comment> comments;
+	private List<Comment> comments;
 
 }

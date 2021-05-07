@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.team32.ong.dto.AddCommentBody;
 import com.team32.ong.dto.CommentDto;
-import com.team32.ong.exception.custom.EmptyInputException;
 import com.team32.ong.service.CommentService;
 
 

@@ -95,6 +95,7 @@ public class CommentServiceImpl implements CommentService {
 			commentDto.setBody(commentBody.getBody());	
 		}
 				
+		commentDto.setId(0L);
 		save(commentDto);
 		
 		return new ResponseEntity<>(commentDto,HttpStatus.OK);

@@ -1,8 +1,10 @@
 package com.team32.ong.model;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -73,7 +75,7 @@ public class News implements Serializable{
     private Set<Category> categories;    
     
     @OneToMany(targetEntity=Comment.class, mappedBy="news", fetch = FetchType.LAZY, cascade=CascadeType.ALL)
-	private Set<Comment> comments = new HashSet<>();
+	private List<Comment> comments = new ArrayList<>();
     
     @CreationTimestamp
     @Column(name="created_date")
