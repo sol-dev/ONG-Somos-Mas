@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -58,6 +59,9 @@ public class User implements Serializable, UserDetails {
     private LocalDateTime created_time;
     @UpdateTimestamp
     private LocalDateTime updated_time;
+    
+    @OneToMany(mappedBy="user", fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	private Set<Comment> comments;
 
 
     public User(String firstName, String lastName, String email, String password) {

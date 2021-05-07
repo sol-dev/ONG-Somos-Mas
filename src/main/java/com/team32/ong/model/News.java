@@ -6,12 +6,14 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -32,7 +34,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @DynamicUpdate
-@SQLDelete(sql = "UPDATE posts SET deleted=true WHERE id=?")
+@SQLDelete(sql = "UPDATE news SET deleted=true WHERE id=?")
 @Where(clause = "deleted = false")
 @Table(name = "news")
 public class News implements Serializable{
@@ -65,6 +67,9 @@ public class News implements Serializable{
         inverseJoinColumns = @JoinColumn(name="category_id", nullable = false)
     )
     private Set<Category> categories;
+
+    @OneToMany(mappedBy="news", fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	private Set<Comment> comments;
     
     @CreationTimestamp
     @Column(name="created_date")
@@ -76,5 +81,13 @@ public class News implements Serializable{
 
     @Column(name="deleted")
     private boolean deleted;
+
+	public News(String name, String content, String image) {
+		this.name = name;
+		this.content = content;
+		this.image = image;
+	}
+    
+    
     
 }
