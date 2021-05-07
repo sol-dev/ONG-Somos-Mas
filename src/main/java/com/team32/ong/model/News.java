@@ -38,7 +38,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @DynamicUpdate
-@SQLDelete(sql = "UPDATE posts SET deleted=true WHERE id=?")
+@SQLDelete(sql = "UPDATE news SET deleted=true WHERE id=?")
 @Where(clause = "deleted = false")
 @Table(name = "news")
 public class News implements Serializable{
@@ -70,7 +70,10 @@ public class News implements Serializable{
         joinColumns = @JoinColumn(name = "news_id"),
         inverseJoinColumns = @JoinColumn(name="category_id")
     )
-    private Set<Category> categories;
+    private Set<Category> categories;    
+    
+    @OneToMany(targetEntity=Comment.class, mappedBy="news", fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	private Set<Comment> comments = new HashSet<>();
     
     @CreationTimestamp
     @Column(name="created_date")
@@ -82,8 +85,11 @@ public class News implements Serializable{
 
     @Column(name="deleted")
     private boolean deleted;
-     
-    @OneToMany(targetEntity=Comment.class, mappedBy="news", fetch = FetchType.LAZY, cascade=CascadeType.ALL)
-	private Set<Comment> comments = new HashSet<>();
 
+	public News(String name, String content, String image) {
+		this.name = name;
+		this.content = content;
+		this.image = image;
+	}  
+    
 }
