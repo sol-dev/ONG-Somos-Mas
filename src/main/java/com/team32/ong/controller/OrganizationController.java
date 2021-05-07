@@ -1,6 +1,8 @@
 package com.team32.ong.controller;
 
 import com.team32.ong.dto.OrganizationDTO;
+import com.team32.ong.exception.custom.BadRequestException;
+import com.team32.ong.exception.custom.EmptyInputException;
 import com.team32.ong.exception.custom.InvalidDataException;
 import com.team32.ong.service.IOrganizationService;
 
@@ -19,6 +21,8 @@ import javax.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javassist.NotFoundException;
+
 
 @RestController
 @RequestMapping("api/v1/organization")
@@ -29,33 +33,32 @@ public class OrganizationController {
     private IOrganizationService organizationService;
 
     @GetMapping(value = "/public")
-    public List<OrganizationDTO> getPublicInfo(){
-        return organizationService.findActives();
+    public ResponseEntity<?> getPublicInfo(){
+        List<OrganizationDTO> list = organizationService.findActives();
+        return new ResponseEntity<>(list,HttpStatus.OK);
     }
 
     @PostMapping(value = "/new", consumes = "application/json")
-    public ResponseEntity<OrganizationDTO> newOrganization(@Valid @RequestBody OrganizationDTO organization, BindingResult result){
-        Map<String, Object> response = new HashMap<>();
-        OrganizationDTO newDto = null;
-        newDto = organizationService.save(organization);
-        response.put("message", "Organizacion Guardada con exito!");
-        response.put("organization", newDto);
-        return new ResponseEntity(response, HttpStatus.CREATED);
+    public ResponseEntity<OrganizationDTO> newOrganization(@RequestBody OrganizationDTO organization) throws BadRequestException,EmptyInputException{
+        OrganizationDTO dto = organizationService.save(organization);
+        return new ResponseEntity<OrganizationDTO>(dto, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/id")
-    public ResponseEntity<OrganizationDTO> findById( @RequestParam("id") Long id){
-       return new ResponseEntity<OrganizationDTO>(organizationService.findById(id), HttpStatus.FOUND);
+    public ResponseEntity<OrganizationDTO> findById( @RequestParam("id") Long id) throws NotFoundException{
+        return new ResponseEntity<OrganizationDTO>(organizationService.findById(id), HttpStatus.FOUND);
     }
  
     @GetMapping(value = "/all")
-    public List<OrganizationDTO> findAll(){
-        return organizationService.findAll();
+    public ResponseEntity<?> findAll(){
+        List<OrganizationDTO> list = organizationService.findAll();
+        return new ResponseEntity<>(list,HttpStatus.OK);
     }
 
     @PostMapping(value="/delete")
-    public void softDelete(@RequestParam("id") Long id) {
+    public ResponseEntity<?> softDelete(@RequestParam("id") Long id) throws NotFoundException {
         organizationService.softDelete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
