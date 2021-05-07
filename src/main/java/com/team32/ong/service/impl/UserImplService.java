@@ -1,7 +1,7 @@
 package com.team32.ong.service.impl;
 
-import com.team32.ong.dto.UserRequest;
-import com.team32.ong.dto.UserResponse;
+import com.team32.ong.dto.UserDTORequest;
+import com.team32.ong.dto.UserDTOResponse;
 import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.model.Role;
 import com.team32.ong.model.User;
@@ -35,24 +35,24 @@ public class UserImplService implements UserService, UserDetailsService {
     private RoleRepository roleRepo;
 
     @Override
-    public UserResponse save(UserRequest userRequest) throws NotFoundException, BadRequestException {
+    public UserDTOResponse save(UserDTORequest userDTORequest) throws NotFoundException, BadRequestException {
 
-        if (userRepo.existsByEmail(userRequest.getEmail())){
+        if (userRepo.existsByEmail(userDTORequest.getEmail())){
             throw new NotFoundException("Este email ya esta registrado");
-        }else if (userRequest.getEmail() == null){
+        }else if (userDTORequest.getEmail() == null){
             throw new BadRequestException("Se necesita definir un Email");
-        }else if (userRequest.getFirstName() == null){
+        }else if (userDTORequest.getFirstName() == null){
             throw new BadRequestException("Se necesita definir un Nombre");
-        }else if (userRequest.getLastName() == null){
+        }else if (userDTORequest.getLastName() == null){
             throw new BadRequestException("Se necesita definir un Apellido");
-        }else if (userRequest.getPassword() == null){
+        }else if (userDTORequest.getPassword() == null){
             throw new BadRequestException("Se necesita definir una Contraseña");
         }
-        userRequest.setPassword(encoder.encode(userRequest.getPassword()));
+        userDTORequest.setPassword(encoder.encode(userDTORequest.getPassword()));
 
         Role role = roleRepo.findByName("USER");
 
-        User userEntity = dtoToEntity(userRequest);
+        User userEntity = dtoToEntity(userDTORequest);
         userEntity.setRole(role);
         User userSave = userRepo.save(userEntity);
 
@@ -76,14 +76,14 @@ public class UserImplService implements UserService, UserDetailsService {
     }
 
 
-    private User dtoToEntity(UserRequest userRequest){
+    private User dtoToEntity(UserDTORequest userDTORequest){
         ModelMapper mapper = new ModelMapper();
-        return mapper.map(userRequest, User.class);
+        return mapper.map(userDTORequest, User.class);
     }
 
-    private UserResponse entityToDto(User user){
+    private UserDTOResponse entityToDto(User user){
         ModelMapper mapper = new ModelMapper();
-        return mapper.map(user, UserResponse.class);
+        return mapper.map(user, UserDTOResponse.class);
     }
 
 
