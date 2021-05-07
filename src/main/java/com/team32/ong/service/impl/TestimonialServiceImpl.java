@@ -22,8 +22,16 @@ public class TestimonialServiceImpl implements TestimonialService {
     @Override
     public TestimonialDto save(TestimonialDto testimonialDto) {
 
+        if(testimonialDto.getName().isEmpty() || testimonialDto.getName().length() == 0){
+            throw new EmptyInputException("Debe completar el campo nombre");
+        }
+
         if(testimonialDto.getContent().isEmpty() || testimonialDto.getContent().length() == 0){
-            throw new EmptyInputException("601" ,"Input can not be empty");
+            throw new EmptyInputException("Debe completar el campo contenido");
+        }
+
+        if(testimonialDto.getImage().isEmpty() || testimonialDto.getImage().length() == 0){
+            throw new EmptyInputException("Debe completar el campo imagen");
         }
 
         Testimonial testimonialToCreate = this.dtoToModel(testimonialDto);
