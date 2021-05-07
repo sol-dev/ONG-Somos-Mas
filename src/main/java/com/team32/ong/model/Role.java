@@ -1,5 +1,4 @@
 package com.team32.ong.model;
-import com.team32.ong.enums.RoleName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,7 +26,7 @@ public class Role implements Serializable {
     @NotNull
     @Column(length = 50)
     @Enumerated(EnumType.STRING)
-    private RoleName name;
+    private String name;
     @Column(length = 50)
     private String description;
     @CreationTimestamp
@@ -36,7 +35,7 @@ public class Role implements Serializable {
     private LocalDateTime update_time;
 
 
-    public Role(RoleName name, String description) {
+    public Role(String name, String description) {
         this.name = name;
         this.description = description;
     }
