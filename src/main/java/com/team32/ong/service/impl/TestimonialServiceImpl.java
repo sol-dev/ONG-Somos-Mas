@@ -1,5 +1,6 @@
 package com.team32.ong.service.impl;
 
+import com.team32.ong.constant.ConstantMessage;
 import com.team32.ong.dto.TestimonialDto;
 import com.team32.ong.exception.custom.EmptyInputException;
 import com.team32.ong.model.Testimonial;
@@ -78,7 +79,7 @@ public class TestimonialServiceImpl implements TestimonialService {
     @Override
     public void deleteById(Long id) throws NotFoundException {
         if(!testimonialRepository.existsById(id)){
-            throw new NotFoundException("No es posible borrar un testimonio con el id " + id);
+            throw new NotFoundException(ConstantMessage.MSG_NOT_FOUND + id);
         }
         testimonialRepository.deleteById(id);
     }
