@@ -34,6 +34,7 @@ public class TestimonialServiceImpl implements TestimonialService {
 
         if(testimonialDto.getImage().isEmpty() || testimonialDto.getImage().length() == 0){
             throw new EmptyInputException("Debe completar el campo imagen");
+
         }
 
         Testimonial testimonialToCreate = this.dtoToModel(testimonialDto);
