@@ -21,7 +21,7 @@ public class ActivitieService implements IActivitiesServices {
 
     @Override
     @Transactional
-    public ActivitiesDTO save(ActivitiesDTO activitiesDTO, MultipartFile image) throws Exception {
+    public ActivitiesDTO save(ActivitiesDTO activitiesDTO , MultipartFile image) throws Exception {
         try {
             if (activitiesDTO.getName() == null || activitiesDTO.getName() == "") {
                 throw new EmptyInputException("El Nombre es Requerido");
