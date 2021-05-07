@@ -1,7 +1,7 @@
 package com.team32.ong.service.impl;
 
 
-import com.team32.ong.dto.CategoryAdminDTO;
+import java.util.Optional;
 import com.team32.ong.dto.CategoryDTO;
 import com.team32.ong.model.Category;
 import com.team32.ong.repository.CategoryRepository;
@@ -9,6 +9,8 @@ import com.team32.ong.service.CategoryService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javassist.NotFoundException;
 
 @Service
 public class CategoryImplService implements CategoryService {
@@ -25,8 +27,12 @@ public class CategoryImplService implements CategoryService {
         return entityToDto(category);
     }
 
-    public CategoryAdminDTO findById(Long id){
-        return entityToAdminDto(repo.findById(id).get());
+    public CategoryDTO findById(Long id) throws NotFoundException{
+        Optional<Category> category = repo.findById(id) ;
+        if(!category.isPresent()){
+            throw new NotFoundException("No existe la categoria con id: "+id);
+        }
+        return entityToDto(category.get());
     }
 
     //model mapper
@@ -38,16 +44,6 @@ public class CategoryImplService implements CategoryService {
     private CategoryDTO entityToDto(Category category){
         ModelMapper mapper = new ModelMapper();
         return mapper.map(category, CategoryDTO.class);
-    }
-
-    private Category dtoToAdminEntity(CategoryAdminDTO dto){
-        ModelMapper mapper = new ModelMapper();
-        return mapper.map(dto, Category.class);
-    }
-
-    private CategoryAdminDTO entityToAdminDto(Category category){
-        ModelMapper mapper = new ModelMapper();
-        return mapper.map(category, CategoryAdminDTO.class);
     }
 
 }
