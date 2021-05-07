@@ -25,7 +25,6 @@ public class Role implements Serializable {
     private Long id;
     @NotNull
     @Column(length = 50)
-    @Enumerated(EnumType.STRING)
     private String name;
     @Column(length = 50)
     private String description;
