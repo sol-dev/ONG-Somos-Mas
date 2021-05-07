@@ -1,5 +1,7 @@
 package com.team32.ong.service.impl;
 
+import com.team32.ong.model.Activities;
+import com.team32.ong.repository.ActivitiesRepository;
 import com.team32.ong.service.IActivitiesServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,9 +28,9 @@ public class ActivitieService implements IActivitiesServices {
                 Path rootPath = Paths.get("upload").resolve(uniqueFilename);
                 Path rootAbsolutepath = rootPath.toAbsolutePath();
                 Files.copy(image.getInputStream(), rootAbsolutepath);
-                Activities.setImange(uniqueFilename);
+                activities.setImage(uniqueFilename);
             }else {
-                Activities.setImange("");
+                activities.setImage("");
             }
 
             return activitiesRepository.save(activities);
