@@ -44,7 +44,7 @@ public class ActivitiesController {
        activitieService.save(activitiesDTO, file);
 
        response.put("message","Actividad Creada!");
-       response.put("actiivitie", activitiesDTO);
+       response.put("activitie", activitiesDTO);
 
        return new ResponseEntity(response, HttpStatus.CREATED);
     }
