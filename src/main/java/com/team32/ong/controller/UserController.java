@@ -7,7 +7,6 @@ import com.team32.ong.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,9 +20,6 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-    
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @GetMapping
     public ResponseEntity<?> vievAll(@RequestParam(defaultValue = "0") int page,
@@ -60,10 +56,4 @@ public class UserController {
     public ResponseEntity<?> deleteUser(@PathVariable("id") Long id){
         return null;
     }
-    
-    @GetMapping("/bcrypt/{texto}")
-    @ResponseBody
-   	public String encriptar(@PathVariable("texto") String texto) {    	
-   		return texto + " Encriptado en Bcrypt: " + passwordEncoder.encode(texto);
-   	}
 }

@@ -54,7 +54,7 @@ public class UserImplService implements UserService, UserDetailsService {
         User user = userRepo.findByUsername(username);
 
         List<GrantedAuthority> rol = new ArrayList<>();
-        rol.add(new SimpleGrantedAuthority(user.getRole().getName()));
+        rol.add(new SimpleGrantedAuthority(user.getRole().getName().name()));
 
         return new org.springframework.security.core.userdetails.
                 User(user.getEmail(), user.getPassword(), rol);
