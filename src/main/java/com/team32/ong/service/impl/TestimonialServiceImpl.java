@@ -1,5 +1,6 @@
 package com.team32.ong.service.impl;
 
+import com.team32.ong.constant.ConstantMessage;
 import com.team32.ong.dto.TestimonialDto;
 import com.team32.ong.exception.custom.EmptyInputException;
 import com.team32.ong.model.Testimonial;
@@ -48,19 +49,19 @@ public class TestimonialServiceImpl implements TestimonialService {
     public TestimonialDto updateById(TestimonialDto testimonialDtoToUpdate, Long id) throws NotFoundException {
 
         if(!testimonialRepository.existsById(id)){
-            throw new NotFoundException("No es posible actualizar un testimonio con el id " + id);
+            throw new NotFoundException( ConstantMessage.MSG_NOT_FOUND + id);
         }
 
         if(testimonialDtoToUpdate.getName().isEmpty() || testimonialDtoToUpdate.getName().length() == 0){
-            throw new EmptyInputException("Debe completar el campo nombre");
+            throw new EmptyInputException(ConstantMessage.MSG_EMPTY_INPUT + "nombre");
         }
 
         if(testimonialDtoToUpdate.getContent().isEmpty() || testimonialDtoToUpdate.getContent().length() == 0){
-            throw new EmptyInputException("Debe completar el campo contenido");
+            throw new EmptyInputException(ConstantMessage.MSG_EMPTY_INPUT + "contenido");
         }
 
         if(testimonialDtoToUpdate.getImage().isEmpty() || testimonialDtoToUpdate.getImage().length() == 0){
-            throw new EmptyInputException("Debe completar el campo imagen");
+            throw new EmptyInputException(ConstantMessage.MSG_EMPTY_INPUT + "imagen");
         }
 
         Optional<Testimonial> testimonials = testimonialRepository.findById(id);
