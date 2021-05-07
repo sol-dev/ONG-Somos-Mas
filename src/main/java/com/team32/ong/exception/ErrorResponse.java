@@ -1,23 +1,25 @@
 package com.team32.ong.exception;
 
-import lombok.AllArgsConstructor;
+import java.util.Date;
+
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
-import java.util.List;
-
 @Setter
-@AllArgsConstructor
+@Getter
 @NoArgsConstructor
 public class ErrorResponse {
 
     private int status;
-    private String message;
     private Date timestamp;
-    private List<String> errors;
-
-    ErrorResponse(String message){
-        this.message = message;
-    }
+    private String message;    
+    private String path;
+    
+	public ErrorResponse(int status, Date timestamp, String message, String path) {
+		this.status = status;
+		this.timestamp = timestamp;
+		this.message = message;
+		this.path = path;
+	};
 }

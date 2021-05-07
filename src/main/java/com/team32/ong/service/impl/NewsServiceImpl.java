@@ -25,12 +25,17 @@ public class NewsServiceImpl implements NewsService{
 	private NewsRepository newsRepository;
 
 	@Override
-	public NewsDto save(NewsDto newsDto, MultipartFile image)throws IOException {
-		if(image != null) {
+	public NewsDto save(NewsDto newsDto, MultipartFile image) throws IOException {
+		if(image.isEmpty()) {
 			String uniqueFilename = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
             Path rootPath = Paths.get("upload").resolve(uniqueFilename);
             Path rootAbsolutepath = rootPath.toAbsolutePath();
-            Files.copy(image.getInputStream(), rootAbsolutepath);
+            try {
+				Files.copy(image.getInputStream(), rootAbsolutepath);
+			} catch (IOException e) {
+				e.printStackTrace();
+				throw new IOException("ERROR: Ocurrio un error de E / S");
+			}
 			newsDto.setImage(image.getOriginalFilename());		
 		}
 		News newsToCreate = this.dtoToModel(newsDto);
