@@ -2,8 +2,11 @@ package com.team32.ong.controller;
 
 import java.util.Optional;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +19,7 @@ import com.team32.ong.service.CommentService;
 
 
 @RestController
+@Validated
 @RequestMapping("api/v1/news")
 public class CommentController {
 	
@@ -25,15 +29,9 @@ public class CommentController {
 	@PostMapping("/addComment")
 	public ResponseEntity<CommentDto> addComment(@RequestParam(name="newsId") Optional<Long> newsId,
 												 @RequestParam("userId") Optional<Long> userId,
-												 @RequestBody(required = false) AddCommentBody commentBody) {		
+												 @RequestBody(required=false) AddCommentBody commentBody) {		
 		
-		if(commentBody == null) {
-			throw new EmptyInputException("Tiene que existir un comentario");
-		} else if(commentBody.getBody().isBlank() | commentBody.getBody().isEmpty()) {
-			throw new EmptyInputException("El cuerpo del comentario no puede estar vacío");
-		}
-		
-    	return commentService.createNewComment(newsId, userId, commentBody.getBody());
+    	return commentService.createNewComment(newsId, userId, commentBody);
     	
 	}
 }

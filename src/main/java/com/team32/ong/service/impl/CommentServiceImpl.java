@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+
+import com.team32.ong.dto.AddCommentBody;
 import com.team32.ong.dto.CommentDto;
 import com.team32.ong.dto.NewsDto;
 import com.team32.ong.dto.UserResponse;
@@ -60,7 +62,7 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
-	public ResponseEntity<CommentDto> createNewComment(Optional<Long> newsId, Optional<Long> userId, String body){
+	public ResponseEntity<CommentDto> createNewComment(Optional<Long> newsId, Optional<Long> userId, AddCommentBody commentBody){
 		CommentDto commentDto = new CommentDto();
 		NewsDto newsDto = new NewsDto();
 		UserResponse userResponse = new UserResponse();
@@ -84,8 +86,15 @@ public class CommentServiceImpl implements CommentService {
 				commentDto.setUser(userService.dtoToEntity(userResponse));
 			}
 		}
-
-		commentDto.setBody(body);	
+		
+		if(commentBody == null) {
+			throw new EmptyInputException("Tiene que existir un comentario");
+		} else if(commentBody.getBody().isBlank() | commentBody.getBody().isEmpty()) {
+			throw new EmptyInputException("El cuerpo del comentario no puede estar vacío");
+		} else {
+			commentDto.setBody(commentBody.getBody());	
+		}
+				
 		save(commentDto);
 		
 		return new ResponseEntity<>(commentDto,HttpStatus.OK);
