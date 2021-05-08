@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.team32.ong.constant.ConstantMessage;
 import com.team32.ong.dto.NewsDto;
 import com.team32.ong.model.News;
 import com.team32.ong.repository.NewsRepository;
@@ -26,15 +27,15 @@ public class NewsServiceImpl implements NewsService{
 
 	@Override
 	public NewsDto save(NewsDto newsDto, MultipartFile image) throws IOException {
-		if(image.isEmpty()) {
-			String uniqueFilename = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
-            Path rootPath = Paths.get("upload").resolve(uniqueFilename);
-            Path rootAbsolutepath = rootPath.toAbsolutePath();
-            try {
+		if(!image.isEmpty()) {
+			try {
+				String uniqueFilename = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
+	            Path rootPath = Paths.get("upload").resolve(uniqueFilename);
+	            Path rootAbsolutepath = rootPath.toAbsolutePath();        
 				Files.copy(image.getInputStream(), rootAbsolutepath);
 			} catch (IOException e) {
 				e.printStackTrace();
-				throw new IOException("ERROR: Ocurrio un error de E / S");
+				throw new IOException(ConstantMessage.MSG_IO_Exception);
 			}
 			newsDto.setImage(image.getOriginalFilename());		
 		}
