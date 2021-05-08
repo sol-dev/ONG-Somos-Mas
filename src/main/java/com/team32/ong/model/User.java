@@ -16,8 +16,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 
 @Entity
@@ -60,6 +62,9 @@ public class User implements Serializable, UserDetails {
     private LocalDateTime created_time;
     @UpdateTimestamp
     private LocalDateTime updated_time;
+    
+    @OneToMany(targetEntity=Comment.class, mappedBy="user", fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	private List<Comment> comments;
 
     public User(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;

@@ -1,8 +1,5 @@
 package com.team32.ong.controller;
 
-import java.util.Optional;
-
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,11 +23,12 @@ public class CommentController {
 	private CommentService commentService;
 	
 	@PostMapping("/addComment")
-	public ResponseEntity<CommentDto> addComment(@RequestParam(name="newsId") Optional<Long> newsId,
-												 @RequestParam("userId") Optional<Long> userId,
-												 @RequestBody(required=false) AddCommentBody commentBody) {		
+	public ResponseEntity<CommentDto> addComment(@RequestParam(name="newsId") Long newsId,
+												 @RequestParam("userId") Long userId,
+												 @RequestBody @NotNull AddCommentBody commentBody) {		
 		
     	return commentService.createNewComment(newsId, userId, commentBody);
     	
 	}
+	
 }
