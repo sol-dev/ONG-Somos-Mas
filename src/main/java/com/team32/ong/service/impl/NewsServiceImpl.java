@@ -28,7 +28,7 @@ public class NewsServiceImpl implements NewsService{
 
 	@Override
 	public NewsDto save(NewsDto newsDto, MultipartFile image) throws IOException {
-		if(!image.isEmpty()) {
+		if(image != null && !image.isEmpty()) {
 			try {
 				String uniqueFilename = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
 	            Path rootPath = Paths.get("upload").resolve(uniqueFilename);
