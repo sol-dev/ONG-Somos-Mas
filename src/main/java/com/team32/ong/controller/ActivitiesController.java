@@ -28,17 +28,11 @@ public class ActivitiesController {
     private static final Logger logger = LoggerFactory.getLogger(ActivitiesController.class);
 
     @PostMapping
-    public ResponseEntity<?> createActivity(@RequestBody(required = false) ActivitiesDTO activitiesDTO,
+    public ResponseEntity<?> createActivity(@RequestBody ActivitiesDTO activitiesDTO,
                                             MultipartFile file) throws Exception{
 
 
         Map<String, Object> response = new HashMap<>();
-
-
-           if (activitiesDTO == null){
-               logger.error("no se recibe Actividad");
-               throw new BadRequestException("Error - No se Recibe Actividad");
-           }
 
 
        activitieService.save(activitiesDTO, file);
