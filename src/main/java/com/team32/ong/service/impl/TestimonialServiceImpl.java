@@ -2,6 +2,7 @@ package com.team32.ong.service.impl;
 
 import com.team32.ong.constant.ConstantMessage;
 import com.team32.ong.dto.TestimonialDto;
+import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.exception.custom.EmptyInputException;
 import com.team32.ong.model.Testimonial;
 import com.team32.ong.repository.TestimonialRepository;
@@ -53,15 +54,15 @@ public class TestimonialServiceImpl implements TestimonialService {
         }
 
         if(testimonialDtoToUpdate.getName().isEmpty() || testimonialDtoToUpdate.getName().length() == 0){
-            throw new EmptyInputException(ConstantMessage.MSG_EMPTY_INPUT + "nombre");
+            throw new BadRequestException(ConstantMessage.MSG_NAME_BAD_REQUEST);
         }
 
         if(testimonialDtoToUpdate.getContent().isEmpty() || testimonialDtoToUpdate.getContent().length() == 0){
-            throw new EmptyInputException(ConstantMessage.MSG_EMPTY_INPUT + "contenido");
+            throw new BadRequestException(ConstantMessage.MSG_CONTENT_BAD_REQUEST);
         }
 
         if(testimonialDtoToUpdate.getImage().isEmpty() || testimonialDtoToUpdate.getImage().length() == 0){
-            throw new EmptyInputException(ConstantMessage.MSG_EMPTY_INPUT + "imagen");
+            throw new BadRequestException(ConstantMessage.MSG_IMAGE_BAD_REQUEST);
         }
 
         Optional<Testimonial> testimonials = testimonialRepository.findById(id);
