@@ -33,7 +33,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         for (ConstraintViolation<?> cv : ex.getConstraintViolations()) {
             message = message + cv.getMessage(); 
         }
-        ErrorResponse errorFound = new ErrorResponse(404, new Date(), message, req.getRequestURI());
+        ErrorResponse errorFound = new ErrorResponse(400, new Date(), message, req.getRequestURI());
         return new ResponseEntity<>(errorFound, HttpStatus.BAD_REQUEST);
     }
 
