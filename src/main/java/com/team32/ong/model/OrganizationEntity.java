@@ -14,6 +14,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+
+import com.team32.ong.constant.ConstantMessage;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -29,11 +32,11 @@ public class OrganizationEntity {
     @Column(name = "id")
     private Long id;
 
-    @NotEmpty
+    @NotEmpty(message = ConstantMessage.MSG_NAME_BAD_REQUEST)
     @Column(name = "name", nullable = false)
     private String name;
 
-    @NotEmpty
+    @NotEmpty(message = ConstantMessage.MSG_IMAGE_BAD_REQUEST)
     @Column(name = "image", nullable = false)
     private String image;
 
@@ -44,8 +47,8 @@ public class OrganizationEntity {
     private Integer phone;
 
     @Column(name = "email", nullable = false)
-    @NotEmpty
-    @Email
+    @NotEmpty(message = ConstantMessage.MSG_EMAIL_BAD_REQUEST)
+    @Email(message = ConstantMessage.MSG_EMAIL_INVALID)
     private String email;
 
     @Column (name = "welcome_text")

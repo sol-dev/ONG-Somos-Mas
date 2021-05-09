@@ -4,12 +4,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+import com.team32.ong.constant.ConstantMessage;
 import com.team32.ong.dto.OrganizationDTO;
 import com.team32.ong.exception.custom.EmptyInputException;
 import com.team32.ong.model.OrganizationEntity;
 import com.team32.ong.repository.IOrganizationRepository;
 import com.team32.ong.service.IOrganizationService;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,7 +29,7 @@ public class OrganizationService implements IOrganizationService{
     @Autowired
     private ModelMapper modelMapper;
 
-    private OrganizationDTO convertToDto(OrganizationEntity entity){
+    private OrganizationDTO convertToDto(@Valid OrganizationEntity entity){
         OrganizationDTO dto = modelMapper.map(entity, OrganizationDTO.class);
         return dto;
     }
@@ -40,13 +41,13 @@ public class OrganizationService implements IOrganizationService{
     //controller methods
     public OrganizationDTO save(OrganizationDTO dto) throws EmptyInputException {
         if(dto.getImage()==null || dto.getImage().isBlank()){
-            throw new EmptyInputException("Error: No ingresó imagen de la organización");
+            throw new EmptyInputException(ConstantMessage.MSG_IMAGE_BAD_REQUEST);
         }
         if(dto.getEmail()==null || dto.getEmail().isBlank()){
-            throw new EmptyInputException("Error: No ingresó email de la organización");
+            throw new EmptyInputException(ConstantMessage.MSG_EMAIL_BAD_REQUEST);
         }
         if(dto.getName()==null || dto.getName().isBlank()){
-            throw new EmptyInputException("Error: No ingresó nombre de la organización");
+            throw new EmptyInputException(ConstantMessage.MSG_NAME_BAD_REQUEST);
         }
         OrganizationEntity entity = convertToEntity(dto);
         entity.setDeleted(false);
@@ -56,7 +57,7 @@ public class OrganizationService implements IOrganizationService{
     public OrganizationDTO findById(Long id) throws NotFoundException{
         Optional<OrganizationEntity> organization = organizationRepository.findById(id) ;
         if(!organization.isPresent()){
-            throw new NotFoundException("No existe la categoria con id: "+id);
+            throw new NotFoundException(ConstantMessage.MSG_NOT_FOUND+id);
         }
         return convertToDto(organization.get());
     }
@@ -77,7 +78,7 @@ public class OrganizationService implements IOrganizationService{
 
     public void softDelete(Long id) throws NotFoundException {
         if(!organizationRepository.existsById(id)) {
-            throw new NotFoundException("No existe la categoria con id: "+id);
+            throw new NotFoundException(ConstantMessage.MSG_NOT_FOUND+id);
         }
         organizationRepository.softDelete(id);
     }
