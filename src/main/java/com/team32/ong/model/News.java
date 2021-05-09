@@ -7,37 +7,35 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Data
-@Getter
-@Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@SQLDelete(sql = "UPDATE posts SET deleted=true WHERE id=?")
+@DynamicUpdate
+@SQLDelete(sql = "UPDATE news SET deleted=true WHERE id=?")
 @Where(clause = "deleted = false")
 @Table(name = "news")
 public class News implements Serializable{
@@ -70,6 +68,9 @@ public class News implements Serializable{
         inverseJoinColumns = @JoinColumn(name="category_id", nullable = false)
     )
     private Set<Category> categories;
+
+    @OneToMany(mappedBy="news", fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	private Set<Comment> comments;
     
     @CreationTimestamp
     @Column(name="created_date")
@@ -81,5 +82,13 @@ public class News implements Serializable{
 
     @Column(name="deleted")
     private boolean deleted;
+
+	public News(String name, String content, String image) {
+		this.name = name;
+		this.content = content;
+		this.image = image;
+	}
+    
+    
     
 }
