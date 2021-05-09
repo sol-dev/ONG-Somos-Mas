@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.team32.ong.constant.ConstantMessage;
 import com.team32.ong.dto.NewUserDto;
 import com.team32.ong.dto.RoleDto;
 import com.team32.ong.dto.UserDto;
@@ -75,7 +76,7 @@ public class UserImplService implements UserService {
 	public UserDto findById(Long id) throws NotFoundException {
 		Optional<User> userFound = userRepo.findById(id);
 		if (!userFound.isPresent()){
-            throw new NotFoundException("The user with id " + id + " does not exist");
+            throw new NotFoundException(ConstantMessage.MSG_NOT_FOUND + id);
         }
 		return entityToDto(userFound.get());
 	}
@@ -84,16 +85,16 @@ public class UserImplService implements UserService {
 	public NewUserDto updateAdminOnly(Optional<UserDto> userDtoFound, UserDto userDto) {
 		StringBuffer errorsFound = new StringBuffer();
 		if(userDto.getFirstName().isEmpty()) {
-			errorsFound.append("El nombre no puede estar vacio. ");
+			errorsFound.append(ConstantMessage.MSG_NAME_BAD_REQUEST);
 		}
 		if(userDto.getLastName().isEmpty()) {
-			errorsFound.append("El apellido no puede estar vacio. ");
+			errorsFound.append(ConstantMessage.MSG_LASTNAME_BAD_REQUEST);
 		}
 		if(userDto.getEmail().isEmpty()) {
-			errorsFound.append("El email no puede estar vacio. ");
+			errorsFound.append(ConstantMessage.MSG_EMAIL_BAD_REQUEST);
 		}
 		if(userDto.getPassword().isEmpty()) {
-			errorsFound.append("La contraseña no puede estar vacia.");
+			errorsFound.append(ConstantMessage.MSG_PASSWORD_BAD_REQUEST);
 		}
 		if(errorsFound.length() > 0) {
 			throw new BadRequestException(errorsFound.toString());
@@ -110,16 +111,16 @@ public class UserImplService implements UserService {
 	public NewUserDto updateForUser(Optional<UserDto> userDtoFound, UserDtoRequestForUser userDto) {
 		StringBuffer errorsFound = new StringBuffer();
 		if(userDto.getFirstName().isEmpty()) {
-			errorsFound.append("El nombre no puede estar vacio. ");
+			errorsFound.append(ConstantMessage.MSG_NAME_BAD_REQUEST);
 		}
 		if(userDto.getLastName().isEmpty()) {
-			errorsFound.append("El apellido no puede estar vacio. ");
+			errorsFound.append(ConstantMessage.MSG_LASTNAME_BAD_REQUEST);
 		}
 		if(userDto.getEmail().isEmpty()) {
-			errorsFound.append("El email no puede estar vacio. ");
+			errorsFound.append(ConstantMessage.MSG_EMAIL_BAD_REQUEST);
 		}
 		if(userDto.getPassword().isEmpty()) {
-			errorsFound.append("La contraseña no puede estar vacia.");
+			errorsFound.append(ConstantMessage.MSG_PASSWORD_BAD_REQUEST);
 		}
 		if(errorsFound.length() > 0) {
 			throw new BadRequestException(errorsFound.toString());
