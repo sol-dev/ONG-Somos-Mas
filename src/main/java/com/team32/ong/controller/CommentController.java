@@ -1,8 +1,10 @@
 package com.team32.ong.controller;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +18,7 @@ import com.team32.ong.service.CommentService;
 
 @RestController
 @Validated
-@RequestMapping("api/v1/news")
+@RequestMapping("api/v1/news/comment")
 public class CommentController {
 	
 	@Autowired
@@ -25,7 +27,7 @@ public class CommentController {
 	@PostMapping("/addComment")
 	public ResponseEntity<CommentDto> addComment(@RequestParam(name="newsId") Long newsId,
 												 @RequestParam("userId") Long userId,
-												 @RequestBody @NotNull AddCommentBody commentBody) {		
+												 @RequestBody AddCommentBody commentBody, BindingResult result) {		
 		
     	return commentService.createNewComment(newsId, userId, commentBody);
     	
