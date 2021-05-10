@@ -27,15 +27,15 @@ public class TestimonialServiceImpl implements TestimonialService {
     public TestimonialDto save(TestimonialDto testimonialDto) {
 
         if(testimonialDto.getName().isEmpty() || testimonialDto.getName().length() == 0){
-            throw new EmptyInputException(ConstantMessage.MSG_EMPTY_INPUT + "nombre");
+            throw new BadRequestException(ConstantMessage.MSG_NAME_BAD_REQUEST);
         }
 
         if(testimonialDto.getContent().isEmpty() || testimonialDto.getContent().length() == 0){
-            throw new EmptyInputException(ConstantMessage.MSG_EMPTY_INPUT + "contenido");
+            throw new BadRequestException(ConstantMessage.MSG_CONTENT_BAD_REQUEST);
         }
 
         if(testimonialDto.getImage().isEmpty() || testimonialDto.getImage().length() == 0){
-            throw new EmptyInputException(ConstantMessage.MSG_EMPTY_INPUT + "imagen");
+            throw new BadRequestException(ConstantMessage.MSG_IMAGE_BAD_REQUEST);
         }
 
         Testimonial testimonialToCreate = this.dtoToModel(testimonialDto);
@@ -75,6 +75,14 @@ public class TestimonialServiceImpl implements TestimonialService {
         testimonialRepository.save(testimonialToUpdate);
 
         return modelToDto(testimonialToUpdate);
+    }
+
+    @Override
+    public void deleteById(Long id) throws NotFoundException {
+        if(!testimonialRepository.existsById(id)){
+            throw new NotFoundException(ConstantMessage.MSG_NOT_FOUND + id);
+        }
+        testimonialRepository.deleteById(id);
     }
 
     private TestimonialDto modelToDto(Testimonial testimonial){
