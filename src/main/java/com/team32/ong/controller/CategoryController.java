@@ -1,6 +1,7 @@
 package com.team32.ong.controller;
 
 
+import com.team32.ong.constant.ConstantMessage;
 import com.team32.ong.dto.CategoryDTO;
 import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.exception.custom.InvalidDataException;
@@ -45,10 +46,7 @@ public class CategoryController {
 
     //only for admin
     @GetMapping(value = "/id")
-    public ResponseEntity<CategoryDTO> findById(@RequestParam("id") Long id) throws BadRequestException,NotFoundException{
-        if(id==null){
-            throw new BadRequestException("Error: no se igresó un id");
-        }
+    public ResponseEntity<CategoryDTO> findById(@RequestParam("id") Long id) throws NotFoundException{
         return new ResponseEntity<CategoryDTO>(categoryService.findById(id), HttpStatus.FOUND);
     }
 
