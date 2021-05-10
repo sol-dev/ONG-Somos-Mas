@@ -1,5 +1,6 @@
 package com.team32.ong.service.impl;
 
+import com.team32.ong.constant.ConstantMessage;
 import com.team32.ong.dto.UserDTORequest;
 import com.team32.ong.dto.UserDTOResponse;
 import com.team32.ong.exception.custom.BadRequestException;
@@ -38,15 +39,15 @@ public class UserImplService implements UserService, UserDetailsService {
     public UserDTOResponse save(UserDTORequest userDTORequest) throws NotFoundException, BadRequestException {
 
         if (userRepo.existsByEmail(userDTORequest.getEmail())){
-            throw new NotFoundException("Este email ya esta registrado");
+            throw new NotFoundException(ConstantMessage.MSG_EMAIL_IN_USE);
         }else if (userDTORequest.getEmail() == null){
-            throw new BadRequestException("Se necesita definir un Email");
+            throw new BadRequestException(ConstantMessage.MSG_EMAIL_BAD_REQUEST);
         }else if (userDTORequest.getFirstName() == null){
-            throw new BadRequestException("Se necesita definir un Nombre");
+            throw new BadRequestException(ConstantMessage.MSG_NAME_BAD_REQUEST);
         }else if (userDTORequest.getLastName() == null){
-            throw new BadRequestException("Se necesita definir un Apellido");
+            throw new BadRequestException(ConstantMessage.MSG_LASTNAME_BAD_REQUEST);
         }else if (userDTORequest.getPassword() == null){
-            throw new BadRequestException("Se necesita definir una Contraseña");
+            throw new BadRequestException(ConstantMessage.MSG_PASSWORD_BAD_REQUEST);
         }
         userDTORequest.setPassword(encoder.encode(userDTORequest.getPassword()));
 
@@ -64,7 +65,7 @@ public class UserImplService implements UserService, UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
         if (!userRepo.existsByEmail(email)){
-            throw new UsernameNotFoundException("Este mail no es un usuario registrado");
+            throw new UsernameNotFoundException(ConstantMessage.MSG_EMAIL_NOT_FOUND);
         }
         User user = userRepo.findByEmail(email);
 
