@@ -38,7 +38,7 @@ public class UserController {
     @PostMapping("/{id}")
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest userRequest,
                                                    BindingResult result, @PathVariable Long id){
-    	if (userService.rolValidation(id)) 
+    	if (userService.rolValidation(id) == false) 
     		return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         if (result.hasErrors()){
             throw new InvalidDataException(result);
