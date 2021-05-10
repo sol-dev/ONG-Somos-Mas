@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -22,11 +23,8 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public ResponseEntity<?> vievAll(@RequestParam(defaultValue = "0") int page,
-                                     @RequestParam(defaultValue = "5") int size,
-                                     @RequestParam(defaultValue = "id") String order,
-                                     @RequestParam(defaultValue = "true") boolean asc) {
-        return null;
+    public ResponseEntity<List<UserDTOResponse>> getAll() {
+        return new ResponseEntity<>(userService.getAllUsers(),HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
