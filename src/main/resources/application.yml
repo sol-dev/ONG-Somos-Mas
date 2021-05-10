@@ -17,6 +17,7 @@ spring:
       max-request-size: 10MB
 
 
-  # Security
-  # jwt.secret=
-  # jwt.expiration=36000
+  security:
+    jwt:
+      secret-key: secret-key
+      expiration-length: 3600000

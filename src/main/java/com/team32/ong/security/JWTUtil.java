@@ -5,20 +5,30 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Date;
 
 @Component
 public class JWTUtil {
 
-    private final static String KEY = "OnGapPl1Cat1On";
+    @Value("${security.jwt.token.secret-key:secret-key}")
+    private String KEY;
+
+    @Value("${security.jwt.token.expire-length:3600000}")
+    private long validityInMilliseconds = 3600000;
 
     public String generateToken(UserDetails userDetails){
+
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + validityInMilliseconds);
+
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
-                .signWith(SignatureAlgorithm.HS256, KEY).compact();
+                .setIssuedAt(now)
+                .setExpiration(validity)
+                .signWith(SignatureAlgorithm.HS256, KEY)
+                .compact();
     }
 
     public boolean validateToken(String token, UserDetails userDetails){
