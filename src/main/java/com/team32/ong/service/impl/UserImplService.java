@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserImplService implements UserService, UserDetailsService {
@@ -60,6 +61,18 @@ public class UserImplService implements UserService, UserDetailsService {
         return entityToDto(userSave);
 
     }
+
+    @Override
+    public List<UserDTOResponse> getAllUsers(){
+
+        List<User> userList = userRepo.findAll();
+
+        return userList
+                .stream()
+                .map(this::entityToDto)
+                .collect(Collectors.toList());
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
