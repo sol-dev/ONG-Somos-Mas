@@ -1,7 +1,5 @@
 package com.team32.ong.controller;
 
-import java.util.Optional;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,22 +55,20 @@ public class UserController {
     }
 
     @PutMapping("/admin/update/{id}")
-    public ResponseEntity<?> modifyUserAdminOnly(@Valid @RequestBody UserDto newUserDto, BindingResult result,
+    public ResponseEntity<?> modifyUserAdminOnly(@RequestBody UserDto newUserDto,
                                          @PathVariable Long id) throws NotFoundException{
-    	Optional<UserDto> userDtoFound =  Optional.of(userService.findById(id));
-        return new ResponseEntity<>(userService.updateAdminOnly(userDtoFound, newUserDto), HttpStatus.OK);
+    	
+        return new ResponseEntity<>(userService.updateAdminOnly(id, newUserDto), HttpStatus.OK);
     }
     
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> modifyUserAll(@Valid @RequestBody UserDtoRequestForUser userDto, BindingResult result,
+    public ResponseEntity<?> modifyUserAll(@RequestBody UserDtoRequestForUser userDto,
                                          @PathVariable Long id) throws NotFoundException{
-    	Optional<UserDto> userDtoFound =  Optional.of(userService.findById(id));
-        return new ResponseEntity<>(userService.updateForUser(userDtoFound, userDto), HttpStatus.OK);
+        return new ResponseEntity<>(userService.updateForUser(id, userDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) throws NotFoundException{
-    	userService.delete(id);
-    	return new ResponseEntity<>("The user with id " + id + " was deleted",HttpStatus.OK);
+    	return new ResponseEntity<>(userService.delete(id),HttpStatus.OK);
     }
 }

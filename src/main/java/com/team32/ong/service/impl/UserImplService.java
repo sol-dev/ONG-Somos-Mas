@@ -12,6 +12,7 @@ import com.team32.ong.dto.NewUserDto;
 import com.team32.ong.dto.RoleDto;
 import com.team32.ong.dto.UserDto;
 import com.team32.ong.dto.UserDtoRequestForUser;
+import com.team32.ong.enums.RoleName;
 import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.model.Role;
 import com.team32.ong.model.User;
@@ -82,8 +83,10 @@ public class UserImplService implements UserService {
 	}
 	
 	@Override
-	public NewUserDto updateAdminOnly(Optional<UserDto> userDtoFound, UserDto userDto) {
+	public NewUserDto updateAdminOnly(Long id, UserDto userDto) throws NotFoundException {
+		Optional<UserDto> userDtoFound =  Optional.of(findById(id));
 		StringBuffer errorsFound = new StringBuffer();
+		
 		if(userDto.getFirstName().isEmpty()) {
 			errorsFound.append(ConstantMessage.MSG_NAME_BAD_REQUEST);
 		}
@@ -99,17 +102,24 @@ public class UserImplService implements UserService {
 		if(errorsFound.length() > 0) {
 			throw new BadRequestException(errorsFound.toString());
 		}
-		Role roleEntity = roleRepo.findByName(userDto.getRole().getName());
 		User userEntity = dtoToEntity(userDto);
 		userEntity.setId(userDtoFound.get().getId());
-		userEntity.setRole(roleEntity);
+		if(userDto.getRole().getName().equals("ROLE_ADMIN")) {
+			Role roleEntity = roleRepo.findByName(RoleName.ROLE_ADMIN);
+			userEntity.setRole(roleEntity);
+		}else {
+			Role roleEntity = roleRepo.findByName(RoleName.ROLE_USER);
+			userEntity.setRole(roleEntity);
+		}
 		userRepo.save(userEntity);
 		return entityToNewDto(userEntity);
 	}
 	
 	@Override
-	public NewUserDto updateForUser(Optional<UserDto> userDtoFound, UserDtoRequestForUser userDto) {
+	public NewUserDto updateForUser(Long id, UserDtoRequestForUser userDto) throws NotFoundException {
+		Optional<UserDto> userDtoFound =  Optional.of(findById(id));
 		StringBuffer errorsFound = new StringBuffer();
+		
 		if(userDto.getFirstName().isEmpty()) {
 			errorsFound.append(ConstantMessage.MSG_NAME_BAD_REQUEST);
 		}
@@ -124,8 +134,8 @@ public class UserImplService implements UserService {
 		}
 		if(errorsFound.length() > 0) {
 			throw new BadRequestException(errorsFound.toString());
-		}
-		Role roleEntity = roleRepo.findByName(userDtoFound.get().getRole().getName());
+		}		
+		Role roleEntity = roleRepo.findByName(RoleName.ROLE_USER);
 		User userEntity = UserDtoRequestForUserToEntity(userDto);
 		userEntity.setId(userDtoFound.get().getId());
 		userEntity.setRole(roleEntity);
@@ -134,11 +144,12 @@ public class UserImplService implements UserService {
 	}
 
 	@Override
-	public void delete(Long id) throws NotFoundException {
+	public String delete(Long id) throws NotFoundException {
 		boolean userExists = userRepo.existsById(id);
 		if(!userExists) {
 			throw new NotFoundException(ConstantMessage.MSG_NOT_FOUND + id);
 		}
 		userRepo.deleteById(id);
+		return ConstantMessage.MSG_DELETE_OK + id;
 	}
 }

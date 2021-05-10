@@ -1,7 +1,5 @@
 package com.team32.ong.service;
 
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 
 import com.team32.ong.dto.NewUserDto;
@@ -17,9 +15,9 @@ public interface UserService {
 
     UserDto findById(Long id) throws NotFoundException;
 	
-	NewUserDto updateAdminOnly(Optional<UserDto> userDtoFound, UserDto newUserDto) throws NotFoundException;
+	NewUserDto updateAdminOnly(Long id, UserDto newUserDto) throws NotFoundException;
 
-	NewUserDto updateForUser(Optional<UserDto> userDtoFound, UserDtoRequestForUser userDto) throws NotFoundException;
+	NewUserDto updateForUser(Long id, UserDtoRequestForUser userDto) throws NotFoundException;
 
-	void delete(Long id) throws NotFoundException;
+	String delete(Long id) throws NotFoundException;
 }
