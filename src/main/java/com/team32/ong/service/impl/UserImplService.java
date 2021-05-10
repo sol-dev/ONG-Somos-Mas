@@ -64,10 +64,11 @@ public class UserImplService implements UserService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        if (!userRepo.existsByEmail(email)){
+        User user = userRepo.findByEmail(email);
+
+        if (user == null){
             throw new UsernameNotFoundException(ConstantMessage.MSG_EMAIL_NOT_FOUND);
         }
-        User user = userRepo.findByEmail(email);
 
         List<GrantedAuthority> rol = new ArrayList<>();
         rol.add(new SimpleGrantedAuthority(user.getRole().getName()));
