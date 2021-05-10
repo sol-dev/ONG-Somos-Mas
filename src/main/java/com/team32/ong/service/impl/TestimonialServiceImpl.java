@@ -50,19 +50,19 @@ public class TestimonialServiceImpl implements TestimonialService {
     public TestimonialDto updateById(TestimonialDto testimonialDtoToUpdate, Long id) throws NotFoundException {
 
         if(!testimonialRepository.existsById(id)){
-            throw new NotFoundException("No es posible actualizar un testimonio con el id " + id);
+            throw new NotFoundException( ConstantMessage.MSG_NOT_FOUND + id);
         }
 
         if(testimonialDtoToUpdate.getName().isEmpty() || testimonialDtoToUpdate.getName().length() == 0){
-            throw new EmptyInputException("Debe completar el campo nombre");
+            throw new BadRequestException(ConstantMessage.MSG_NAME_BAD_REQUEST);
         }
 
         if(testimonialDtoToUpdate.getContent().isEmpty() || testimonialDtoToUpdate.getContent().length() == 0){
-            throw new EmptyInputException("Debe completar el campo contenido");
+            throw new BadRequestException(ConstantMessage.MSG_CONTENT_BAD_REQUEST);
         }
 
         if(testimonialDtoToUpdate.getImage().isEmpty() || testimonialDtoToUpdate.getImage().length() == 0){
-            throw new EmptyInputException("Debe completar el campo imagen");
+            throw new BadRequestException(ConstantMessage.MSG_IMAGE_BAD_REQUEST);
         }
 
         Optional<Testimonial> testimonials = testimonialRepository.findById(id);
