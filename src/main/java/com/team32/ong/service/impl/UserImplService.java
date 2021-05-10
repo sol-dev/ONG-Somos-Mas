@@ -51,7 +51,7 @@ public class UserImplService implements UserService, UserDetailsService {
         }
         userDTORequest.setPassword(encoder.encode(userDTORequest.getPassword()));
 
-        Role role = roleRepo.findByName("USER");
+        Role role = roleRepo.findByName("ROLE_USER");
 
         User userEntity = dtoToEntity(userDTORequest);
         userEntity.setRole(role);
