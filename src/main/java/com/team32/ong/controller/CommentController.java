@@ -1,39 +1,38 @@
 package com.team32.ong.controller;
 
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import com.team32.ong.dto.AddCommentBody;
 import com.team32.ong.dto.CommentDto;
-import com.team32.ong.service.impl.CommentServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import com.team32.ong.service.CommentService;
 
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
+@Validated
 @RequestMapping("api/v1/news/comment")
-@CrossOrigin
 public class CommentController {
-
-    @Autowired
-    private CommentServiceImpl commentService;
-
-    @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody AddCommentBody commentDto)
-                                                  throws Exception {
-
-        Map<String, Object> response = new HashMap<>();
-        AddCommentBody commentDtoRes = null;
-
-
-        commentDtoRes = commentService.update(id,commentDto);
-
-        response.put("message", "Comentrio Actualizado");
-        response.put("comment", commentDtoRes);
-
-        return new ResponseEntity(response, HttpStatus.OK);
-    }
-
+	
+	@Autowired
+	private CommentService commentService;
+	
+	@PostMapping("/addComment")
+	public ResponseEntity<CommentDto> addComment(@RequestParam(name="newsId") Long newsId,
+												 @RequestParam("userId") Long userId,
+												 @RequestBody AddCommentBody commentBody, BindingResult result) {		
+		
+    	return commentService.createNewComment(newsId, userId, commentBody);
+    	
+	}
+	
 
 }
