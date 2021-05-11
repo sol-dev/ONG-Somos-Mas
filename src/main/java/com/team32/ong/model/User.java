@@ -11,13 +11,16 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import com.team32.ong.model.Role;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
+
 
 @Entity
 @Table(name = "users")
@@ -30,7 +33,10 @@ import java.util.Set;
 @Where(clause = "deleted = false")
 public class User implements Serializable, UserDetails {
 
-    @Id
+	private static final long serialVersionUID = 1L;
+	
+	
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
@@ -60,9 +66,8 @@ public class User implements Serializable, UserDetails {
     @UpdateTimestamp
     private LocalDateTime updated_time;
     
-    @OneToMany(mappedBy="user", fetch = FetchType.LAZY, cascade=CascadeType.ALL)
-	private Set<Comment> comments;
-
+    @OneToMany(targetEntity=Comment.class, mappedBy="user", fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	private List<Comment> comments;
 
     public User(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;

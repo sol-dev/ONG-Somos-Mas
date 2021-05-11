@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter @Builder
-public class UserRequest {
+public class UserDTORequest {
 
     private long id;
     private String firstName;
