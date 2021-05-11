@@ -4,6 +4,7 @@ import com.team32.ong.constant.ConstantMessage;
 import com.team32.ong.dto.UserDTORequest;
 import com.team32.ong.dto.UserDTOResponse;
 import com.team32.ong.exception.custom.BadRequestException;
+import com.team32.ong.exception.custom.InvalidDataException;
 import com.team32.ong.model.Role;
 import com.team32.ong.model.User;
 import com.team32.ong.repository.RoleRepository;
@@ -36,6 +37,7 @@ public class UserImplService implements UserService, UserDetailsService {
     private RoleRepository roleRepo;
 
     @Override
+
     public UserDTOResponse save(UserDTORequest userDTORequest) throws NotFoundException, BadRequestException {
 
         if (userRepo.existsByEmail(userDTORequest.getEmail())){
@@ -51,13 +53,27 @@ public class UserImplService implements UserService, UserDetailsService {
         }
         userDTORequest.setPassword(encoder.encode(userDTORequest.getPassword()));
 
-        Role role = roleRepo.findByName("USER");
+        Role role = roleRepo.findByName("ROLE_USER");
 
         User userEntity = dtoToEntity(userDTORequest);
+
         userEntity.setRole(role);
         User userSave = userRepo.save(userEntity);
 
         return entityToDto(userSave);
+
+    }
+    
+    @Override
+    public UserDTOResponse getOne(Long id) {
+    	User user = userRepo.getOne(id);
+		return entityToDto(user);
+    }
+    
+    @Override
+    public UserDTOResponse findById(Long id) {
+    	User user = userRepo.findById(id).orElseThrow(() -> new InvalidDataException("No existe un usuario con ese id"));
+    	return entityToDto(user);
 
     }
 
@@ -76,14 +92,14 @@ public class UserImplService implements UserService, UserDetailsService {
         return new org.springframework.security.core.userdetails.
                 User(user.getEmail(), user.getPassword(), rol);
     }
-
-
-    private User dtoToEntity(UserDTORequest userDTORequest){
+    @Override
+    public User dtoToEntity(UserDTORequest userDTORequest){
         ModelMapper mapper = new ModelMapper();
         return mapper.map(userDTORequest, User.class);
     }
 
-    private UserDTOResponse entityToDto(User user){
+    @Override
+    public UserDTOResponse entityToDto(User user){
         ModelMapper mapper = new ModelMapper();
         return mapper.map(user, UserDTOResponse.class);
     }
