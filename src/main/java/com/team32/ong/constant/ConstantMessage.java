@@ -15,4 +15,5 @@ public class ConstantMessage {
     public static final String MSG_DUPLICATE_KEY = "Ya existe una entidad con esa clave";
     public static final String MSG_DELETE_OK = "Se elimino correctamente al usurio con id ";
 
+    
 }
