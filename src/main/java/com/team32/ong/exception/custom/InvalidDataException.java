@@ -18,7 +18,14 @@ public class InvalidDataException extends RuntimeException{
         this.result = result;
     }
 
-    public BindingResult getResult() {
+	public BindingResult getResult() {
         return result;
     }
+	
+	public InvalidDataException(String message) {
+		super(message);
+		this.result = null;
+	}
+	
+    
 }
