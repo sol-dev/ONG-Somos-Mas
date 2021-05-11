@@ -1,6 +1,5 @@
 package com.team32.ong.controller;
 
-
 import com.team32.ong.dto.UserDTORequest;
 import com.team32.ong.dto.UserDTOResponse;
 import com.team32.ong.service.UserService;
@@ -47,11 +46,10 @@ public class UserController {
     public ResponseEntity<UserDTOResponse> createUser(@RequestBody UserDTORequest userDTORequest) throws NotFoundException {
         return new ResponseEntity<>(userService.save(userDTORequest), HttpStatus.CREATED);
     }
-
+    
     @PutMapping("/admin/update/{id}")
     public ResponseEntity<?> modifyUserAdminOnly(@RequestBody UserDtoRequestForAdmin newUserDto,
                                          @PathVariable Long id) throws NotFoundException{
-    	
         return new ResponseEntity<>(userService.updateAdminOnly(id, newUserDto), HttpStatus.OK);
     }
     

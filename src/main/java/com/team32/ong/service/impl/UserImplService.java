@@ -1,19 +1,5 @@
 package com.team32.ong.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-
 import com.team32.ong.constant.ConstantMessage;
 import com.team32.ong.dto.NewUserDto;
 import com.team32.ong.dto.UserDTORequest;
@@ -26,8 +12,20 @@ import com.team32.ong.model.User;
 import com.team32.ong.repository.RoleRepository;
 import com.team32.ong.repository.UserRepository;
 import com.team32.ong.service.UserService;
-
 import javassist.NotFoundException;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserImplService implements UserService, UserDetailsService {
@@ -166,7 +164,7 @@ public class UserImplService implements UserService, UserDetailsService {
 		}
 		if(errorsFound.length() > 0) {
 			throw new BadRequestException(errorsFound.toString());
-		}		
+		}
 		Role roleEntity = roleRepo.findByName("ROLE_USER");
 		User userEntity = dtoToEntity(userDto);
 		userEntity.setId(userDtoFound.get().getId());
@@ -174,7 +172,6 @@ public class UserImplService implements UserService, UserDetailsService {
 		userRepo.save(userEntity);
 		return entityToNewDto(userEntity);
 	}
-
 	@Override
 	public String delete(Long id) throws NotFoundException {
 		boolean userExists = userRepo.existsById(id);

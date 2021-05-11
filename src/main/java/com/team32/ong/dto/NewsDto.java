@@ -1,6 +1,5 @@
 package com.team32.ong.dto;
 
-
 import java.util.List;
 import java.util.Set;
 import com.team32.ong.model.Category;
