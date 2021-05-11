@@ -35,6 +35,7 @@ public class TestimonialServiceImpl implements TestimonialService {
         }
 
         if(testimonialDto.getImage().isEmpty() || testimonialDto.getImage().length() == 0){
+
             throw new BadRequestException(ConstantMessage.MSG_IMAGE_BAD_REQUEST);
         }
 

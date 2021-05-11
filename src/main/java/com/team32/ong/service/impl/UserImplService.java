@@ -1,8 +1,10 @@
 package com.team32.ong.service.impl;
 
 import com.team32.ong.constant.ConstantMessage;
+import com.team32.ong.dto.NewUserDto;
 import com.team32.ong.dto.UserDTORequest;
 import com.team32.ong.dto.UserDTOResponse;
+import com.team32.ong.dto.UserDtoRequestForAdmin;
 import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.exception.custom.InvalidDataException;
 import com.team32.ong.model.Role;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserImplService implements UserService, UserDetailsService {
@@ -97,12 +100,76 @@ public class UserImplService implements UserService, UserDetailsService {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(userDTORequest, User.class);
     }
+    
+    private NewUserDto entityToNewDto(User user){
+        ModelMapper mapper = new ModelMapper();
+        return mapper.map(user, NewUserDto.class);
+    }
 
     @Override
     public UserDTOResponse entityToDto(User user){
         ModelMapper mapper = new ModelMapper();
         return mapper.map(user, UserDTOResponse.class);
     }
-
-
+    
+    private User UserDtoRequestForUserToEntity(UserDtoRequestForAdmin userDto) {
+    	ModelMapper mapper = new ModelMapper();
+        return mapper.map(userDto, User.class);
+	}
+	
+	@Override
+	public NewUserDto updateAdminOnly(Long id, UserDtoRequestForAdmin userDto) throws NotFoundException {		
+		Optional<UserDTOResponse> userDtoFound =  Optional.of(findById(id));
+		StringBuffer errorsFound = new StringBuffer();
+		
+		if(userDto.getFirstName().isEmpty()) {
+			errorsFound.append(ConstantMessage.MSG_NAME_BAD_REQUEST);
+		}
+		if(userDto.getLastName().isEmpty()) {
+			errorsFound.append(ConstantMessage.MSG_LASTNAME_BAD_REQUEST);
+		}
+		if(userDto.getEmail().isEmpty()) {
+			errorsFound.append(ConstantMessage.MSG_EMAIL_BAD_REQUEST);
+		}
+		if(userDto.getPassword().isEmpty()) {
+			errorsFound.append(ConstantMessage.MSG_PASSWORD_BAD_REQUEST);
+		}
+		if(errorsFound.length() > 0) {
+			throw new BadRequestException(errorsFound.toString());
+		}
+		User userEntity = UserDtoRequestForUserToEntity(userDto);
+		userEntity.setId(userDtoFound.get().getId());
+		Role roleEntity = roleRepo.findByName(userDto.getRole().getName());
+		userEntity.setRole(roleEntity);
+		userRepo.save(userEntity);
+		return entityToNewDto(userEntity);
+	}
+	
+	@Override
+	public NewUserDto updateForUser(Long id, UserDTORequest userDto) throws NotFoundException {
+		Optional<UserDTOResponse> userDtoFound =  Optional.of(findById(id));
+		StringBuffer errorsFound = new StringBuffer();
+		
+		if(userDto.getFirstName().isEmpty()) {
+			errorsFound.append(ConstantMessage.MSG_NAME_BAD_REQUEST);
+		}
+		if(userDto.getLastName().isEmpty()) {
+			errorsFound.append(ConstantMessage.MSG_LASTNAME_BAD_REQUEST);
+		}
+		if(userDto.getEmail().isEmpty()) {
+			errorsFound.append(ConstantMessage.MSG_EMAIL_BAD_REQUEST);
+		}
+		if(userDto.getPassword().isEmpty()) {
+			errorsFound.append(ConstantMessage.MSG_PASSWORD_BAD_REQUEST);
+		}
+		if(errorsFound.length() > 0) {
+			throw new BadRequestException(errorsFound.toString());
+		}
+		Role roleEntity = roleRepo.findByName("ROLE_USER");
+		User userEntity = dtoToEntity(userDto);
+		userEntity.setId(userDtoFound.get().getId());
+		userEntity.setRole(roleEntity);
+		userRepo.save(userEntity);
+		return entityToNewDto(userEntity);
+	}
 }
