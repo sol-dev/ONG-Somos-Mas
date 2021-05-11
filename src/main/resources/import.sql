@@ -8,5 +8,8 @@ INSERT INTO news(content, name, image, deleted) VALUES("Contenido Notocia 1", "N
 INSERT INTO comments(body, news_id, user_id, deleted) VALUES("Contenido body Comentario1", 1, 1, 0);
 
 INSERT INTO categories(name, description, image, deleted) VALUES("Categoria 1", "descripcion categoria 1", "default.jpg", 0);
+INSERT INTO categories(name, description, image, deleted) VALUES("Categoria 2", "descripcion categoria 2", "default.jpg", 0);
+INSERT INTO categories(name, description, image, deleted) VALUES("Categoria 3", "descripcion categoria 3", "default.jpg", 0);
+INSERT INTO categories(name, description, image, deleted) VALUES("Categoria 4", "descripcion categoria 4", "default.jpg", 0);
 
 INSERT INTO news_to_category(news_id, category_id) VALUES(1,1);
