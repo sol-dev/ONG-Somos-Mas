@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.team32.ong.constant.ConstantMessage;
 import com.team32.ong.dto.CategoryDTO;
+import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.model.Category;
 import com.team32.ong.repository.CategoryRepository;
 import com.team32.ong.service.CategoryService;
@@ -22,7 +23,11 @@ public class CategoryImplService implements CategoryService {
 
 
     @Override
-    public CategoryDTO save(CategoryDTO categoryDTO){
+    public CategoryDTO save(CategoryDTO categoryDTO) throws BadRequestException {
+
+        if (categoryDTO.getName() == null){
+            throw new BadRequestException(ConstantMessage.MSG_NAME_BAD_REQUEST);
+        }
 
         Category category = repo.save(dtoToEntity(categoryDTO));
 
