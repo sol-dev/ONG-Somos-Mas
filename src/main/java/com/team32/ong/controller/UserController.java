@@ -1,8 +1,9 @@
 package com.team32.ong.controller;
 
-import com.team32.ong.dto.UserDto;
-import com.team32.ong.exception.custom.InvalidDataException;
+import com.team32.ong.dto.UserDTORequest;
+import com.team32.ong.dto.UserDTOResponse;
 import com.team32.ong.service.UserService;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,18 +34,14 @@ public class UserController {
         return null;
     }
 
-    @PostMapping
-    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto nuserDto, BindingResult result){
 
-        if (result.hasErrors()){
-            throw new InvalidDataException(result);
-        }else {
-            return new ResponseEntity<>(userService.save(nuserDto), HttpStatus.CREATED);
-        }
+    @PostMapping
+    public ResponseEntity<UserDTOResponse> createUser(@RequestBody UserDTORequest userDTORequest) throws NotFoundException {
+        return new ResponseEntity<>(userService.save(userDTORequest), HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<?> modifyUser(@Valid @RequestBody UserDto newuserDto, BindingResult
+    public ResponseEntity<?> modifyUser(@Valid @RequestBody UserDTORequest newuserDTORequest, BindingResult
                                         result, MultipartFile image){
         return null;
     }
