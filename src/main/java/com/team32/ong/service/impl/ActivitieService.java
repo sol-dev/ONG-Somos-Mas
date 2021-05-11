@@ -24,10 +24,10 @@ public class ActivitieService implements IActivitiesServices {
     public ActivitiesDTO save(ActivitiesDTO activitiesDTO , MultipartFile image) throws Exception {
         try {
             if (activitiesDTO.getName() == null || activitiesDTO.getName() == "") {
-                throw new EmptyInputException("El Nombre es Requerido!");
+                throw new EmptyInputException(ConstantMessage.MSG_NAME_BAD_REQUEST);
             }
             if (activitiesDTO.getContent() == null || activitiesDTO.getContent() == ""){
-                throw new EmptyInputException("La Actividad No tiene Contenido!");
+                throw new EmptyInputException(ConstantMessage.MSG_EMPTY_ACTIVITY);
             }
 
             //todo: capturar imagen
