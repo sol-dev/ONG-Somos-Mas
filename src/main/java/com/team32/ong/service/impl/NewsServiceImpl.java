@@ -59,8 +59,7 @@ public class NewsServiceImpl implements NewsService {
 		}
 		News newsToCreate = this.dtoToModel(newsDto);
 		newsToCreate.setDeleted(false);
-		News newsCreated = newsRepository.save(newsToCreate);
-		
+		News newsCreated = newsRepository.save(newsToCreate);		
 		return modelToDto(newsCreated);
 	}
 

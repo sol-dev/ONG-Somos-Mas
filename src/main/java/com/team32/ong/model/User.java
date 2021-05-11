@@ -29,7 +29,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-@SQLDelete(sql = "UPDATE posts SET deleted=true WHERE id=?")
+@SQLDelete(sql = "UPDATE users SET deleted=true WHERE id=?")
 @Where(clause = "deleted = false")
 public class User implements Serializable, UserDetails {
 

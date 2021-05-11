@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.team32.ong.dto.UserDtoRequestForAdmin;
 
 @RestController
@@ -58,8 +59,8 @@ public class UserController {
         return new ResponseEntity<>(userService.updateForUser(id, userDto), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id){
-        return null;
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) throws NotFoundException{
+    	return new ResponseEntity<>(userService.delete(id),HttpStatus.OK);
     }
 }
