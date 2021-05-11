@@ -1,24 +1,21 @@
 package com.team32.ong.dto;
 
 import lombok.Getter;
+import lombok.Setter;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+@Getter @Setter
+public class NewUserDto {
 
-@Getter
-public class NewuserDto {
-
-    @NotEmpty
-    private String firstName;
-    @NotEmpty
+	private String firstName;
     private String lastName;
-    @NotEmpty
-    @Email
     private String email;
-    @NotEmpty
-    private String password;
-    @NotNull
-    private Role role;
-
+    private String photo;
+    private RoleDto role;
+	@Override
+	public String toString() {
+		return "NewUserDto [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", photo=" + photo
+				+ ", role=" + role + "]";
+	}
+    
+    
 }
