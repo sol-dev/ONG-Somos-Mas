@@ -7,6 +7,7 @@ import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.model.Category;
 import com.team32.ong.repository.CategoryRepository;
 import com.team32.ong.service.CategoryService;
+import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,25 @@ public class CategoryImplService implements CategoryService {
         Category category = repo.save(dtoToEntity(categoryDTO));
 
         return entityToDto(category);
+    }
+
+    @Override
+    public CategoryDTO update(Long id, CategoryDTO categoryDTO) throws Exception {
+
+        try {
+
+            //todo: validar usuario
+
+            if (!repo.existsById(id)){
+                throw new NotFoundException(ConstantMessage.MSG_CATEGORY_NOT_FOUND.concat(id.toString()));
+            }
+
+            repo.save(dtoToEntity(categoryDTO));
+            return categoryDTO;
+
+        }catch (Exception e){
+            throw new Exception(e.getMessage());
+        }
     }
 
 

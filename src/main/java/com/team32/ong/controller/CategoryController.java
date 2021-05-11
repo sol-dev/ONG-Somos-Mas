@@ -9,12 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/categories")
@@ -28,6 +27,20 @@ public class CategoryController {
 
         return new ResponseEntity<>(categoryService.save(categoryDTO), HttpStatus.CREATED);
 
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable("id") Long id, CategoryDTO categoryDTO)
+                                                throws Exception {
+
+        Map<String, Object> response = new HashMap<>();
+
+        CategoryDTO updatedCategory = categoryService.update(id, categoryDTO);
+
+        response.put("message", "Categoria actualizada!");
+        response.put("categorie", updatedCategory);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }

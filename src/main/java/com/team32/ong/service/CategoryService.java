@@ -7,4 +7,5 @@ import org.springframework.stereotype.Service;
 public interface CategoryService {
 
     CategoryDTO save(CategoryDTO categoryDTO);
+    CategoryDTO update(Long id,CategoryDTO categoryDTO) throws Exception;
 }
