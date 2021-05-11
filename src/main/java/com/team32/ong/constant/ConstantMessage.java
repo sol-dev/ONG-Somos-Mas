@@ -14,8 +14,5 @@ public class ConstantMessage {
     public static final String MSG_NOT_FOUND = "No se encontro la entidad con el id ";
     public static final String MSG_DUPLICATE_KEY = "Ya existe una entidad con esa clave";
     public static final String MSG_DELETE_OK = "Se elimino correctamente al usurio con id ";
-    public static final String MSG_COMMENT_NOT_FOUND = "No se encontro el comentario con el id ";
-    public static final String MSG_EMPTY_COMMENT_BODY = "El cuerpo del comentario no puede etar vacio";
-    public static final String MSG_EMPTY_ACTIVITY = "La Actividad No tiene contenido";
 
 }
