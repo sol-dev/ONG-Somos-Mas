@@ -132,7 +132,7 @@ public class UserImplService implements UserService, UserDetailsService {
 	}
 	
 	@Override
-	public NewUserDto updateAdminOnly(Long id, UserDtoRequestForAdmin userDto) throws NotFoundException {		
+	public NewUserDto updateAdminOnly(Long id, UserDtoRequestForAdmin userDto) throws NotFoundException {
 		Optional<UserDTOResponse> userDtoFound =  Optional.of(findById(id));
 		StringBuffer errorsFound = new StringBuffer();
 		
@@ -185,5 +185,14 @@ public class UserImplService implements UserService, UserDetailsService {
 		userEntity.setRole(roleEntity);
 		userRepo.save(userEntity);
 		return entityToNewDto(userEntity);
+	}
+	@Override
+	public String delete(Long id) throws NotFoundException {
+		boolean userExists = userRepo.existsById(id);
+		if(!userExists) {
+			throw new NotFoundException(ConstantMessage.MSG_NOT_FOUND + id);
+		}
+		userRepo.deleteById(id);
+		return ConstantMessage.MSG_DELETE_OK + id;
 	}
 }

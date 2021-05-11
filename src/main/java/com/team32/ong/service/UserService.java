@@ -22,5 +22,6 @@ public interface UserService {
     User dtoToEntity(UserDTORequest userDTORequest);
     UserDTOResponse entityToDto(User user);
     NewUserDto updateAdminOnly(Long id, UserDtoRequestForAdmin newUserDto) throws NotFoundException;
-    NewUserDto updateForUser(Long id, UserDTORequest userDto) throws NotFoundException;
+	NewUserDto updateForUser(Long id, UserDTORequest userDto) throws NotFoundException;
+	String delete(Long id) throws NotFoundException;
 }

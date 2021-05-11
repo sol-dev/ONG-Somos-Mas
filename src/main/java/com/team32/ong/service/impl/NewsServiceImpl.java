@@ -38,8 +38,8 @@ public class NewsServiceImpl implements NewsService {
             Path rootPath = Paths.get("upload").resolve(uniqueFilename);
             Path rootAbsolutepath = rootPath.toAbsolutePath();
             Files.copy(image.getInputStream(), rootAbsolutepath);
-			newsDto.setImage(image.getOriginalFilename());		
-		}		
+			newsDto.setImage(image.getOriginalFilename());	
+		}
 		News news = this.dtoToModel(newsDto);
 		news.setDeleted(false);
 		News newNews = newsRepository.save(news);
