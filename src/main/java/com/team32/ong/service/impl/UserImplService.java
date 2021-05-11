@@ -1,13 +1,16 @@
 package com.team32.ong.service.impl;
 
-import com.team32.ong.dto.UserRequest;
-import com.team32.ong.dto.UserResponse;
+import com.team32.ong.constant.ConstantMessage;
+import com.team32.ong.dto.UserDTORequest;
+import com.team32.ong.dto.UserDTOResponse;
+import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.exception.custom.InvalidDataException;
 import com.team32.ong.model.Role;
 import com.team32.ong.model.User;
 import com.team32.ong.repository.RoleRepository;
 import com.team32.ong.repository.UserRepository;
 import com.team32.ong.service.UserService;
+import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,7 +23,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserImplService implements UserService, UserDetailsService {
@@ -35,29 +37,44 @@ public class UserImplService implements UserService, UserDetailsService {
     private RoleRepository roleRepo;
 
     @Override
-    public UserResponse save(UserRequest userRequest) {
 
-        userRequest.setPassword(encoder.encode(userRequest.getPassword()));
-        
-        Role role = roleRepo.findByName("USER");
+    public UserDTOResponse save(UserDTORequest userDTORequest) throws NotFoundException, BadRequestException {
 
-        User userEntity = dtoToEntity(userRequest);
+        if (userRepo.existsByEmail(userDTORequest.getEmail())){
+            throw new NotFoundException(ConstantMessage.MSG_EMAIL_IN_USE);
+        }else if (userDTORequest.getEmail() == null){
+            throw new BadRequestException(ConstantMessage.MSG_EMAIL_BAD_REQUEST);
+        }else if (userDTORequest.getFirstName() == null){
+            throw new BadRequestException(ConstantMessage.MSG_NAME_BAD_REQUEST);
+        }else if (userDTORequest.getLastName() == null){
+            throw new BadRequestException(ConstantMessage.MSG_LASTNAME_BAD_REQUEST);
+        }else if (userDTORequest.getPassword() == null){
+            throw new BadRequestException(ConstantMessage.MSG_PASSWORD_BAD_REQUEST);
+        }
+        userDTORequest.setPassword(encoder.encode(userDTORequest.getPassword()));
+
+        Role role = roleRepo.findByName("ROLE_USER");
+
+        User userEntity = dtoToEntity(userDTORequest);
+
         userEntity.setRole(role);
         User userSave = userRepo.save(userEntity);
 
         return entityToDto(userSave);
+
     }
     
     @Override
-    public UserResponse getOne(Long id) {
+    public UserDTOResponse getOne(Long id) {
     	User user = userRepo.getOne(id);
 		return entityToDto(user);
     }
     
     @Override
-    public UserResponse findById(Long id) {
+    public UserDTOResponse findById(Long id) {
     	User user = userRepo.findById(id).orElseThrow(() -> new InvalidDataException("No existe un usuario con ese id"));
     	return entityToDto(user);
+
     }
 
     @Override
@@ -65,26 +82,27 @@ public class UserImplService implements UserService, UserDetailsService {
 
         User user = userRepo.findByEmail(email);
 
+        if (user == null){
+            throw new UsernameNotFoundException(ConstantMessage.MSG_EMAIL_NOT_FOUND);
+        }
+
         List<GrantedAuthority> rol = new ArrayList<>();
         rol.add(new SimpleGrantedAuthority(user.getRole().getName()));
 
         return new org.springframework.security.core.userdetails.
                 User(user.getEmail(), user.getPassword(), rol);
     }
-
-    private User dtoToEntity(UserRequest userRequest){
+    @Override
+    public User dtoToEntity(UserDTORequest userDTORequest){
         ModelMapper mapper = new ModelMapper();
-        return mapper.map(userRequest, User.class);
+        return mapper.map(userDTORequest, User.class);
     }
 
-    public UserResponse entityToDto(User user){
+    @Override
+    public UserDTOResponse entityToDto(User user){
         ModelMapper mapper = new ModelMapper();
-        return mapper.map(user, UserResponse.class);
+        return mapper.map(user, UserDTOResponse.class);
     }
-    
-    public User dtoToEntity(UserResponse userDto){
-        ModelMapper mapper = new ModelMapper();
-        return mapper.map(userDto, User.class);
-    }
+
 
 }

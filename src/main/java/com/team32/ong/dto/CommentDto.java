@@ -16,7 +16,7 @@ public class CommentDto{
 	
 	private long id;
 	private String body;
-	private User user;
+	private UserDTOResponse user;
 	private News news;
 
 }
