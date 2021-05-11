@@ -16,7 +16,7 @@ public class JWTUtil {
     private String KEY;
 
     @Value("${security.jwt.token.expire-length:3600000}")
-    private long validityInMilliseconds = 3600000;
+    private long validityInMilliseconds;
 
     public String generateToken(UserDetails userDetails){
 
