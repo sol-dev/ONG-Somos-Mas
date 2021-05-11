@@ -47,7 +47,7 @@ public class CategoryController {
     //only for admin
     @GetMapping(value = "/id")
     public ResponseEntity<CategoryDTO> findById(@RequestParam("id") Long id) throws NotFoundException{
-        return new ResponseEntity<CategoryDTO>(categoryService.findById(id), HttpStatus.FOUND);
+        return new ResponseEntity<CategoryDTO>(categoryService.findById(id), HttpStatus.OK);
     }
 
 }
