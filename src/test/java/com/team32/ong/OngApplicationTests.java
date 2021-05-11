@@ -5,8 +5,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class OngApplicationTests {
-
-
+	
 	@Test
 	void saveOrganizationEntity() {
 
