@@ -15,5 +15,5 @@ public interface CommentService {
 	CommentDto getOne(Long id);
 	CommentDto findById(Long id);
 	ResponseEntity<CommentDto> createNewComment(Long newsId, Long userId, AddCommentBody commentBody);
-
+	AddCommentBody update(Long id, AddCommentBody commentBody) throws Exception;
 }

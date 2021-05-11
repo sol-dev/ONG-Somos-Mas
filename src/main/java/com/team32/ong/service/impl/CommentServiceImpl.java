@@ -1,6 +1,8 @@
 package com.team32.ong.service.impl;
 
+import com.team32.ong.constant.ConstantMessage;
 import com.team32.ong.dto.UserDTOResponse;
+import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -76,9 +78,33 @@ public class CommentServiceImpl implements CommentService {
 		
 		return new ResponseEntity<>(commentDto,HttpStatus.OK);
 	}
-	
-	
-	
+
+	@Override
+	public AddCommentBody update(Long id, AddCommentBody commentBody) throws Exception {
+		if (!commentRepository.existsById(id)){
+			throw new NotFoundException(ConstantMessage.MSG_COMMENT_NO_FOUND.concat(id.toString()));
+		}
+
+		if (commentBody.getBody() == null || commentBody.getBody() == ""){
+			throw new EmptyInputException(ConstantMessage.MSG_EMPTY_COMMENT_BODY);
+		}
+
+		//todo: validar usuario
+
+		Comment oldComment = commentRepository.findById(id).get();
+		Comment newComment = new Comment();
+		newComment.setId(oldComment.getId());
+		newComment.setBody(commentBody.getBody());
+		newComment.setDeleted(false);
+		newComment.setUser(oldComment.getUser());
+		newComment.setNews(oldComment.getNews());
+
+		commentRepository.save(newComment);
+
+		return commentBody;
+	}
+
+
 	public CommentDto modelToDto(Comment comment) {
 		ModelMapper mapper = new ModelMapper();
         CommentDto commentDto = mapper.map(comment, CommentDto.class);
