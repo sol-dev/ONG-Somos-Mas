@@ -33,15 +33,13 @@ public class NewsServiceImpl implements NewsService {
 
 	@Override
 	public NewsDto save(NewsDto newsDto, MultipartFile image)throws IOException {
-
 		if(image != null) {
 			String uniqueFilename = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
             Path rootPath = Paths.get("upload").resolve(uniqueFilename);
             Path rootAbsolutepath = rootPath.toAbsolutePath();
             Files.copy(image.getInputStream(), rootAbsolutepath);
-			newsDto.setImage(image.getOriginalFilename());		
+			newsDto.setImage(image.getOriginalFilename());	
 		}
-		
 		News news = this.dtoToModel(newsDto);
 		news.setDeleted(false);
 		News newNews = newsRepository.save(news);

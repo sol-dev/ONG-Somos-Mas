@@ -1,8 +1,10 @@
 package com.team32.ong.service.impl;
 
 import com.team32.ong.constant.ConstantMessage;
+import com.team32.ong.dto.NewUserDto;
 import com.team32.ong.dto.UserDTORequest;
 import com.team32.ong.dto.UserDTOResponse;
+import com.team32.ong.dto.UserDtoRequestForAdmin;
 import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.exception.custom.InvalidDataException;
 import com.team32.ong.model.Role;
@@ -24,7 +26,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.List;
+<<<<<<< HEAD
 import java.util.Optional;
+=======
+import java.util.stream.Collectors;
+import java.util.Optional;
+
+>>>>>>> af30c8539f4ab7f48435f6fe96262c4e15207982
 
 @Service
 public class UserImplService implements UserService, UserDetailsService {
@@ -80,6 +88,18 @@ public class UserImplService implements UserService, UserDetailsService {
     }
 
     @Override
+    public List<UserDTOResponse> getAllUsers(){
+
+        List<User> userList = userRepo.findAll();
+
+        return userList
+                .stream()
+                .map(this::entityToDto)
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
         User user = userRepo.findByEmail(email);
@@ -101,10 +121,88 @@ public class UserImplService implements UserService, UserDetailsService {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(userDTORequest, User.class);
     }
+    
+    private NewUserDto entityToNewDto(User user){
+        ModelMapper mapper = new ModelMapper();
+        return mapper.map(user, NewUserDto.class);
+    }
 
     @Override
     public UserDTOResponse entityToDto(User user){
         ModelMapper mapper = new ModelMapper();
         return mapper.map(user, UserDTOResponse.class);
     }
+<<<<<<< HEAD
+=======
+    
+    private User UserDtoRequestForUserToEntity(UserDtoRequestForAdmin userDto) {
+    	ModelMapper mapper = new ModelMapper();
+        return mapper.map(userDto, User.class);
+	}
+	
+	@Override
+	public NewUserDto updateAdminOnly(Long id, UserDtoRequestForAdmin userDto) throws NotFoundException {
+		Optional<UserDTOResponse> userDtoFound =  Optional.of(findById(id));
+		StringBuffer errorsFound = new StringBuffer();
+		
+		if(userDto.getFirstName().isEmpty()) {
+			errorsFound.append(ConstantMessage.MSG_NAME_BAD_REQUEST);
+		}
+		if(userDto.getLastName().isEmpty()) {
+			errorsFound.append(ConstantMessage.MSG_LASTNAME_BAD_REQUEST);
+		}
+		if(userDto.getEmail().isEmpty()) {
+			errorsFound.append(ConstantMessage.MSG_EMAIL_BAD_REQUEST);
+		}
+		if(userDto.getPassword().isEmpty()) {
+			errorsFound.append(ConstantMessage.MSG_PASSWORD_BAD_REQUEST);
+		}
+		if(errorsFound.length() > 0) {
+			throw new BadRequestException(errorsFound.toString());
+		}
+		User userEntity = UserDtoRequestForUserToEntity(userDto);
+		userEntity.setId(userDtoFound.get().getId());
+		Role roleEntity = roleRepo.findByName(userDto.getRole().getName());
+		userEntity.setRole(roleEntity);
+		userRepo.save(userEntity);
+		return entityToNewDto(userEntity);
+	}
+	
+	@Override
+	public NewUserDto updateForUser(Long id, UserDTORequest userDto) throws NotFoundException {
+		Optional<UserDTOResponse> userDtoFound =  Optional.of(findById(id));
+		StringBuffer errorsFound = new StringBuffer();
+		
+		if(userDto.getFirstName().isEmpty()) {
+			errorsFound.append(ConstantMessage.MSG_NAME_BAD_REQUEST);
+		}
+		if(userDto.getLastName().isEmpty()) {
+			errorsFound.append(ConstantMessage.MSG_LASTNAME_BAD_REQUEST);
+		}
+		if(userDto.getEmail().isEmpty()) {
+			errorsFound.append(ConstantMessage.MSG_EMAIL_BAD_REQUEST);
+		}
+		if(userDto.getPassword().isEmpty()) {
+			errorsFound.append(ConstantMessage.MSG_PASSWORD_BAD_REQUEST);
+		}
+		if(errorsFound.length() > 0) {
+			throw new BadRequestException(errorsFound.toString());
+		}
+		Role roleEntity = roleRepo.findByName("ROLE_USER");
+		User userEntity = dtoToEntity(userDto);
+		userEntity.setId(userDtoFound.get().getId());
+		userEntity.setRole(roleEntity);
+		userRepo.save(userEntity);
+		return entityToNewDto(userEntity);
+	}
+	@Override
+	public String delete(Long id) throws NotFoundException {
+		boolean userExists = userRepo.existsById(id);
+		if(!userExists) {
+			throw new NotFoundException(ConstantMessage.MSG_NOT_FOUND + id);
+		}
+		userRepo.deleteById(id);
+		return ConstantMessage.MSG_DELETE_OK + id;
+	}
+>>>>>>> af30c8539f4ab7f48435f6fe96262c4e15207982
 }
