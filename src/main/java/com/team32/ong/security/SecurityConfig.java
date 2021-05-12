@@ -5,6 +5,7 @@ import com.team32.ong.service.impl.UserImplService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -43,7 +44,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/**/authenticate").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/").permitAll()
-                .antMatchers("/api/**").permitAll()
+                .antMatchers("/api/v1/activities/**").permitAll()
+                .antMatchers("/api/v1/categories/**").permitAll()
+                .antMatchers("/api/v1/comment/**").permitAll()
+                .antMatchers("/api/v1/member/**").permitAll()
+                .antMatchers("/api/v1/news/**").permitAll()
+                .antMatchers("/api/v1/organization/**").permitAll()
+                .antMatchers("/api/v1/testimonials/**").permitAll()
+                .antMatchers("/api/v1/role/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/api/v1/users").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/v1/users").hasRole("ROLE_ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
