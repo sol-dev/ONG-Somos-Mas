@@ -10,5 +10,4 @@ class OngApplicationTests {
 	void saveOrganizationEntity() {
 
 	}
-
 }

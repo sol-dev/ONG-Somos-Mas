@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.team32.ong.dto.AddCommentBody;
 import com.team32.ong.dto.CommentDto;
+import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.service.CommentService;
+
+import javassist.NotFoundException;
 
 
 @RestController
@@ -27,7 +30,7 @@ public class CommentController {
 	@PostMapping("/addComment")
 	public ResponseEntity<CommentDto> addComment(@RequestParam(name="newsId") Long newsId,
 												 @RequestParam("userId") Long userId,
-												 @RequestBody AddCommentBody commentBody, BindingResult result) {		
+												 @RequestBody AddCommentBody commentBody) throws BadRequestException, NotFoundException {		
 		
     	return commentService.createNewComment(newsId, userId, commentBody);
     	
