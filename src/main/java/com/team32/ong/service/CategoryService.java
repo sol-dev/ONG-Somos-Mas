@@ -10,5 +10,5 @@ import java.util.List;
 public interface CategoryService {
 
     CategoryDTO save(CategoryDTO categoryDTO);
-    List<String > viewAll() throws Exception;
+    List<String> viewAll() throws Exception;
 }
