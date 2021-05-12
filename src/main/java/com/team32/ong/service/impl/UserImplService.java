@@ -22,17 +22,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.List;
-<<<<<<< HEAD
-import java.util.Optional;
-=======
+
 import java.util.stream.Collectors;
 import java.util.Optional;
-
->>>>>>> af30c8539f4ab7f48435f6fe96262c4e15207982
 
 @Service
 public class UserImplService implements UserService, UserDetailsService {
@@ -132,8 +127,6 @@ public class UserImplService implements UserService, UserDetailsService {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(user, UserDTOResponse.class);
     }
-<<<<<<< HEAD
-=======
     
     private User UserDtoRequestForUserToEntity(UserDtoRequestForAdmin userDto) {
     	ModelMapper mapper = new ModelMapper();
@@ -204,5 +197,4 @@ public class UserImplService implements UserService, UserDetailsService {
 		userRepo.deleteById(id);
 		return ConstantMessage.MSG_DELETE_OK + id;
 	}
->>>>>>> af30c8539f4ab7f48435f6fe96262c4e15207982
 }
