@@ -1,6 +1,7 @@
 package com.team32.ong.controller;
 
 import com.team32.ong.dto.OrganizationDTO;
+import com.team32.ong.dto.OrganizationPublicDTO;
 import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.exception.custom.EmptyInputException;
 import com.team32.ong.exception.custom.InvalidDataException;
@@ -28,7 +29,7 @@ public class OrganizationController {
 
     @GetMapping(value = "/public")
     public ResponseEntity<?> getPublicInfo(){
-        List<OrganizationDTO> list = organizationService.findActives();
+        List<OrganizationPublicDTO> list = organizationService.findActives();
         return new ResponseEntity<>(list,HttpStatus.OK);
     }
 

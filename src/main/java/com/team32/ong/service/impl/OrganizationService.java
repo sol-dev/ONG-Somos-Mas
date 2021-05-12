@@ -5,8 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
-import com.team32.ong.constant.ConstantMessage;
+import com.team32.ong.constant.*;
 import com.team32.ong.dto.OrganizationDTO;
+import com.team32.ong.dto.OrganizationPublicDTO;
 import com.team32.ong.exception.custom.EmptyInputException;
 import com.team32.ong.model.OrganizationEntity;
 import com.team32.ong.repository.IOrganizationRepository;
@@ -70,9 +71,9 @@ public class OrganizationService implements IOrganizationService{
         return lDto;
     }
 
-    public List<OrganizationDTO> findActives() {
+    public List<OrganizationPublicDTO> findActives() {
         List<OrganizationEntity> lEntities= organizationRepository.findActives();
-        List<OrganizationDTO> lDto = Arrays.asList(modelMapper.map(lEntities, OrganizationDTO[].class));
+        List<OrganizationPublicDTO> lDto = Arrays.asList(modelMapper.map(lEntities, OrganizationPublicDTO[].class));
         return lDto;
     }
 
