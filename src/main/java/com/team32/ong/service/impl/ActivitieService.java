@@ -1,5 +1,6 @@
 package com.team32.ong.service.impl;
 
+import com.team32.ong.constant.ConstantMessage;
 import com.team32.ong.dto.ActivitiesDTO;
 import com.team32.ong.exception.custom.EmptyInputException;
 import com.team32.ong.model.Activities;
@@ -27,7 +28,7 @@ public class ActivitieService implements IActivitiesServices {
                 throw new EmptyInputException(ConstantMessage.MSG_NAME_BAD_REQUEST);
             }
             if (activitiesDTO.getContent() == null || activitiesDTO.getContent() == ""){
-                throw new EmptyInputException(ConstantMessage.MSG_EMPTY_ACTIVITY);
+                throw new EmptyInputException(ConstantMessage.MSG_EMPTY_INPUT);
             }
 
             //todo: capturar imagen
