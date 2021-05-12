@@ -34,12 +34,9 @@ public class UserController {
         return null;
     }
 
-    @PostMapping("/{id}")
+    @PostMapping
     public ResponseEntity<UserDTOResponse> createUser(@Valid @RequestBody UserDTORequest userDTORequest,
-                                                   BindingResult result, @PathVariable Long id) throws NotFoundException{
-    	if (userService.rolValidation(id) == false) 
-    		return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-    	
+                                                   BindingResult result) throws NotFoundException{
             return new ResponseEntity<>(userService.save(userDTORequest), HttpStatus.CREATED);
         }
 

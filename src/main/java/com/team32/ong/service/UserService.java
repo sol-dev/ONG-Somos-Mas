@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface UserService {
 
-    public Boolean rolValidation(Long id);
     UserDTOResponse save(UserDTORequest user) throws NotFoundException;
 	UserDTOResponse getOne(Long id);
 	UserDTOResponse findById(Long id);

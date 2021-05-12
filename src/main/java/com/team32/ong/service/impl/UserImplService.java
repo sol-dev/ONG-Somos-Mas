@@ -94,18 +94,7 @@ public class UserImplService implements UserService, UserDetailsService {
         return new org.springframework.security.core.userdetails.
                 User(user.getEmail(), user.getPassword(), rol);
     }
-    
-	@Override
-	public Boolean rolValidation(Long id) {
-		Optional<User> userOpt = userRepo.findById(id);
-		if (userOpt.isPresent()) {
-			User user = userOpt.get();
-			if (user.getRole().getId() == 1) {
-				return true;
-			}
-		}
-		return false;
-	}
+
     
     @Override
     public User dtoToEntity(UserDTORequest userDTORequest){
