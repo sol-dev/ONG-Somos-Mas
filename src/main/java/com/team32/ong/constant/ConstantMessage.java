@@ -14,4 +14,5 @@ public class ConstantMessage {
     public static final String MSG_NOT_FOUND = "No se encontro la entidad con el id ";
     public static final String MSG_DUPLICATE_KEY = "Ya existe una entidad con esa clave";
     public static final String MSG_CATEGORY_NOT_FOUND = "No existe la categiria con el id : ";
+    public static final String MSG_ID_DIFFERS = "Se enviaron 2 ID diferentes";
 }

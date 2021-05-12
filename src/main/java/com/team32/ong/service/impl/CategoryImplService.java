@@ -41,6 +41,12 @@ public class CategoryImplService implements CategoryService {
             if (!repo.existsById(id)){
                 throw new NotFoundException(ConstantMessage.MSG_CATEGORY_NOT_FOUND.concat(id.toString()));
             }
+            if (categoryDTO.getName() == null || categoryDTO.getName().isBlank()){
+                throw new BadRequestException(ConstantMessage.MSG_NAME_BAD_REQUEST);
+            }
+            if (categoryDTO.getId() != id){
+                throw new BadRequestException(ConstantMessage.MSG_ID_DIFFERS);
+            }
 
             repo.save(dtoToEntity(categoryDTO));
             return categoryDTO;
