@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import com.team32.ong.constant.ConstantMessage;
 import com.team32.ong.dto.NewsDto;
+import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.exception.custom.InvalidDataException;
 import com.team32.ong.model.News;
 import com.team32.ong.repository.NewsRepository;
@@ -32,19 +34,33 @@ public class NewsServiceImpl implements NewsService {
 	}
 
 	@Override
-	public NewsDto save(NewsDto newsDto, MultipartFile image)throws IOException {
-		if(image != null) {
-			String uniqueFilename = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
-            Path rootPath = Paths.get("upload").resolve(uniqueFilename);
-            Path rootAbsolutepath = rootPath.toAbsolutePath();
-            Files.copy(image.getInputStream(), rootAbsolutepath);
-			newsDto.setImage(image.getOriginalFilename());	
+	public NewsDto save(NewsDto newsDto, MultipartFile image) throws IOException {
+		if(image != null && !image.isEmpty()) {
+			try {
+				String uniqueFilename = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
+	            Path rootPath = Paths.get("upload").resolve(uniqueFilename);
+	            Path rootAbsolutepath = rootPath.toAbsolutePath();        
+				Files.copy(image.getInputStream(), rootAbsolutepath);
+			} catch (IOException e) {
+				e.printStackTrace();
+				throw new IOException(ConstantMessage.MSG_IO_Exception);
+			}
+			newsDto.setImage(image.getOriginalFilename());		
 		}
-		News news = this.dtoToModel(newsDto);
-		news.setDeleted(false);
-		News newNews = newsRepository.save(news);
-		
-		return modelToDto(newNews);
+		StringBuffer errorsFound = new StringBuffer();
+		if(newsDto.getName().isEmpty()) {			
+			errorsFound.append(ConstantMessage.MSG_NAME_BAD_REQUEST);
+		}
+		if(newsDto.getContent().isEmpty()) {			
+			errorsFound.append(ConstantMessage.MSG_CONTENT_BAD_REQUEST);
+		}
+		if(errorsFound.length() > 0) {
+			throw new BadRequestException(errorsFound.toString());
+		}
+		News newsToCreate = this.dtoToModel(newsDto);
+		newsToCreate.setDeleted(false);
+		News newsCreated = newsRepository.save(newsToCreate);		
+		return modelToDto(newsCreated);
 	}
 
 	
