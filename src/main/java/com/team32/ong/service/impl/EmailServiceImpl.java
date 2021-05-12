@@ -56,6 +56,7 @@ public class EmailServiceImpl implements EmailService {
         Mail mail = new Mail();
 
         Email fromEmail = new Email();
+
         fromEmail.setEmail("somosmas53@gmail.com");
         mail.setFrom(fromEmail);
 
