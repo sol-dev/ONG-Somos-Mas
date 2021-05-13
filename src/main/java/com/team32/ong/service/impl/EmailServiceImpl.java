@@ -26,30 +26,20 @@ public class EmailServiceImpl implements EmailService {
     SendGrid sendGrid;
 
     @Override
-    public String sendEmail(String email) {
+    public void sendEmail(String email) {
         try {
             Mail mail = prepareMail(email);
-
+            
             Request request = new Request();
             request.setMethod(Method.POST);
             request.setEndpoint("mail/send");
 
-
             request.setBody(mail.build());
-
-            Response response = sendGrid.api(request);
-            if(response!= null){
-                System.out.println("response code from sendgrid" + response.getHeaders());
-                System.out.println(response.getStatusCode());
-                System.out.println(response.getBody());
-            }
+            
+           sendGrid.api(request);
         } catch (IOException e) {
-            System.out.println("catch");
             e.printStackTrace();
-            return "Error in sent email";
         }
-
-        return "mail has been sent check your inbox";
     }
 
     public Mail prepareMail(String email){
@@ -57,7 +47,7 @@ public class EmailServiceImpl implements EmailService {
 
         Email fromEmail = new Email();
 
-        fromEmail.setEmail("somosmas53@gmail.com");
+        fromEmail.setEmail("matias-leandro@outlook.com");
         mail.setFrom(fromEmail);
 
         Email toEmail = new Email();
@@ -68,6 +58,7 @@ public class EmailServiceImpl implements EmailService {
 
 
         mail.setTemplateId(templateId);
+        mail.setSubject("HOLA");
         mail.addPersonalization(personalization);
         return mail;
     }

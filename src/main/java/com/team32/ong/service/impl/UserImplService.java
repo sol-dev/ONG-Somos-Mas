@@ -11,6 +11,7 @@ import com.team32.ong.model.Role;
 import com.team32.ong.model.User;
 import com.team32.ong.repository.RoleRepository;
 import com.team32.ong.repository.UserRepository;
+import com.team32.ong.service.EmailService;
 import com.team32.ong.service.UserService;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
@@ -40,9 +41,11 @@ public class UserImplService implements UserService, UserDetailsService {
 
     @Autowired
     private RoleRepository roleRepo;
+    
+    @Autowired
+    private EmailService emailService;
 
     @Override
-
     public UserDTOResponse save(UserDTORequest userDTORequest) throws NotFoundException, BadRequestException {
 
         if (userRepo.existsByEmail(userDTORequest.getEmail())){
@@ -64,6 +67,8 @@ public class UserImplService implements UserService, UserDetailsService {
 
         userEntity.setRole(role);
         User userSave = userRepo.save(userEntity);
+        
+        emailService.sendEmail(userSave.getEmail());
 
         return entityToDto(userSave);
 
