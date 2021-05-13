@@ -30,7 +30,7 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable("id") Long id, CategoryDTO categoryDTO)
+    public ResponseEntity<?> update(@PathVariable("id") Long id,@RequestBody CategoryDTO categoryDTO)
                                                 throws Exception {
 
         Map<String, Object> response = new HashMap<>();

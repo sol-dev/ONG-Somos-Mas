@@ -9,6 +9,8 @@ import com.team32.ong.repository.CategoryRepository;
 import com.team32.ong.service.CategoryService;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,8 @@ public class CategoryImplService implements CategoryService {
 
     @Autowired
     private CategoryRepository repo;
+
+    private static final Logger logger = LoggerFactory.getLogger(CategoryImplService.class);
 
 
     @Override
@@ -41,7 +45,7 @@ public class CategoryImplService implements CategoryService {
             if (!repo.existsById(id)){
                 throw new NotFoundException(ConstantMessage.MSG_CATEGORY_NOT_FOUND.concat(id.toString()));
             }
-            if (categoryDTO.getName() == null || categoryDTO.getName().isBlank()){
+            if (categoryDTO.getName() == null || categoryDTO.getName() == ""){
                 throw new BadRequestException(ConstantMessage.MSG_NAME_BAD_REQUEST);
             }
             if (categoryDTO.getId() != id){
