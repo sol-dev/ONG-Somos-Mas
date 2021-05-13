@@ -8,6 +8,8 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.SdkClientException;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
@@ -16,11 +18,10 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
+
 @Service
 public class AmazonClient {
-
-    private AmazonS3 s3client;
-
+	 
     @Value("${amazonProperties.endpointUrl}")
     private String endpointUrl;
     @Value("${amazonProperties.bucketName}")
@@ -30,16 +31,19 @@ public class AmazonClient {
     @Value("${amazonProperties.secretKey}")
     private String secretKey;
     
+    /*  
     
 	@PostConstruct    
 	private void initializeAmazon() {
 		BasicAWSCredentials creds = new BasicAWSCredentials(this.accessKey, this.secretKey);
-		AmazonS3 s3Client = AmazonS3ClientBuilder
+		AmazonS3 s3client = AmazonS3ClientBuilder
 											.standard()
 											.withRegion("us-east-1")
 											.withCredentials(new AWSStaticCredentialsProvider(creds))
 											.build();   
 	}
+	
+	*/ 
 	
 	private File convertMultiPartToFile(MultipartFile file) throws IOException {
 	    File convFile = new File(file.getOriginalFilename());
@@ -54,6 +58,11 @@ public class AmazonClient {
 	}
 	
 	private void uploadFileTos3bucket(String fileName, File file) {
+		BasicAWSCredentials creds = new BasicAWSCredentials(this.accessKey, this.secretKey);
+	    AmazonS3 s3client = AmazonS3ClientBuilder.standard()
+                .withRegion("us-east-1")
+                .withCredentials(new AWSStaticCredentialsProvider(creds))
+                .build();
 	    s3client.putObject(new PutObjectRequest(bucketName, fileName, file)
 	            .withCannedAcl(CannedAccessControlList.PublicRead));
 	}
@@ -74,10 +83,27 @@ public class AmazonClient {
 	
 	public String deleteFileFromS3Bucket(String fileUrl) {
 	    String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
-	    s3client.deleteObject(new DeleteObjectRequest(bucketName + "/", fileName));
-	    return "Successfully deleted";
+	    BasicAWSCredentials creds = new BasicAWSCredentials(this.accessKey, this.secretKey);
+	    AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
+                .withRegion("us-east-1")
+                .withCredentials(new AWSStaticCredentialsProvider(creds))
+                .build();
+	    s3Client.deleteObject(new DeleteObjectRequest(bucketName, fileName));
+	    return "No tiró error, ver si se borró " + bucketName + "/" + fileName;
 	}
 	
-	
-	
+	public String putObject(String documentName) {
+		BasicAWSCredentials creds = new BasicAWSCredentials(this.accessKey, this.secretKey);
+		AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
+                .withRegion("us-east-1")
+                .withCredentials(new AWSStaticCredentialsProvider(creds))
+                .build();
+		s3Client.putObject(bucketName, documentName, new File("D:\\Documentos\\PROGRAMACIÓN\\ALKEMY\\aceleracion\\restApp\\"+documentName));
+		return "se cargó el archivo";
+	}
+	  
+    
 }
+
+	
+
