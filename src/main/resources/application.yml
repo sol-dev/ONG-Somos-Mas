@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/somos_mas?serverTimezone=UTC
-    username: user
-    password: password
+    username: root
+    password: 123456
     driver-class: com.mysql.cj.jdbc.Driver
     
   jpa:
@@ -25,6 +25,6 @@ spring:
 app:
   sengrid:
     key: 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
-    templateId: d-769bb1b4886846489e62142f0b6f7226
+    emailIssuing: matias-leandro@outlook.com
 
 

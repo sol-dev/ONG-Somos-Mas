@@ -2,12 +2,11 @@ package com.team32.ong.service.impl;
 
 import com.sendgrid.Method;
 import com.sendgrid.Request;
-import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
 import com.sendgrid.helpers.mail.Mail;
-import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
 import com.sendgrid.helpers.mail.objects.Personalization;
+import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,17 +18,16 @@ import java.io.IOException;
 @Service
 @Transactional
 public class EmailServiceImpl implements EmailService {
-
-    @Value("${app.sengrid.templateId}")
-    private String templateId;
     @Autowired
     SendGrid sendGrid;
+    
+    @Value("${app.sengrid.emailIssuing}")
+    private String emailIssuing;
 
     @Override
-    public void sendEmail(String email) {
+    public void sendEmail(String email) throws IOException{
         try {
-            Mail mail = prepareMail(email);
-            
+        	Mail mail = prepareMail(email);
             Request request = new Request();
             request.setMethod(Method.POST);
             request.setEndpoint("mail/send");
@@ -39,6 +37,7 @@ public class EmailServiceImpl implements EmailService {
            sendGrid.api(request);
         } catch (IOException e) {
             e.printStackTrace();
+            throw new IOException(ConstantExceptionMessage.MSG_ERROR_SEND_EMAIL);
         }
     }
 
@@ -47,7 +46,7 @@ public class EmailServiceImpl implements EmailService {
 
         Email fromEmail = new Email();
 
-        fromEmail.setEmail("matias-leandro@outlook.com");
+        fromEmail.setEmail(emailIssuing);
         mail.setFrom(fromEmail);
 
         Email toEmail = new Email();
@@ -57,8 +56,7 @@ public class EmailServiceImpl implements EmailService {
         personalization.addTo(toEmail);
 
 
-        mail.setTemplateId(templateId);
-        mail.setSubject("HOLA");
+        mail.setSubject("test");
         mail.addPersonalization(personalization);
         return mail;
     }
