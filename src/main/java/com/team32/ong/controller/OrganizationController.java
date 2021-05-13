@@ -9,6 +9,7 @@ import com.team32.ong.service.IOrganizationService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.web.JsonPath;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +42,7 @@ public class OrganizationController {
 
     @GetMapping(value = "/id")
     public ResponseEntity<OrganizationDTO> findById( @RequestParam("id") Long id) throws NotFoundException{
-        return new ResponseEntity<OrganizationDTO>(organizationService.findById(id), HttpStatus.OK);
+        return new ResponseEntity<OrganizationDTO>(organizationService.findDtoById(id), HttpStatus.OK);
     }
  
     @GetMapping(value = "/all")
@@ -55,7 +56,6 @@ public class OrganizationController {
         organizationService.softDelete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 
 
 }
