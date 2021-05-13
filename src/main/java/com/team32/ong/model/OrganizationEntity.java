@@ -57,6 +57,15 @@ public class OrganizationEntity {
     @Column(name = "aboutUsText")
     private String aboutUsText;
 
+    @Column(name = "facebookUrl", nullable = true)
+    private String facebookUrl;
+
+    @Column(name = "linkedinUrl", nullable = true)
+    private String linkedinUrl;
+
+    @Column(name = "instagramUrl", nullable = true)
+    private String instagramUrl;
+
     @CreationTimestamp
     @Column(name = "created_date")
     private LocalDateTime createDate;
