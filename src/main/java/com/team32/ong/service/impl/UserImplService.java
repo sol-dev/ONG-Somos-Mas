@@ -1,6 +1,6 @@
 package com.team32.ong.service.impl;
 
-import com.team32.ong.constant.ConstantMessage;
+import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.NewUserDto;
 import com.team32.ong.dto.UserDTORequest;
 import com.team32.ong.dto.UserDTOResponse;
@@ -24,6 +24,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,18 +47,18 @@ public class UserImplService implements UserService, UserDetailsService {
     private EmailService emailService;
 
     @Override
-    public UserDTOResponse save(UserDTORequest userDTORequest) throws NotFoundException, BadRequestException {
+    public UserDTOResponse save(UserDTORequest userDTORequest) throws NotFoundException, BadRequestException, IOException {
 
         if (userRepo.existsByEmail(userDTORequest.getEmail())){
-            throw new NotFoundException(ConstantMessage.MSG_EMAIL_IN_USE);
+            throw new NotFoundException(ConstantExceptionMessage.MSG_EMAIL_IN_USE);
         }else if (userDTORequest.getEmail() == null){
-            throw new BadRequestException(ConstantMessage.MSG_EMAIL_BAD_REQUEST);
+            throw new BadRequestException(ConstantExceptionMessage.MSG_EMAIL_BAD_REQUEST);
         }else if (userDTORequest.getFirstName() == null){
-            throw new BadRequestException(ConstantMessage.MSG_NAME_BAD_REQUEST);
+            throw new BadRequestException(ConstantExceptionMessage.MSG_NAME_BAD_REQUEST);
         }else if (userDTORequest.getLastName() == null){
-            throw new BadRequestException(ConstantMessage.MSG_LASTNAME_BAD_REQUEST);
+            throw new BadRequestException(ConstantExceptionMessage.MSG_LASTNAME_BAD_REQUEST);
         }else if (userDTORequest.getPassword() == null){
-            throw new BadRequestException(ConstantMessage.MSG_PASSWORD_BAD_REQUEST);
+            throw new BadRequestException(ConstantExceptionMessage.MSG_PASSWORD_BAD_REQUEST);
         }
         userDTORequest.setPassword(encoder.encode(userDTORequest.getPassword()));
 
@@ -105,7 +106,7 @@ public class UserImplService implements UserService, UserDetailsService {
         User user = userRepo.findByEmail(email);
 
         if (user == null){
-            throw new UsernameNotFoundException(ConstantMessage.MSG_EMAIL_NOT_FOUND);
+            throw new UsernameNotFoundException(ConstantExceptionMessage.MSG_EMAIL_NOT_FOUND);
         }
 
         List<GrantedAuthority> rol = new ArrayList<>();
@@ -142,16 +143,16 @@ public class UserImplService implements UserService, UserDetailsService {
 		StringBuffer errorsFound = new StringBuffer();
 		
 		if(userDto.getFirstName().isEmpty()) {
-			errorsFound.append(ConstantMessage.MSG_NAME_BAD_REQUEST);
+			errorsFound.append(ConstantExceptionMessage.MSG_NAME_BAD_REQUEST);
 		}
 		if(userDto.getLastName().isEmpty()) {
-			errorsFound.append(ConstantMessage.MSG_LASTNAME_BAD_REQUEST);
+			errorsFound.append(ConstantExceptionMessage.MSG_LASTNAME_BAD_REQUEST);
 		}
 		if(userDto.getEmail().isEmpty()) {
-			errorsFound.append(ConstantMessage.MSG_EMAIL_BAD_REQUEST);
+			errorsFound.append(ConstantExceptionMessage.MSG_EMAIL_BAD_REQUEST);
 		}
 		if(userDto.getPassword().isEmpty()) {
-			errorsFound.append(ConstantMessage.MSG_PASSWORD_BAD_REQUEST);
+			errorsFound.append(ConstantExceptionMessage.MSG_PASSWORD_BAD_REQUEST);
 		}
 		if(errorsFound.length() > 0) {
 			throw new BadRequestException(errorsFound.toString());
@@ -170,16 +171,16 @@ public class UserImplService implements UserService, UserDetailsService {
 		StringBuffer errorsFound = new StringBuffer();
 		
 		if(userDto.getFirstName().isEmpty()) {
-			errorsFound.append(ConstantMessage.MSG_NAME_BAD_REQUEST);
+			errorsFound.append(ConstantExceptionMessage.MSG_NAME_BAD_REQUEST);
 		}
 		if(userDto.getLastName().isEmpty()) {
-			errorsFound.append(ConstantMessage.MSG_LASTNAME_BAD_REQUEST);
+			errorsFound.append(ConstantExceptionMessage.MSG_LASTNAME_BAD_REQUEST);
 		}
 		if(userDto.getEmail().isEmpty()) {
-			errorsFound.append(ConstantMessage.MSG_EMAIL_BAD_REQUEST);
+			errorsFound.append(ConstantExceptionMessage.MSG_EMAIL_BAD_REQUEST);
 		}
 		if(userDto.getPassword().isEmpty()) {
-			errorsFound.append(ConstantMessage.MSG_PASSWORD_BAD_REQUEST);
+			errorsFound.append(ConstantExceptionMessage.MSG_PASSWORD_BAD_REQUEST);
 		}
 		if(errorsFound.length() > 0) {
 			throw new BadRequestException(errorsFound.toString());
@@ -195,9 +196,9 @@ public class UserImplService implements UserService, UserDetailsService {
 	public String delete(Long id) throws NotFoundException {
 		boolean userExists = userRepo.existsById(id);
 		if(!userExists) {
-			throw new NotFoundException(ConstantMessage.MSG_NOT_FOUND + id);
+			throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND + id);
 		}
 		userRepo.deleteById(id);
-		return ConstantMessage.MSG_DELETE_OK + id;
+		return ConstantExceptionMessage.MSG_DELETE_OK + id;
 	}
 }
