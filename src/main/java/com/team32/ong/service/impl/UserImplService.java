@@ -68,6 +68,10 @@ public class UserImplService implements UserService, UserDetailsService {
         return entityToDto(userSave);
 
     }
+
+    public UserDTOResponse getByEmail(String email){
+    	return entityToDto(userRepo.findByEmail(email));
+	}
     
     @Override
     public UserDTOResponse getOne(Long id) {

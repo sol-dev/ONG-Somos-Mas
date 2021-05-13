@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.team32.ong.dto.UserDtoRequestForAdmin;
 
+import javax.ws.rs.HeaderParam;
+
 @RestController
 @RequestMapping("/api/v1/users")
 @CrossOrigin
@@ -37,6 +39,11 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getUser(@PathVariable("id") Long id){
         return null;
+    }
+
+    @GetMapping("auth/me")
+    public ResponseEntity<UserDTOResponse> getMe(@HeaderParam("Authorization") String j){
+
     }
     
     @PostMapping

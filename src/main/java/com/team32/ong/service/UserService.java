@@ -17,6 +17,7 @@ public interface UserService {
 
     UserDTOResponse save(UserDTORequest user) throws NotFoundException;
     List<UserDTOResponse> getAllUsers();
+    UserDTOResponse getByEmail(String email);
 	UserDTOResponse getOne(Long id);
 	UserDTOResponse findById(Long id);
     User dtoToEntity(UserDTORequest userDTORequest);
