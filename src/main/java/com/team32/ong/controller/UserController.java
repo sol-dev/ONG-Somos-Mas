@@ -2,26 +2,18 @@ package com.team32.ong.controller;
 
 import com.team32.ong.dto.UserDTORequest;
 import com.team32.ong.dto.UserDTOResponse;
+import com.team32.ong.security.JWTUtil;
 import com.team32.ong.service.UserService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import java.util.List;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.web.bind.annotation.*;
 
 import com.team32.ong.dto.UserDtoRequestForAdmin;
 
-import javax.ws.rs.HeaderParam;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -30,6 +22,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private JWTUtil jwtUtil;
 
     @GetMapping
     public ResponseEntity<List<UserDTOResponse>> getAll() {
@@ -41,9 +36,11 @@ public class UserController {
         return null;
     }
 
-    @GetMapping("auth/me")
-    public ResponseEntity<UserDTOResponse> getMe(@HeaderParam("Authorization") String j){
+    @GetMapping("/auth/me")
+    public ResponseEntity<UserDTOResponse> getMe(@RequestHeader("authorization") String jwt){
+        String emailUser = jwtUtil.extractUsername(jwt.substring(7));
 
+        return new ResponseEntity<>(userService.getByEmail(emailUser), HttpStatus.OK);
     }
     
     @PostMapping
