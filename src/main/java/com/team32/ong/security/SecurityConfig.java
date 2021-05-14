@@ -63,7 +63,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/v1/testimonials/**").permitAll()
                 .antMatchers("/api/v1/role/**").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/v1/users").permitAll()
-                .antMatchers(HttpMethod.GET,"/api/v1/users").hasRole("ROLE_ADMIN")
+                .antMatchers(HttpMethod.GET,"/api/v1/users").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
@@ -76,7 +76,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		String email = jwtUtil.extractUsername(token);
 		User user = userRepo.findByEmail(email);
 		if (user != null) {
-			if (user.getRole().getId() == 1) {
+			if (user.getRole().equals("ADMIN")) {
 				return true;
 			}
 		}

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.team32.ong.constant.ConstantMessage;
+import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.MemberDTO;
 import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.model.Member;
@@ -23,10 +23,10 @@ public class MemberServiceImp implements IMemberService {
     @Transactional
     public MemberDTO save(MemberDTO memberDTO){
 		if(memberDTO.getName().isEmpty() || memberDTO.getName().length() == 0){
-            throw new BadRequestException(ConstantMessage.MSG_NAME_BAD_REQUEST);
+            throw new BadRequestException(ConstantExceptionMessage.MSG_NAME_BAD_REQUEST);
         }
         if(memberDTO.getImage().isEmpty() || memberDTO.getImage().length() == 0){
-            throw new BadRequestException(ConstantMessage.MSG_IMAGE_BAD_REQUEST);
+            throw new BadRequestException(ConstantExceptionMessage.MSG_IMAGE_BAD_REQUEST);
         }
         Member member = this.dtoToModel(memberDTO);
         member.setDeleted(false);
