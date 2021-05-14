@@ -40,7 +40,7 @@ public class TestimonialServiceImpl implements TestimonialService {
             throw new BadRequestException(ConstantExceptionMessage.MSG_IMAGE_BAD_REQUEST);
         }
 
-        if(stringIsOnlyDigits(testimonialDto.getName())){
+        if(stringHasDigit(testimonialDto.getName())){
             throw new BadRequestException(ConstantExceptionMessage.MSG_NAME_NOT_NUMBER);
         }
 
@@ -108,6 +108,16 @@ public class TestimonialServiceImpl implements TestimonialService {
         // Return if the string
         // matched the ReGex
         return m.matches();
+    }
+    private Boolean stringHasDigit(String str){
+        Boolean hasDigit = false;
+        for(int i = 0; i < str.length(); i++){
+            if(Character.isDigit(str.charAt(i))){
+                hasDigit = true;
+                break;
+            }
+        }
+        return  hasDigit;
     }
 
     private TestimonialDto modelToDto(Testimonial testimonial){
