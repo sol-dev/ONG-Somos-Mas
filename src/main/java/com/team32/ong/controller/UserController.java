@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @GetMapping("/auth/me")
-    public ResponseEntity<UserDTOResponse> getMe(@RequestHeader("authorization") String jwt){
+    public ResponseEntity<UserDTOResponse> getMe(@RequestHeader("authorization") String jwt) throws NotFoundException{
         String emailUser = jwtUtil.extractUsername(jwt.substring(7));
 
         return new ResponseEntity<>(userService.getByEmail(emailUser), HttpStatus.OK);
