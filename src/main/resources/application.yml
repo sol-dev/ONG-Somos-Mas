@@ -27,7 +27,11 @@ amazonProperties:
     accessKey: AKIA5YX3QC3YARN66KVE
     secretKey: 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
     bucketName: alkemy-somos-mas
-
+    
+    #endpointUrl: https://s3.us-east-3.amazonaws.com
+    #accessKey: AKIA5YX3QC3YARN66KVl
+    #secretKey: IgkUka/GWx/wMn6Py6CSoc13UKA+OxTJQjPX8r+1
+    #bucketName: alkemy-somos
 
 app:
   sengrid:
