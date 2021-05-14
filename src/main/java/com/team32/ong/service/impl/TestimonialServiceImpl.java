@@ -93,11 +93,11 @@ public class TestimonialServiceImpl implements TestimonialService {
             throw new BadRequestException(ConstantExceptionMessage.MSG_IMAGE_BAD_REQUEST);
         }
 
-        //validate if only digits
-        if(stringIsOnlyDigits(testimonialDtoToUpdate.getName())){
+        //validate if has a digit
+        if(stringHasDigit(testimonialDtoToUpdate.getName())){
             throw new BadRequestException(ConstantExceptionMessage.MSG_NAME_NOT_NUMBER);
         }
-
+        //validate if only digit
         if(stringIsOnlyDigits(testimonialDtoToUpdate.getContent())){
             throw new BadRequestException(ConstantExceptionMessage.MSG_CONTENT_NOT_NUMBER);
         }
