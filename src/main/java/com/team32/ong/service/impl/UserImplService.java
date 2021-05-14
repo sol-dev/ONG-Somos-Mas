@@ -1,6 +1,6 @@
 package com.team32.ong.service.impl;
 
-import com.team32.ong.constant.ConstantMessage;
+import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.NewUserDto;
 import com.team32.ong.dto.UserDTORequest;
 import com.team32.ong.dto.UserDTOResponse;
@@ -10,6 +10,7 @@ import com.team32.ong.model.Role;
 import com.team32.ong.model.User;
 import com.team32.ong.repository.RoleRepository;
 import com.team32.ong.repository.UserRepository;
+import com.team32.ong.service.EmailService;
 import com.team32.ong.service.UserService;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
@@ -22,6 +23,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,30 +43,34 @@ public class UserImplService implements UserService, UserDetailsService {
 
     @Autowired
     private RoleRepository roleRepo;
+    
+    @Autowired
+    private EmailService emailService;
 
     @Override
-
-    public UserDTOResponse save(UserDTORequest userDTORequest) throws NotFoundException, BadRequestException {
+    public UserDTOResponse save(UserDTORequest userDTORequest) throws NotFoundException, BadRequestException, IOException {
 
         if (userRepo.existsByEmail(userDTORequest.getEmail())){
-            throw new NotFoundException(ConstantMessage.MSG_EMAIL_IN_USE);
+            throw new NotFoundException(ConstantExceptionMessage.MSG_EMAIL_IN_USE);
         }else if (userDTORequest.getEmail() == null){
-            throw new BadRequestException(ConstantMessage.MSG_EMAIL_BAD_REQUEST);
+            throw new BadRequestException(ConstantExceptionMessage.MSG_EMAIL_BAD_REQUEST);
         }else if (userDTORequest.getFirstName() == null){
-            throw new BadRequestException(ConstantMessage.MSG_NAME_BAD_REQUEST);
+            throw new BadRequestException(ConstantExceptionMessage.MSG_NAME_BAD_REQUEST);
         }else if (userDTORequest.getLastName() == null){
-            throw new BadRequestException(ConstantMessage.MSG_LASTNAME_BAD_REQUEST);
+            throw new BadRequestException(ConstantExceptionMessage.MSG_LASTNAME_BAD_REQUEST);
         }else if (userDTORequest.getPassword() == null){
-            throw new BadRequestException(ConstantMessage.MSG_PASSWORD_BAD_REQUEST);
+            throw new BadRequestException(ConstantExceptionMessage.MSG_PASSWORD_BAD_REQUEST);
         }
         userDTORequest.setPassword(encoder.encode(userDTORequest.getPassword()));
 
-        Role role = roleRepo.findByName("ROLE_USER");
+        Role role = roleRepo.findByName("USER");
 
         User userEntity = dtoToEntity(userDTORequest);
 
         userEntity.setRole(role);
         User userSave = userRepo.save(userEntity);
+        
+        emailService.sendEmail(userSave.getEmail());
 
         return entityToDto(userSave);
 
@@ -78,7 +84,7 @@ public class UserImplService implements UserService, UserDetailsService {
     
     @Override
     public UserDTOResponse findById(Long id) throws NotFoundException {
-    	User user = userRepo.findById(id).orElseThrow(() -> new NotFoundException(ConstantMessage.MSG_NOT_FOUND + id));
+    	User user = userRepo.findById(id).orElseThrow(() -> new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND + id));
     	return entityToDto(user);
 
     }
@@ -107,7 +113,7 @@ public class UserImplService implements UserService, UserDetailsService {
         User user = userRepo.findByEmail(email);
 
         if (user == null){
-            throw new UsernameNotFoundException(ConstantMessage.MSG_EMAIL_NOT_FOUND);
+            throw new UsernameNotFoundException(ConstantExceptionMessage.MSG_EMAIL_NOT_FOUND);
         }
 
         List<GrantedAuthority> rol = new ArrayList<>();
@@ -166,25 +172,25 @@ public class UserImplService implements UserService, UserDetailsService {
 			userEntity.setRole(userEntityForGetPassRol.getRole());
 		}
 		if(userEntity.getFirstName().isEmpty()) {
-			errorsFound.append(ConstantMessage.MSG_NAME_BAD_REQUEST);
+			errorsFound.append(ConstantExceptionMessage.MSG_NAME_BAD_REQUEST);
 		}
 		if(userEntity.getLastName().isEmpty()) {
-			errorsFound.append(ConstantMessage.MSG_LASTNAME_BAD_REQUEST);
+			errorsFound.append(ConstantExceptionMessage.MSG_LASTNAME_BAD_REQUEST);
 		}
 		if(userEntity.getEmail().isEmpty()) {
-			errorsFound.append(ConstantMessage.MSG_EMAIL_BAD_REQUEST);
+			errorsFound.append(ConstantExceptionMessage.MSG_EMAIL_BAD_REQUEST);
 		}
 		if(userEntity.getPassword().isEmpty()) {
-			errorsFound.append(ConstantMessage.MSG_PASSWORD_BAD_REQUEST);
+			errorsFound.append(ConstantExceptionMessage.MSG_PASSWORD_BAD_REQUEST);
 		}
 		if(!validateEmail(userEntity.getEmail())) {
-			errorsFound.append(ConstantMessage.MSG_EMAIL_BAD_REQUEST);
+			errorsFound.append(ConstantExceptionMessage.MSG_EMAIL_BAD_REQUEST);
 		}
 		if(!validateString(userEntity.getFirstName())) {
-			errorsFound.append(ConstantMessage.MSG_NAME_NOT_NUMBER);
+			errorsFound.append(ConstantExceptionMessage.MSG_NAME_NOT_NUMBER);
 		}
 		if(!validateString(userEntity.getLastName())) {
-			errorsFound.append(ConstantMessage.MSG_LASTNAME_NOT_NUMBER);
+			errorsFound.append(ConstantExceptionMessage.MSG_LASTNAME_NOT_NUMBER);
 		}
 		if(userEntity.getRole().getName().equalsIgnoreCase("ROLE_ADMIN")) {
 			Role roleEntity = roleRepo.findByName("ROLE_ADMIN");
@@ -193,7 +199,7 @@ public class UserImplService implements UserService, UserDetailsService {
 			Role roleEntity = roleRepo.findByName("ROLE_USER");
 			userEntity.setRole(roleEntity);
 		}else {
-			errorsFound.append(ConstantMessage.MSG_ROL_BAD_REQUEST);
+			errorsFound.append(ConstantExceptionMessage.MSG_ROL_BAD_REQUEST);
 		}
 		if(errorsFound.length() > 0) {
 			throw new BadRequestException(errorsFound.toString());
@@ -223,25 +229,25 @@ public class UserImplService implements UserService, UserDetailsService {
 			userEntity.setPassword(userEntityForGetPassRol.getPassword());
 		}
 		if(userEntity.getFirstName().isEmpty()) {
-			errorsFound.append(ConstantMessage.MSG_NAME_BAD_REQUEST);
+			errorsFound.append(ConstantExceptionMessage.MSG_NAME_BAD_REQUEST);
 		}
 		if(userEntity.getLastName().isEmpty()) {
-			errorsFound.append(ConstantMessage.MSG_LASTNAME_BAD_REQUEST);
+			errorsFound.append(ConstantExceptionMessage.MSG_LASTNAME_BAD_REQUEST);
 		}
 		if(userEntity.getEmail().isEmpty()) {
-			errorsFound.append(ConstantMessage.MSG_EMAIL_BAD_REQUEST);
+			errorsFound.append(ConstantExceptionMessage.MSG_EMAIL_BAD_REQUEST);
 		}
 		if(userEntity.getPassword().isEmpty()) {
-			errorsFound.append(ConstantMessage.MSG_PASSWORD_BAD_REQUEST);
+			errorsFound.append(ConstantExceptionMessage.MSG_PASSWORD_BAD_REQUEST);
 		}
 		if(!validateEmail(userEntity.getEmail())) {
-			errorsFound.append(ConstantMessage.MSG_EMAIL_BAD_REQUEST);
+			errorsFound.append(ConstantExceptionMessage.MSG_EMAIL_BAD_REQUEST);
 		}
 		if(!validateString(userEntity.getFirstName())) {
-			errorsFound.append(ConstantMessage.MSG_NAME_NOT_NUMBER);
+			errorsFound.append(ConstantExceptionMessage.MSG_NAME_NOT_NUMBER);
 		}
 		if(!validateString(userEntity.getLastName())) {
-			errorsFound.append(ConstantMessage.MSG_LASTNAME_NOT_NUMBER);
+			errorsFound.append(ConstantExceptionMessage.MSG_LASTNAME_NOT_NUMBER);
 		}
 		if(errorsFound.length() > 0) {
 			throw new BadRequestException(errorsFound.toString());
@@ -256,10 +262,10 @@ public class UserImplService implements UserService, UserDetailsService {
 	public String delete(Long id) throws NotFoundException {
 		boolean userExists = userRepo.existsById(id);
 		if(!userExists) {
-			throw new NotFoundException(ConstantMessage.MSG_NOT_FOUND + id);
+			throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND + id);
 		}
 		userRepo.deleteById(id);
-		return ConstantMessage.MSG_DELETE_OK + id;
+		return ConstantExceptionMessage.MSG_DELETE_OK + id;
 	}
 	
 	private boolean validateEmail(String email) {

@@ -17,8 +17,14 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
 
-
   security:
     jwt:
       secret-key: secret-key
       expiration-length: 3600000
+
+app:
+  sengrid:
+    key: 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
+    emailIssuing: matias-leandro@outlook.com
+
+
