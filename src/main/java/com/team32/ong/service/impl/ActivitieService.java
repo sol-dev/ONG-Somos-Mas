@@ -29,7 +29,7 @@ public class ActivitieService implements IActivitiesServices {
             }
             if (activitiesDTO.getContent() == null || activitiesDTO.getContent() == ""){
 
-               // throw new EmptyInputException(ConstantExceptionMessage.MSG_EMPTY_ACTIVITY);
+                throw new EmptyInputException(ConstantExceptionMessage.MSG_EMPTY_ACTIVITY);
             }
 
             //todo: capturar imagen

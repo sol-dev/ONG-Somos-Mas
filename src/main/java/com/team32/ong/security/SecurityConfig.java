@@ -76,7 +76,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		String email = jwtUtil.extractUsername(token);
 		User user = userRepo.findByEmail(email);
 		if (user != null) {
-			if (user.getRole().equals("ADMIN")) {
+			if (user.getRole().getName() == "ADMIN") {
 				return true;
 			}
 		}
