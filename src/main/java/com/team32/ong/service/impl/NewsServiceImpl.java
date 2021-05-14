@@ -63,7 +63,15 @@ public class NewsServiceImpl implements NewsService {
 		return modelToDto(newsCreated);
 	}
 
-	
+	@Override
+	public boolean deleteNew(Long id) {
+		return newsRepository.findById(id).map(news -> {
+			news.setDeleted(true);
+			return true;
+		}).orElse(false);
+	}
+
+
 	@Override
 	public NewsDto getOne(Long id) {
 		News news = newsRepository.getOne(id);
