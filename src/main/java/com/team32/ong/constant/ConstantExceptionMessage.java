@@ -1,6 +1,6 @@
 package com.team32.ong.constant;
 
-public class ConstantMessage {
+public class ConstantExceptionMessage {
     public static final String MSG_NAME_BAD_REQUEST = "Se necesita definir el campo nombre. ";
     public static final String MSG_LASTNAME_BAD_REQUEST = "Se necesita definir el campo apellido. ";
     public static final String MSG_CONTENT_BAD_REQUEST = "Se necesita definir el campo contenido. ";
