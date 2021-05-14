@@ -1,9 +1,8 @@
 package com.team32.ong.service.impl;
 
-import com.team32.ong.constant.ConstantMessage;
+import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.TestimonialDto;
 import com.team32.ong.exception.custom.BadRequestException;
-import com.team32.ong.exception.custom.EmptyInputException;
 import com.team32.ong.model.Testimonial;
 import com.team32.ong.repository.TestimonialRepository;
 import com.team32.ong.service.TestimonialService;
@@ -27,16 +26,16 @@ public class TestimonialServiceImpl implements TestimonialService {
     public TestimonialDto save(TestimonialDto testimonialDto) {
 
         if(testimonialDto.getName().isEmpty() || testimonialDto.getName().length() == 0){
-            throw new BadRequestException(ConstantMessage.MSG_NAME_BAD_REQUEST);
+            throw new BadRequestException(ConstantExceptionMessage.MSG_NAME_BAD_REQUEST);
         }
 
         if(testimonialDto.getContent().isEmpty() || testimonialDto.getContent().length() == 0){
-            throw new BadRequestException(ConstantMessage.MSG_CONTENT_BAD_REQUEST);
+            throw new BadRequestException(ConstantExceptionMessage.MSG_CONTENT_BAD_REQUEST);
         }
 
         if(testimonialDto.getImage().isEmpty() || testimonialDto.getImage().length() == 0){
 
-            throw new BadRequestException(ConstantMessage.MSG_IMAGE_BAD_REQUEST);
+            throw new BadRequestException(ConstantExceptionMessage.MSG_IMAGE_BAD_REQUEST);
         }
 
         Testimonial testimonialToCreate = this.dtoToModel(testimonialDto);
@@ -51,19 +50,19 @@ public class TestimonialServiceImpl implements TestimonialService {
     public TestimonialDto updateById(TestimonialDto testimonialDtoToUpdate, Long id) throws NotFoundException {
 
         if(!testimonialRepository.existsById(id)){
-            throw new NotFoundException( ConstantMessage.MSG_NOT_FOUND + id);
+            throw new NotFoundException( ConstantExceptionMessage.MSG_NOT_FOUND + id);
         }
 
         if(testimonialDtoToUpdate.getName().isEmpty() || testimonialDtoToUpdate.getName().length() == 0){
-            throw new BadRequestException(ConstantMessage.MSG_NAME_BAD_REQUEST);
+            throw new BadRequestException(ConstantExceptionMessage.MSG_NAME_BAD_REQUEST);
         }
 
         if(testimonialDtoToUpdate.getContent().isEmpty() || testimonialDtoToUpdate.getContent().length() == 0){
-            throw new BadRequestException(ConstantMessage.MSG_CONTENT_BAD_REQUEST);
+            throw new BadRequestException(ConstantExceptionMessage.MSG_CONTENT_BAD_REQUEST);
         }
 
         if(testimonialDtoToUpdate.getImage().isEmpty() || testimonialDtoToUpdate.getImage().length() == 0){
-            throw new BadRequestException(ConstantMessage.MSG_IMAGE_BAD_REQUEST);
+            throw new BadRequestException(ConstantExceptionMessage.MSG_IMAGE_BAD_REQUEST);
         }
 
         Optional<Testimonial> testimonials = testimonialRepository.findById(id);
@@ -81,7 +80,7 @@ public class TestimonialServiceImpl implements TestimonialService {
     @Override
     public void deleteById(Long id) throws NotFoundException {
         if(!testimonialRepository.existsById(id)){
-            throw new NotFoundException(ConstantMessage.MSG_NOT_FOUND + id);
+            throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND + id);
         }
         testimonialRepository.deleteById(id);
     }

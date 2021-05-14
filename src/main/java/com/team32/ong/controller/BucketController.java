@@ -1,5 +1,7 @@
 package com.team32.ong.controller;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import com.team32.ong.exception.custom.EmptyInputException;
 import com.team32.ong.service.AmazonClient;
 
 @RestController
@@ -18,8 +21,8 @@ public class BucketController {
 	@Autowired
 	private AmazonClient amazonClient;
 
-    @PostMapping(value="/uploadFile" /*,headers=("content-type=multipart/*")*/)
-    public ResponseEntity<String>  uploadFile(@RequestPart(required=true) MultipartFile file) throws Exception{
+    @PostMapping(value="/uploadFile")
+    public ResponseEntity<String>  uploadFile(@RequestPart(required=true) MultipartFile file) throws IOException, EmptyInputException{
         return amazonClient.uplodFileToS3Bucket(file);
     }
     
