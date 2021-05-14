@@ -77,16 +77,16 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
     
     @Override
-    protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException ex, HttpHeaders headers, HttpStatus status, WebRequest req) {
         String error = "Falta el parámetro " + ex.getParameterName();
-        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "No se puede responder a la petición porque faltan parámetros", error);
-        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
+        ErrorResponse errorFound = new ErrorResponse(400, new Date(), error, req.getContextPath());
+        return new ResponseEntity<Object>(error, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
     
-    protected ResponseEntity<Object> handleMissingServletRequestPart(MissingServletRequestPartException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        String error = "Problemas con la imagen ";
-        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "Saltó el controlador", error);
-        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
+    protected ResponseEntity<Object> handleMissingServletRequestPart(MissingServletRequestPartException ex, HttpHeaders headers, HttpStatus status, WebRequest req) {
+        String error = "No se envió el parámetro " + ex.getRequestPartName();
+        ErrorResponse errorFound = new ErrorResponse(400, new Date(), error, req.getContextPath());
+        return new ResponseEntity<Object>(error, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
     
 }

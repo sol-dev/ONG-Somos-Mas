@@ -1,6 +1,7 @@
 package com.team32.ong.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,18 +19,13 @@ public class BucketController {
 	private AmazonClient amazonClient;
 
     @PostMapping(value="/uploadFile")
-    public String uploadFile(@RequestPart(value = "file", required=false) MultipartFile file) throws Exception{
-        return this.amazonClient.uploadFile(file);
-    }
-
-    @DeleteMapping("/deleteFile")
-    public String deleteFile(@RequestPart String fileUrl) {
-        return this.amazonClient.deleteFileFromS3Bucket(fileUrl);
+    public ResponseEntity<String>  uploadFile(@RequestPart(required=false) MultipartFile file){
+        return amazonClient.uplodFileToS3Bucket(file);
     }
     
-    @PostMapping(value="/prueba")
-    public String prueba(@RequestParam String fileName) throws Exception{
-        return this.amazonClient.putObject(fileName) ;
+    @DeleteMapping("/deleteFile")
+    public ResponseEntity<String>  deleteFilePrueba(@RequestParam String fileUrl) {
+        return amazonClient.deleteFileFromS3Bucket(fileUrl);
     }
 
     

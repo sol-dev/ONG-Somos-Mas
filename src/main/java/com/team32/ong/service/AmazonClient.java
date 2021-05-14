@@ -4,8 +4,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
-import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.amazonaws.AmazonServiceException;
@@ -17,6 +18,7 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.team32.ong.exception.custom.EmptyInputException;
 
 
 @Service
@@ -30,20 +32,6 @@ public class AmazonClient {
     private String accessKey;
     @Value("${amazonProperties.secretKey}")
     private String secretKey;
-    
-    /*  
-    
-	@PostConstruct    
-	private void initializeAmazon() {
-		BasicAWSCredentials creds = new BasicAWSCredentials(this.accessKey, this.secretKey);
-		AmazonS3 s3client = AmazonS3ClientBuilder
-											.standard()
-											.withRegion("us-east-1")
-											.withCredentials(new AWSStaticCredentialsProvider(creds))
-											.build();   
-	}
-	
-	*/ 
 	
 	private File convertMultiPartToFile(MultipartFile file) throws IOException {
 	    File convFile = new File(file.getOriginalFilename());
@@ -67,21 +55,29 @@ public class AmazonClient {
 	            .withCannedAcl(CannedAccessControlList.PublicRead));
 	}
 	
-	public String uploadFile(MultipartFile multipartFile) {
-	    String fileUrl = "";
-	    try {
-	        File file = convertMultiPartToFile(multipartFile);
-	        String fileName = generateFileName(multipartFile);
-	        fileUrl = endpointUrl + "/" + bucketName + "/" + fileName;
-	        uploadFileTos3bucket(fileName, file);
-	        file.delete();
-	    } catch (Exception e) {
-	       e.printStackTrace();
-	    }
-	    return fileUrl;
+	public ResponseEntity<String> uplodFileToS3Bucket(MultipartFile multipartFile) throws EmptyInputException {
+		
+		if(multipartFile != null && !multipartFile.isEmpty()) {
+			String fileUrl = "";
+		    try {
+		        File file = convertMultiPartToFile(multipartFile);
+		        String fileName = generateFileName(multipartFile);
+		        fileUrl = endpointUrl + "/" + bucketName + "/" + fileName;
+		        uploadFileTos3bucket(fileName, file);
+		        file.delete();
+		    } catch (Exception e) {
+		       e.printStackTrace();
+		    }
+		    return new ResponseEntity<>(fileUrl,HttpStatus.OK);
+		} else {
+			throw new EmptyInputException("Tiene que cargar un archivo");
+		}    
 	}
 	
-	public String deleteFileFromS3Bucket(String fileUrl) {
+	public ResponseEntity<String> deleteFileFromS3Bucket(String fileUrl) {
+		if(fileUrl.isEmpty()|fileUrl.isBlank()) {
+			throw new EmptyInputException("Tiene que poner la dirección URL del archivo que quiere borrar");
+		}
 	    String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
 	    BasicAWSCredentials creds = new BasicAWSCredentials(this.accessKey, this.secretKey);
 	    AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
@@ -89,19 +85,8 @@ public class AmazonClient {
                 .withCredentials(new AWSStaticCredentialsProvider(creds))
                 .build();
 	    s3Client.deleteObject(new DeleteObjectRequest(bucketName, fileName));
-	    return "No tiró error, ver si se borró " + bucketName + "/" + fileName;
-	}
-	
-	public String putObject(String documentName) {
-		BasicAWSCredentials creds = new BasicAWSCredentials(this.accessKey, this.secretKey);
-		AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
-                .withRegion("us-east-1")
-                .withCredentials(new AWSStaticCredentialsProvider(creds))
-                .build();
-		s3Client.putObject(bucketName, documentName, new File("D:\\Documentos\\PROGRAMACIÓN\\ALKEMY\\aceleracion\\restApp\\"+documentName));
-		return "se cargó el archivo";
-	}
-	  
+	    return new ResponseEntity<>("El archivo " + bucketName + "/" + fileName + " se borró correctamente",HttpStatus.OK);
+	}	
     
 }
 
