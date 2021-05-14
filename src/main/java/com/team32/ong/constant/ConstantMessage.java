@@ -17,4 +17,6 @@ public class ConstantMessage {
     public static final String MSG_NOT_FOUND_USERS = "No hay usuarios registrados";
     public static final String MSG_DELETE_OK = "Se elimino correctamente al usurio con id ";
     public static final String MSG_ERROR_SEND_EMAIL= "Ocurrio un error al enviar el email.";
+    public static final String MSG_COMMENT_NOT_FOUND = "No existe el comentario con id ";
+    public static final String MSG_EMPTY_COMMENT_BODY = "El cuerpo del comentario no puede etar vacio";
 }
