@@ -6,16 +6,18 @@ import com.team32.ong.dto.NewUserDto;
 import com.team32.ong.dto.UserDTORequest;
 import com.team32.ong.dto.UserDTOResponse;
 import com.team32.ong.dto.UserDtoRequestForAdmin;
+import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.model.User;
 
 import javassist.NotFoundException;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
 public interface UserService {
 
-    UserDTOResponse save(UserDTORequest user) throws NotFoundException;
+    UserDTOResponse save(UserDTORequest user) throws NotFoundException, BadRequestException, IOException;
     List<UserDTOResponse> getAllUsers();
     UserDTOResponse getByEmail(String email);
 	UserDTOResponse getOne(Long id);

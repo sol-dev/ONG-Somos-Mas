@@ -8,11 +8,14 @@ import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.*;
 
 import com.team32.ong.dto.UserDtoRequestForAdmin;
+import com.team32.ong.exception.custom.BadRequestException;
 
 
 @RestController
@@ -44,7 +47,7 @@ public class UserController {
     }
     
     @PostMapping
-    public ResponseEntity<UserDTOResponse> createUser(@RequestBody UserDTORequest userDTORequest) throws NotFoundException {
+    public ResponseEntity<UserDTOResponse> createUser(@RequestBody UserDTORequest userDTORequest) throws NotFoundException, BadRequestException, IOException {
         return new ResponseEntity<>(userService.save(userDTORequest), HttpStatus.CREATED);
     }
     
