@@ -14,7 +14,9 @@ public interface NewsService {
 	NewsDto findById(Long id);
 
 	NewsDto save(NewsDto newsDto, MultipartFile image)throws IOException;
-	
+
+	boolean deleteNew(Long id);
+
 	NewsDto modelToDto(News news);
 	News dtoToModel(NewsDto newsDto);
 	
