@@ -75,8 +75,14 @@ public class UserImplService implements UserService, UserDetailsService {
 
     }
 
-    public UserDTOResponse getByEmail(String email){
-    	return entityToDto(userRepo.findByEmail(email));
+    public UserDTOResponse getByEmail(String email) throws NotFoundException{
+
+    	User userEntity = userRepo.findByEmail(email);
+
+    	if (userEntity == null){
+    		throw new NotFoundException(ConstantExceptionMessage.MSG_EMAIL_NOT_FOUND);
+		}
+    	return entityToDto(userEntity);
 	}
     
     @Override
