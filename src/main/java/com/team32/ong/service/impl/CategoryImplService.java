@@ -36,8 +36,6 @@ public class CategoryImplService implements CategoryService {
     @Override
     public List<String> viewAll() throws Exception {
 
-        //todo: validar usuario
-
         List<Category> categories = repo.findAll();
         return categories.stream().map(category -> category.getName()).collect(Collectors.toList());
 
