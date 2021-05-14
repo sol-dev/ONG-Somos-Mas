@@ -8,12 +8,14 @@ import org.springframework.stereotype.Service;
 import com.team32.ong.dto.AddCommentBody;
 import com.team32.ong.dto.CommentDto;
 
+import javassist.NotFoundException;
+
 @Service
 public interface CommentService {
 	
 	CommentDto save(CommentDto commentDto);
 	CommentDto getOne(Long id);
 	CommentDto findById(Long id);
-	ResponseEntity<CommentDto> createNewComment(Long newsId, Long userId, AddCommentBody commentBody);
+	ResponseEntity<CommentDto> createNewComment(Long newsId, Long userId, AddCommentBody commentBody) throws NotFoundException;
 
 }

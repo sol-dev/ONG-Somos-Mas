@@ -17,6 +17,8 @@ import com.team32.ong.service.CommentService;
 import com.team32.ong.service.NewsService;
 import com.team32.ong.service.UserService;
 
+import javassist.NotFoundException;
+
 
 @Service
 @Transactional
@@ -49,7 +51,7 @@ public class CommentServiceImpl implements CommentService {
     	return modelToDto(comment);
 	}
 
-	public ResponseEntity<CommentDto> createNewComment(Long newsId, Long userId, AddCommentBody commentBody){
+	public ResponseEntity<CommentDto> createNewComment(Long newsId, Long userId, AddCommentBody commentBody) throws NotFoundException{
 		
 		CommentDto commentDto = new CommentDto();
 		
