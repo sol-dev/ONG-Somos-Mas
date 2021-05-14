@@ -1,5 +1,6 @@
 package com.team32.ong.service.impl;
 
+import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.constant.ConstantMessage;
 
 
@@ -86,11 +87,11 @@ public class CommentServiceImpl implements CommentService {
 
 		Comment oldComment = commentRepository.findById(id).get();
 		if (oldComment == null){
-			throw new NotFoundException(ConstantMessage.MSG_COMMENT_NOT_FOUND.concat(id.toString()))
+			throw new NotFoundException(ConstantExceptionMessage.MSG_COMMENT_NOT_FOUND.concat(id.toString()));
 		}
 
 		if (commentBody.getBody() == null || commentBody.getBody() == ""){
-			throw new EmptyInputException(ConstantMessage.MSG_EMPTY_COMMENT_BODY);
+			throw new EmptyInputException(ConstantExceptionMessage.MSG_EMPTY_COMMENT_BODY);
 		}
 
 		//todo: validar usuario
