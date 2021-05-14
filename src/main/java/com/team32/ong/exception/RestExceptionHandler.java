@@ -1,5 +1,6 @@
 package com.team32.ong.exception;
 
+import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.util.Date;
 
@@ -65,7 +66,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected void unauthorizedException(Exception e, HttpServletRequest req){
     }
     
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler({
+    	IOException.class,
+    	Exception.class    	
+    })
     protected ResponseEntity<?> exception(Exception e, HttpServletRequest req){
     	ErrorResponse errorFound = new ErrorResponse(500, new Date(), e.getMessage(), req.getRequestURI());
         return new ResponseEntity<>(errorFound, HttpStatus.INTERNAL_SERVER_ERROR);
