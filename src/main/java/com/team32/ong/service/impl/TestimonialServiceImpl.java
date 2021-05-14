@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 @Service
@@ -36,6 +38,14 @@ public class TestimonialServiceImpl implements TestimonialService {
         if(testimonialDto.getImage().isEmpty() || testimonialDto.getImage().length() == 0){
 
             throw new BadRequestException(ConstantExceptionMessage.MSG_IMAGE_BAD_REQUEST);
+        }
+
+        if(stringIsOnlyDigits(testimonialDto.getName())){
+            throw new BadRequestException(ConstantExceptionMessage.MSG_NAME_NOT_NUMBER);
+        }
+
+        if(stringIsOnlyDigits(testimonialDto.getContent())){
+            throw new BadRequestException(ConstantExceptionMessage.MSG_CONTENT_NOT_NUMBER);
         }
 
         Testimonial testimonialToCreate = this.dtoToModel(testimonialDto);
@@ -83,6 +93,21 @@ public class TestimonialServiceImpl implements TestimonialService {
             throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND + id);
         }
         testimonialRepository.deleteById(id);
+    }
+
+    private Boolean stringIsOnlyDigits(String str){
+        String regex = "[0-9]+";
+
+        Pattern p = Pattern.compile(regex);
+
+        // Find match between given string
+        // and regular expression
+        // using Pattern.matcher()
+        Matcher m = p.matcher(str);
+
+        // Return if the string
+        // matched the ReGex
+        return m.matches();
     }
 
     private TestimonialDto modelToDto(Testimonial testimonial){

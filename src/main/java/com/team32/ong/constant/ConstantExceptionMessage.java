@@ -17,4 +17,7 @@ public class ConstantExceptionMessage {
     public static final String MSG_NOT_FOUND_USERS = "No hay usuarios registrados";
     public static final String MSG_DELETE_OK = "Se elimino correctamente al usurio con id ";
     public static final String MSG_ERROR_SEND_EMAIL= "Ocurrio un error al enviar el email.";
+    public static final String MSG_NAME_NOT_NUMBER = "El campo nombre no puede contener numeros. ";
+    public static final String MSG_LASTNAME_NOT_NUMBER = "El campo apellido no puede contener numeros. ";
+    public static final String MSG_CONTENT_NOT_NUMBER = "El campo contenido no puede ser solo numeros. ";
 }
