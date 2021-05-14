@@ -18,8 +18,8 @@ public class BucketController {
 	@Autowired
 	private AmazonClient amazonClient;
 
-    @PostMapping(value="/uploadFile")
-    public ResponseEntity<String>  uploadFile(@RequestPart(required=false) MultipartFile file){
+    @PostMapping(value="/uploadFile" /*,headers=("content-type=multipart/*")*/)
+    public ResponseEntity<String>  uploadFile(@RequestPart(required=true) MultipartFile file) throws Exception{
         return amazonClient.uplodFileToS3Bucket(file);
     }
     

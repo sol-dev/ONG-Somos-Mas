@@ -32,6 +32,10 @@ public class AmazonClient {
     private String accessKey;
     @Value("${amazonProperties.secretKey}")
     private String secretKey;
+    
+    
+    // pruebas
+    //private String endpointUrl = "https://us-east-1.amazonaws.com";
 	
 	private File convertMultiPartToFile(MultipartFile file) throws IOException {
 	    File convFile = new File(file.getOriginalFilename());
@@ -55,19 +59,18 @@ public class AmazonClient {
 	            .withCannedAcl(CannedAccessControlList.PublicRead));
 	}
 	
-	public ResponseEntity<String> uplodFileToS3Bucket(MultipartFile multipartFile) throws EmptyInputException {
-		
+	public ResponseEntity<String> uplodFileToS3Bucket(MultipartFile multipartFile) throws EmptyInputException, IOException {
 		if(multipartFile != null && !multipartFile.isEmpty()) {
 			String fileUrl = "";
-		    try {
+			try {
 		        File file = convertMultiPartToFile(multipartFile);
 		        String fileName = generateFileName(multipartFile);
 		        fileUrl = endpointUrl + "/" + bucketName + "/" + fileName;
 		        uploadFileTos3bucket(fileName, file);
 		        file.delete();
-		    } catch (Exception e) {
-		       e.printStackTrace();
-		    }
+			} catch (IOException ioe) {
+				throw new IOException("No se pudo cargar la imagen: " + multipartFile, ioe);
+			}
 		    return new ResponseEntity<>(fileUrl,HttpStatus.OK);
 		} else {
 			throw new EmptyInputException("Tiene que cargar un archivo");
