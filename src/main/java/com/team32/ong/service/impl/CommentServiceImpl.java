@@ -83,8 +83,10 @@ public class CommentServiceImpl implements CommentService {
 
 	@Override
 	public AddCommentBody update(Long id, AddCommentBody commentBody) throws Exception {
-		if (!commentRepository.existsById(id)){
-			throw new NotFoundException(ConstantMessage.MSG_COMMENT_NOT_FOUND.concat(id.toString()));
+
+		Comment oldComment = commentRepository.findById(id).get();
+		if (oldComment == null){
+			throw new NotFoundException(ConstantMessage.MSG_COMMENT_NOT_FOUND.concat(id.toString()))
 		}
 
 		if (commentBody.getBody() == null || commentBody.getBody() == ""){
@@ -93,7 +95,6 @@ public class CommentServiceImpl implements CommentService {
 
 		//todo: validar usuario
 
-		Comment oldComment = commentRepository.findById(id).get();
 		Comment newComment = new Comment();
 		newComment.setId(oldComment.getId());
 		newComment.setBody(commentBody.getBody());

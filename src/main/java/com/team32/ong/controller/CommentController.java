@@ -43,7 +43,6 @@ public class CommentController {
 
 		commentResponse = commentService.update(id, commentBody);
 
-		response.put("message", "Comentario Actualizado");
 		response.put("comment", commentResponse);
 
 		return new ResponseEntity(response, HttpStatus.OK);
