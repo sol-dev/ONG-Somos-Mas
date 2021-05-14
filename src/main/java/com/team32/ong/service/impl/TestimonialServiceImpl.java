@@ -63,25 +63,51 @@ public class TestimonialServiceImpl implements TestimonialService {
             throw new NotFoundException( ConstantExceptionMessage.MSG_NOT_FOUND + id);
         }
 
-        if(testimonialDtoToUpdate.getName().isEmpty() || testimonialDtoToUpdate.getName().length() == 0){
-            throw new BadRequestException(ConstantExceptionMessage.MSG_NAME_BAD_REQUEST);
-        }
-
-        if(testimonialDtoToUpdate.getContent().isEmpty() || testimonialDtoToUpdate.getContent().length() == 0){
-            throw new BadRequestException(ConstantExceptionMessage.MSG_CONTENT_BAD_REQUEST);
-        }
-
-        if(testimonialDtoToUpdate.getImage().isEmpty() || testimonialDtoToUpdate.getImage().length() == 0){
-            throw new BadRequestException(ConstantExceptionMessage.MSG_IMAGE_BAD_REQUEST);
-        }
-
         Optional<Testimonial> testimonials = testimonialRepository.findById(id);
 
         Testimonial testimonialToUpdate = testimonials.get();
+
+        //validate if null
+        if(testimonialDtoToUpdate.getName() == null){
+            testimonialDtoToUpdate.setName(testimonialToUpdate.getName());
+        }
+
+        if(testimonialDtoToUpdate.getContent() == null){
+            testimonialDtoToUpdate.setContent(testimonialToUpdate.getContent());
+        }
+
+        if(testimonialDtoToUpdate.getImage() == null){
+            testimonialDtoToUpdate.setImage(testimonialToUpdate.getImage());
+        }
+
+        //validate if empty
+        if(testimonialDtoToUpdate.getName().isEmpty()){
+            throw new BadRequestException(ConstantExceptionMessage.MSG_NAME_BAD_REQUEST);
+        }
+
+        if(testimonialDtoToUpdate.getContent().isEmpty()){
+            throw new BadRequestException(ConstantExceptionMessage.MSG_CONTENT_BAD_REQUEST);
+        }
+
+        if(testimonialDtoToUpdate.getImage().isEmpty()){
+            throw new BadRequestException(ConstantExceptionMessage.MSG_IMAGE_BAD_REQUEST);
+        }
+
+        //validate if only digits
+        if(stringIsOnlyDigits(testimonialDtoToUpdate.getName())){
+            throw new BadRequestException(ConstantExceptionMessage.MSG_NAME_NOT_NUMBER);
+        }
+
+        if(stringIsOnlyDigits(testimonialDtoToUpdate.getContent())){
+            throw new BadRequestException(ConstantExceptionMessage.MSG_CONTENT_NOT_NUMBER);
+        }
+
+        //set testimonial's attributes
         testimonialToUpdate.setName(testimonialDtoToUpdate.getName());
         testimonialToUpdate.setImage(testimonialDtoToUpdate.getImage());
         testimonialToUpdate.setContent(testimonialDtoToUpdate.getContent());
 
+        //save testimonial
         testimonialRepository.save(testimonialToUpdate);
 
         return modelToDto(testimonialToUpdate);
