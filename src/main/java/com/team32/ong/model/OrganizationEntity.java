@@ -9,11 +9,12 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "organization")
@@ -54,6 +55,9 @@ public class OrganizationEntity {
 
     @Column(name = "aboutUsText")
     private String aboutUsText;
+    
+    @OneToMany(targetEntity=Slide.class, mappedBy="organization", fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	private List<Slide> slides = new ArrayList<>();
 
     @CreationTimestamp
     @Column(name = "created_date")
@@ -65,6 +69,6 @@ public class OrganizationEntity {
 
     @Column(name = "deleted")
     private Boolean deleted;
-
-
+    
+    
 }
