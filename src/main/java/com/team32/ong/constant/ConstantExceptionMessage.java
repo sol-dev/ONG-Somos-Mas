@@ -1,6 +1,6 @@
 package com.team32.ong.constant;
 
-public class ConstantMessage {
+public class ConstantExceptionMessage {
     public static final String MSG_NAME_BAD_REQUEST = "Se necesita definir el campo nombre. ";
     public static final String MSG_LASTNAME_BAD_REQUEST = "Se necesita definir el campo apellido. ";
     public static final String MSG_CONTENT_BAD_REQUEST = "Se necesita definir el campo contenido. ";
@@ -17,4 +17,6 @@ public class ConstantMessage {
     public static final String MSG_NOT_FOUND_USERS = "No hay usuarios registrados";
     public static final String MSG_DELETE_OK = "Se elimino correctamente al usurio con id ";
 	public static final String MSG_EMPTY_ACTIVITY = null;
+    public static final String MSG_ERROR_SEND_EMAIL= "Ocurrio un error al enviar el email.";
+
 }
