@@ -3,7 +3,7 @@ package com.team32.ong.service.impl;
 
 import java.util.Optional;
 
-import com.team32.ong.constant.ConstantMessage;
+import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.CategoryDTO;
 import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.model.Category;
@@ -26,7 +26,7 @@ public class CategoryImplService implements CategoryService {
     public CategoryDTO save(CategoryDTO categoryDTO) throws BadRequestException {
 
         if (categoryDTO.getName() == null){
-            throw new BadRequestException(ConstantMessage.MSG_NAME_BAD_REQUEST);
+            throw new BadRequestException(ConstantExceptionMessage.MSG_NAME_BAD_REQUEST);
         }
 
         Category category = repo.save(dtoToEntity(categoryDTO));
@@ -37,7 +37,7 @@ public class CategoryImplService implements CategoryService {
     public CategoryDTO findById(Long id) throws NotFoundException{
         Optional<Category> category = repo.findById(id) ;
         if(!category.isPresent()){
-            throw new NotFoundException(ConstantMessage.MSG_NOT_FOUND+id);
+            throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND+id);
         }
         return entityToDto(category.get());
     }
