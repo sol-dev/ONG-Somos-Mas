@@ -78,8 +78,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         String error = "Falta el parámetro " + ex.getParameterName();
-        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "No se puede responder a la petición porque faltan parámetros", error);
-        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
+        return new ResponseEntity<Object>(error, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
     
 }
