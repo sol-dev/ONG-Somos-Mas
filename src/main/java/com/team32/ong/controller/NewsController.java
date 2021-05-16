@@ -26,8 +26,7 @@ public class NewsController {
 
 	@DeleteMapping("/{idNews}")
 	public ResponseEntity<?> delete(@RequestParam("idNews") Long id) throws NotFoundException {
-		boolean news = newsService.deleteNew(id);
-		if (news){
+		if (newsService.deleteNew(id)){
 			return new ResponseEntity<>(HttpStatus.OK);
 		}else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
