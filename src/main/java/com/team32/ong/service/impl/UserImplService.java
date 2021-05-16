@@ -159,6 +159,7 @@ public class UserImplService implements UserService, UserDetailsService {
 		}
 		User userEntity = UserDtoRequestForUserToEntity(userDto);
 		userEntity.setId(userDtoFound.get().getId());
+		userEntity.setPassword(encoder.encode(userDto.getPassword()));
 		Role roleEntity = roleRepo.findByName(userDto.getRole().getName());
 		userEntity.setRole(roleEntity);
 		userRepo.save(userEntity);
@@ -187,6 +188,7 @@ public class UserImplService implements UserService, UserDetailsService {
 		}
 		Role roleEntity = roleRepo.findByName("ROLE_USER");
 		User userEntity = dtoToEntity(userDto);
+		userEntity.setPassword(encoder.encode(userDto.getPassword()));
 		userEntity.setId(userDtoFound.get().getId());
 		userEntity.setRole(roleEntity);
 		userRepo.save(userEntity);
