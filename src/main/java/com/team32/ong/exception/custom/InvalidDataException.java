@@ -4,7 +4,7 @@ import org.springframework.validation.BindingResult;
 
 public class InvalidDataException extends RuntimeException{
 
-    private final static long serialVersionUID = 1L;
+	private final static long serialVersionUID = 1L;
 
     private final transient BindingResult result;
 
@@ -18,7 +18,14 @@ public class InvalidDataException extends RuntimeException{
         this.result = result;
     }
 
-    public BindingResult getResult() {
+	public BindingResult getResult() {
         return result;
     }
+	
+	public InvalidDataException(String message) {
+		super(message);
+		this.result = null;
+	}
+	
+    
 }

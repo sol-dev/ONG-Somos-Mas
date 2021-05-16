@@ -28,4 +28,10 @@ public class TestimonialController {
         TestimonialDto updatedTestimonial = testimonialService.updateById(testimonialDtoToUpdate, id);
         return new ResponseEntity<>(updatedTestimonial, HttpStatus.OK);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteTestimonial(@PathVariable Long id) throws NotFoundException {
+        testimonialService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
