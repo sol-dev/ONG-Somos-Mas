@@ -79,6 +79,7 @@ public class UserImplService implements UserService, UserDetailsService {
 
     }
 
+    @Override
     public UserDTOResponse getMe(String jwt) throws NotFoundException{
 
 		String emailUser = jwtUtil.extractUsername(jwt.substring(7));
