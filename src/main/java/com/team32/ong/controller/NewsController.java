@@ -1,5 +1,6 @@
 package com.team32.ong.controller;
 
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class NewsController {
 	}
 
 	@DeleteMapping("/{idNews}")
-	public ResponseEntity<?> delete(@RequestParam("idNews") Long id){
+	public ResponseEntity<?> delete(@RequestParam("idNews") Long id) throws NotFoundException {
 		boolean news = newsService.deleteNew(id);
 		if (news){
 			return new ResponseEntity<>(HttpStatus.OK);

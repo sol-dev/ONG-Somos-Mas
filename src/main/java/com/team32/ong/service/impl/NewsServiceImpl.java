@@ -5,6 +5,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
+
+import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,11 +66,11 @@ public class NewsServiceImpl implements NewsService {
 	}
 
 	@Override
-	public boolean deleteNew(Long id) {
+	public boolean deleteNew(Long id) throws NotFoundException{
 		return newsRepository.findById(id).map(news -> {
 			news.setDeleted(true);
 			return true;
-		}).orElse(false);
+		}).orElseThrow(() -> new NotFoundException(ConstantExceptionMessage.MSG_ERROR_DELETE_NEWS));
 	}
 
 

@@ -17,4 +17,5 @@ public class ConstantExceptionMessage {
     public static final String MSG_NOT_FOUND_USERS = "No hay usuarios registrados";
     public static final String MSG_DELETE_OK = "Se elimino correctamente al usurio con id ";
     public static final String MSG_ERROR_SEND_EMAIL= "Ocurrio un error al enviar el email.";
+    public static final String MSG_ERROR_DELETE_NEWS= "No se encontro la Noticio que desea borrar";
 }
