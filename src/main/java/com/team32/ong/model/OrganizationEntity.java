@@ -15,7 +15,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
-import com.team32.ong.constant.ConstantMessage;
+import com.team32.ong.constant.ConstantExceptionMessage;
 
 import java.time.LocalDateTime;
 
@@ -32,11 +32,11 @@ public class OrganizationEntity {
     @Column(name = "id")
     private Long id;
 
-    @NotEmpty(message = ConstantMessage.MSG_NAME_BAD_REQUEST)
+    @NotEmpty(message = ConstantExceptionMessage.MSG_NAME_BAD_REQUEST)
     @Column(name = "name", nullable = false)
     private String name;
 
-    @NotEmpty(message = ConstantMessage.MSG_IMAGE_BAD_REQUEST)
+    @NotEmpty(message = ConstantExceptionMessage.MSG_IMAGE_BAD_REQUEST)
     @Column(name = "image", nullable = false)
     private String image;
 
@@ -47,8 +47,8 @@ public class OrganizationEntity {
     private Integer phone;
 
     @Column(name = "email", nullable = false)
-    @NotEmpty(message = ConstantMessage.MSG_EMAIL_BAD_REQUEST)
-    @Email(message = ConstantMessage.MSG_EMAIL_INVALID)
+    @NotEmpty(message = ConstantExceptionMessage.MSG_EMAIL_BAD_REQUEST)
+    @Email(message = ConstantExceptionMessage.MSG_EMAIL_INVALID)
     private String email;
 
     @Column (name = "welcome_text")

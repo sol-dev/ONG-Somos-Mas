@@ -30,11 +30,7 @@ public class OrganizationService implements IOrganizationService{
     //model mapper
     @Autowired
     private ModelMapper modelMapper;
-/*
-    private OrganizationDTO convertToDto(@Valid OrganizationEntity entity){
-        OrganizationDTO dto = modelMapper.map(entity, OrganizationDTO.class);
-        return dto;
-    }*/
+
     //OrganizationDTO
     private OrganizationDTO convertToDto(@Valid OrganizationEntity entity){
         return modelMapper.map(entity, OrganizationDTO.class);
@@ -55,13 +51,13 @@ public class OrganizationService implements IOrganizationService{
     //controller methods
     public OrganizationDTO save(OrganizationDTO dto) throws EmptyInputException {
         if(dto.getImage()==null || dto.getImage().isBlank()){
-            throw new EmptyInputException(ConstantMessage.MSG_IMAGE_BAD_REQUEST);
+            throw new EmptyInputException(ConstantExceptionMessage.MSG_IMAGE_BAD_REQUEST);
         }
         if(dto.getEmail()==null || dto.getEmail().isBlank()){
-            throw new EmptyInputException(ConstantMessage.MSG_EMAIL_BAD_REQUEST);
+            throw new EmptyInputException(ConstantExceptionMessage.MSG_EMAIL_BAD_REQUEST);
         }
         if(dto.getName()==null || dto.getName().isBlank()){
-            throw new EmptyInputException(ConstantMessage.MSG_NAME_BAD_REQUEST);
+            throw new EmptyInputException(ConstantExceptionMessage.MSG_NAME_BAD_REQUEST);
         }
         OrganizationEntity entity = convertDtoToEntity(dto);
         entity.setDeleted(false);
@@ -80,7 +76,7 @@ public class OrganizationService implements IOrganizationService{
     protected OrganizationEntity findById(Long id) throws NotFoundException{
         Optional<OrganizationEntity> organization = organizationRepository.findById(id) ;
         if(!organization.isPresent()){
-            throw new NotFoundException(ConstantMessage.MSG_NOT_FOUND+id);
+            throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND+id);
         }
         return organization.get();
     }
@@ -101,7 +97,7 @@ public class OrganizationService implements IOrganizationService{
 
     public void softDelete(Long id) throws NotFoundException {
         if(!organizationRepository.existsById(id)) {
-            throw new NotFoundException(ConstantMessage.MSG_NOT_FOUND+id);
+            throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND+id);
         }
         organizationRepository.softDelete(id);
     }
