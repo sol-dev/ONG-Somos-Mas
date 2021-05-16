@@ -5,6 +5,9 @@ import java.nio.file.AccessDeniedException;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
+
+import javax.validation.ConstraintViolation;
+
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -28,6 +31,16 @@ import javassist.NotFoundException;
 
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
+
+    @ExceptionHandler(javax.validation.ConstraintViolationException.class)
+    protected ResponseEntity<Object> handleConstraintViolation(javax.validation.ConstraintViolationException ex, HttpServletRequest req) {
+        String message= "";
+        for (ConstraintViolation<?> cv : ex.getConstraintViolations()) {
+            message = message + cv.getMessage(); 
+        }
+        ErrorResponse errorFound = new ErrorResponse(400, new Date(), message, req.getRequestURI());
+        return new ResponseEntity<>(errorFound, HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(NotFoundException.class)
     protected ResponseEntity<?> notFoundException(Exception e, HttpServletRequest req){
@@ -81,7 +94,4 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "No se puede responder a la petición porque faltan parámetros", error);
         return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
     }
-    
 }
-
-
