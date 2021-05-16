@@ -11,6 +11,7 @@ import com.team32.ong.model.Role;
 import com.team32.ong.model.User;
 import com.team32.ong.repository.RoleRepository;
 import com.team32.ong.repository.UserRepository;
+import com.team32.ong.security.JWTUtil;
 import com.team32.ong.service.EmailService;
 import com.team32.ong.service.UserService;
 import javassist.NotFoundException;
@@ -46,6 +47,9 @@ public class UserImplService implements UserService, UserDetailsService {
     @Autowired
     private EmailService emailService;
 
+	@Autowired
+	private JWTUtil jwtUtil;
+
     @Override
     public UserDTOResponse save(UserDTORequest userDTORequest) throws NotFoundException, BadRequestException, IOException {
 
@@ -75,9 +79,11 @@ public class UserImplService implements UserService, UserDetailsService {
 
     }
 
-    public UserDTOResponse getByEmail(String email) throws NotFoundException{
+    public UserDTOResponse getMe(String jwt) throws NotFoundException{
 
-    	User userEntity = userRepo.findByEmail(email);
+		String emailUser = jwtUtil.extractUsername(jwt.substring(7));
+
+    	User userEntity = userRepo.findByEmail(emailUser);
 
     	if (userEntity == null){
     		throw new NotFoundException(ConstantExceptionMessage.MSG_EMAIL_NOT_FOUND);

@@ -26,9 +26,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private JWTUtil jwtUtil;
-
     @GetMapping
     public ResponseEntity<List<UserDTOResponse>> getAll() {
         return new ResponseEntity<>(userService.getAllUsers(),HttpStatus.OK);
@@ -41,9 +38,8 @@ public class UserController {
 
     @GetMapping("/auth/me")
     public ResponseEntity<UserDTOResponse> getMe(@RequestHeader("authorization") String jwt) throws NotFoundException{
-        String emailUser = jwtUtil.extractUsername(jwt.substring(7));
 
-        return new ResponseEntity<>(userService.getByEmail(emailUser), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getMe(jwt), HttpStatus.OK);
     }
     
     @PostMapping

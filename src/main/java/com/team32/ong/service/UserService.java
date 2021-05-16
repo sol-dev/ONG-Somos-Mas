@@ -19,7 +19,7 @@ public interface UserService {
 
     UserDTOResponse save(UserDTORequest user) throws NotFoundException, BadRequestException, IOException;
     List<UserDTOResponse> getAllUsers();
-    UserDTOResponse getByEmail(String email) throws NotFoundException;
+    UserDTOResponse getMe(String email) throws NotFoundException;
 	UserDTOResponse getOne(Long id);
 	UserDTOResponse findById(Long id);
     User dtoToEntity(UserDTORequest userDTORequest);
