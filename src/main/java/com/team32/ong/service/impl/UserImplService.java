@@ -26,6 +26,8 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -47,34 +49,46 @@ public class UserImplService implements UserService, UserDetailsService {
     @Autowired
     private EmailService emailService;
 
-    @Override
-    public UserDTOResponse save(UserDTORequest userDTORequest) throws NotFoundException, BadRequestException, IOException {
+	@Override
+	public UserDTOResponse save(UserDTORequest userDTORequest) throws NotFoundException, BadRequestException, IOException {
 
-        if (userRepo.existsByEmail(userDTORequest.getEmail())){
-            throw new NotFoundException(ConstantExceptionMessage.MSG_EMAIL_IN_USE);
-        }else if (userDTORequest.getEmail() == null){
-            throw new BadRequestException(ConstantExceptionMessage.MSG_EMAIL_BAD_REQUEST);
-        }else if (userDTORequest.getFirstName() == null){
-            throw new BadRequestException(ConstantExceptionMessage.MSG_NAME_BAD_REQUEST);
-        }else if (userDTORequest.getLastName() == null){
-            throw new BadRequestException(ConstantExceptionMessage.MSG_LASTNAME_BAD_REQUEST);
-        }else if (userDTORequest.getPassword() == null){
-            throw new BadRequestException(ConstantExceptionMessage.MSG_PASSWORD_BAD_REQUEST);
-        }
-        userDTORequest.setPassword(encoder.encode(userDTORequest.getPassword()));
+		StringBuffer errorsFound = new StringBuffer();
 
-        Role role = roleRepo.findByName("USER");
+		if (userRepo.existsByEmail(userDTORequest.getEmail())){
+			throw new NotFoundException(ConstantExceptionMessage.MSG_EMAIL_IN_USE);
+		}else if (userDTORequest.getEmail().isEmpty()){
+			throw new BadRequestException(ConstantExceptionMessage.MSG_EMAIL_BAD_REQUEST);
+		}else if (userDTORequest.getFirstName().isEmpty()){
+			throw new BadRequestException(ConstantExceptionMessage.MSG_NAME_BAD_REQUEST);
+		}else if (userDTORequest.getLastName().isEmpty()){
+			throw new BadRequestException(ConstantExceptionMessage.MSG_LASTNAME_BAD_REQUEST);
+		}else if (userDTORequest.getPassword().isEmpty()){
+			throw new BadRequestException(ConstantExceptionMessage.MSG_PASSWORD_BAD_REQUEST);
+		}else if(!validateEmail(userDTORequest.getEmail())) {
+			errorsFound.append(ConstantExceptionMessage.MSG_EMAIL_BAD_REQUEST);
+		}else if(!validateString(userDTORequest.getLastName())) {
+			errorsFound.append(ConstantExceptionMessage.MSG_LASTNAME_NOT_NUMBER);
+		}else if(!validateString(userDTORequest.getFirstName())) {
+			errorsFound.append(ConstantExceptionMessage.MSG_NAME_NOT_NUMBER);
+		}else if(!validateString(userDTORequest.getLastName())) {
+			errorsFound.append(ConstantExceptionMessage.MSG_LASTNAME_NOT_NUMBER);
+		}else if(errorsFound.length() > 0) {
+			throw new BadRequestException(errorsFound.toString());
+		}
+		userDTORequest.setPassword(encoder.encode(userDTORequest.getPassword()));
 
-        User userEntity = dtoToEntity(userDTORequest);
+		Role role = roleRepo.findByName("USER");
 
-        userEntity.setRole(role);
-        User userSave = userRepo.save(userEntity);
-        
-        emailService.sendEmail(userSave.getEmail());
+		User userEntity = dtoToEntity(userDTORequest);
 
-        return entityToDto(userSave);
+		userEntity.setRole(role);
+		User userSave = userRepo.save(userEntity);
 
-    }
+		emailService.sendEmail(userSave.getEmail());
+
+		return entityToDto(userSave);
+
+	}
     
     @Override
     public UserDTOResponse getOne(Long id) {
