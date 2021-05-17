@@ -3,6 +3,7 @@ package com.team32.ong.service.impl;
 
 import com.team32.ong.constant.ConstantMessage;
 import com.team32.ong.dto.CategoryDTO;
+import com.team32.ong.dto.ModifyCategoryDTO;
 import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.model.Category;
 import com.team32.ong.repository.CategoryRepository;
@@ -36,28 +37,28 @@ public class CategoryImplService implements CategoryService {
     }
 
     @Override
-    public CategoryDTO update(Long id, CategoryDTO categoryDTO) throws Exception {
+    public CategoryDTO update(Long id, ModifyCategoryDTO categoryDTO) throws NotFoundException, BadRequestException {
 
-        try {
 
             //todo: validar usuario
 
-            if (!repo.existsById(id)){
+            Category oldcategory = repo.findById(id).orElse(null);
+            if (oldcategory == null){
                 throw new NotFoundException(ConstantMessage.MSG_CATEGORY_NOT_FOUND.concat(id.toString()));
             }
             if (categoryDTO.getName() == null || categoryDTO.getName() == ""){
                 throw new BadRequestException(ConstantMessage.MSG_NAME_BAD_REQUEST);
             }
-            if (categoryDTO.getId() != id){
-                throw new BadRequestException(ConstantMessage.MSG_ID_DIFFERS);
+            if (categoryDTO.getDescription() == null || categoryDTO.getName() == ""){
+                throw new BadRequestException(ConstantMessage.MSG_DESCRIPTION_EMPTY);
             }
+
+            
 
             repo.save(dtoToEntity(categoryDTO));
             return categoryDTO;
 
-        }catch (Exception e){
-            throw new Exception(e.getMessage());
-        }
+
     }
 
 
@@ -71,4 +72,13 @@ public class CategoryImplService implements CategoryService {
         return mapper.map(category, CategoryDTO.class);
     }
 
+    private Category modifyDtoToEntitity(ModifyCategoryDTO categoryDTO){
+        ModelMapper mapper = new ModelMapper();
+        return mapper.map(categoryDTO, Category.class);
+    }
+
+    private ModifyCategoryDTO entityToModifyDto(Category category){
+        ModelMapper mapper = new ModelMapper();
+        return mapper.map(category, ModifyCategoryDTO.class);
+    }
 }

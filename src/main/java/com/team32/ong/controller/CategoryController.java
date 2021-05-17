@@ -1,6 +1,7 @@
 package com.team32.ong.controller;
 
 import com.team32.ong.dto.CategoryDTO;
+import com.team32.ong.dto.ModifyCategoryDTO;
 import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.exception.custom.InvalidDataException;
 import com.team32.ong.service.CategoryService;
@@ -30,7 +31,7 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable("id") Long id,@RequestBody CategoryDTO categoryDTO)
+    public ResponseEntity<?> update(@PathVariable("id") Long id,@RequestBody ModifyCategoryDTO categoryDTO)
                                                 throws Exception {
 
         Map<String, Object> response = new HashMap<>();
