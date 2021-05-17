@@ -37,9 +37,11 @@ public class CategoryImplService implements CategoryService {
     @Override
     public List<String> viewAll() throws Exception {
 
-       List<Category> categories1 = repo.findAll();
+       List<Category> categories = repo.findAll();
 
-       return categories1.stream().map(category -> category.getName()).collect(Collectors.toList());
+       return categories.stream().map(category -> category.getName()).collect(Collectors.toList());
+
+
 
     }
 
