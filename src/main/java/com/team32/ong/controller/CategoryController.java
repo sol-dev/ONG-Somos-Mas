@@ -51,16 +51,8 @@ public class CategoryController {
     @GetMapping
     public ResponseEntity<?> listCategories() throws Exception {
 
-        Map<String,Object> response = new HashMap<>();
-        //ListCategoryNameDTO  categories = new ListCategoryNameDTO();
-        List<String> categories = null;
-
-        categories = categoryService.viewAll();
-
-
-        response.put("categories", categories);
-
-        return new ResponseEntity(response, HttpStatus.OK);
+       List<ListCategoryNameDTO> list = categoryService.findAll();
+        return new ResponseEntity(list, HttpStatus.OK);
     }
 
 }

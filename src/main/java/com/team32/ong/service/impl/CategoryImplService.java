@@ -1,6 +1,7 @@
 package com.team32.ong.service.impl;
 
 
+import java.util.Arrays;
 import java.util.Optional;
 
 import com.team32.ong.constant.ConstantExceptionMessage;
@@ -23,6 +24,8 @@ public class CategoryImplService implements CategoryService {
 
     @Autowired
     private CategoryRepository repo;
+    @Autowired
+    private  ModelMapper modelMapper;
 
 
     @Override
@@ -37,18 +40,6 @@ public class CategoryImplService implements CategoryService {
         return entityToDto(category);
     }
 
-    @Override
-    public List<String> viewAll() throws Exception {
-
-       List<Category> categories = repo.findAll();
-
-       return categories.stream().map(category -> category.getName()).collect(Collectors.toList());
-
-
-
-    }
-
-
     public CategoryDTO findById(Long id) throws NotFoundException{
         Optional<Category> category = repo.findById(id) ;
         if(!category.isPresent()){
@@ -56,6 +47,15 @@ public class CategoryImplService implements CategoryService {
         }
         return entityToDto(category.get());
     }
+
+    @Override
+    public List<ListCategoryNameDTO> findAll() throws Exception {
+       List<Category> lCategory = repo.findAll();
+       List<ListCategoryNameDTO> category = Arrays.asList(modelMapper.map(lCategory,
+               ListCategoryNameDTO[].class));
+       return category;
+    }
+
 
     //model mapper
     private Category dtoToEntity(CategoryDTO categoryDto){
