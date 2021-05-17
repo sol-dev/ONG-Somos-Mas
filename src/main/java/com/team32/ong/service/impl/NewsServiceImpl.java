@@ -67,7 +67,8 @@ public class NewsServiceImpl implements NewsService {
 
 	@Override
 	public NewsDto findById(Long id) throws NotFoundException {
-		News news = newsRepository.findById(id).orElseThrow(() -> new NotFoundException("No existe una noticia con ese id"));
+		News news = newsRepository.findById(id).orElseThrow(() -> new NotFoundException(
+				ConstantExceptionMessage.MSG_NEWS_NOT_FOUND.concat(id.toString())));
     	return modelToDto(news);
 	}
 	

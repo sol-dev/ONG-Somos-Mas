@@ -22,5 +22,6 @@ public class ConstantExceptionMessage {
     public static final String MSG_CONTENT_NOT_NUMBER = "El campo contenido no puede ser solo numeros. ";
     public static final String MSG_ERROR_SEND_EMAIL= "Ocurrio un error al enviar el email.";
     public static final String MSG_EMPTY_ACTIVITY = null;
+    public static final String MSG_NEWS_NOT_FOUND = "No se encontro la noticia con el id ";
 
 }
