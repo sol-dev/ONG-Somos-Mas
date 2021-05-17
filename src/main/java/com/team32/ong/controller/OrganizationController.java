@@ -30,7 +30,7 @@ public class OrganizationController {
 
     @GetMapping(value = "/public")
     public ResponseEntity<?> getPublicInfo(){
-        List<OrganizationPublicDTO> list = organizationService.findActives();
+        List<OrganizationPublicDTO> list = organizationService.findAll();
         return new ResponseEntity<>(list,HttpStatus.OK);
     }
 
@@ -44,14 +44,8 @@ public class OrganizationController {
     public ResponseEntity<OrganizationDTO> findById( @RequestParam("id") Long id) throws NotFoundException{
         return new ResponseEntity<OrganizationDTO>(organizationService.findDtoById(id), HttpStatus.OK);
     }
- 
-    @GetMapping(value = "/all")
-    public ResponseEntity<?> findAll(){
-        List<OrganizationDTO> list = organizationService.findAll();
-        return new ResponseEntity<>(list,HttpStatus.OK);
-    }
 
-    @PostMapping(value="/delete")
+    @DeleteMapping(value="/delete")
     public ResponseEntity<?> softDelete(@RequestParam("id") Long id) throws NotFoundException {
         organizationService.softDelete(id);
         return new ResponseEntity<>(HttpStatus.OK);

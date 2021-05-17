@@ -86,16 +86,10 @@ public class OrganizationService implements IOrganizationService{
         return organization.get();
     }
 
-    public List<OrganizationDTO> findAll() {
+    public List<OrganizationPublicDTO> findAll() {
         //list of entities
         List<OrganizationEntity> lEntities= organizationRepository.findAll();
         //convert to dto list
-        List<OrganizationDTO> lDto = Arrays.asList(modelMapper.map(lEntities, OrganizationDTO[].class));
-        return lDto;
-    }
-
-    public List<OrganizationPublicDTO> findActives() {
-        List<OrganizationEntity> lEntities= organizationRepository.findActives();
         List<OrganizationPublicDTO> lDto = Arrays.asList(modelMapper.map(lEntities, OrganizationPublicDTO[].class));
         return lDto;
     }
@@ -104,7 +98,7 @@ public class OrganizationService implements IOrganizationService{
         if(!organizationRepository.existsById(id)) {
             throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND+id);
         }
-        organizationRepository.softDelete(id);
+        organizationRepository.deleteById(id);
     }
 
     public OrganizationPublicDTO update(Long id, JsonPatch patch) throws NotFoundException {

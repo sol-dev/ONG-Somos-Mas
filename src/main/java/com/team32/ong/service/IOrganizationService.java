@@ -19,9 +19,7 @@ public interface IOrganizationService {
   
     public OrganizationPublicDTO findPublicDtoById(Long id) throws NotFoundException;
 
-    public List<OrganizationDTO> findAll();
-
-    public List<OrganizationPublicDTO> findActives();
+    public List<OrganizationPublicDTO> findAll();
 
     public void softDelete(Long id) throws NotFoundException;
 

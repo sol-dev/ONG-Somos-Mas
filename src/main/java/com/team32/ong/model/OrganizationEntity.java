@@ -6,18 +6,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.team32.ong.constant.ConstantExceptionMessage;
 
 import java.time.LocalDateTime;
@@ -28,7 +26,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+<<<<<<< HEAD
 @Getter
+=======
+@SQLDelete(sql = "UPDATE organization SET deleted=true WHERE id = ?")
+@Where(clause = "deleted = false")
+>>>>>>> 5600f396f47ae53163769d1b5048e17c897518e6
 public class OrganizationEntity {
 
     @Id
