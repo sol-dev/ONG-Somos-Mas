@@ -79,14 +79,12 @@ public class UserImplService implements UserService, UserDetailsService {
 			throw new BadRequestException(errorsFound.toString());
 		}
 		userDTORequest.setPassword(encoder.encode(userDTORequest.getPassword()));
-
 		Role role = roleRepo.findByName("USER");
-
 		User userEntity = dtoToEntity(userDTORequest);
-
 		userEntity.setRole(role);
-
 		User userSave = userRepo.save(userEntity);
+
+		emailService.sendEmail(userSave.getEmail());
 
 		return entityToDto(userSave);
 
