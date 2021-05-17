@@ -18,6 +18,8 @@ import com.team32.ong.model.News;
 import com.team32.ong.repository.NewsRepository;
 import com.team32.ong.service.NewsService;
 
+import javassist.NotFoundException;
+
 @Service
 @Transactional
 public class NewsServiceImpl implements NewsService {
@@ -63,16 +65,9 @@ public class NewsServiceImpl implements NewsService {
 		return modelToDto(newsCreated);
 	}
 
-	
 	@Override
-	public NewsDto getOne(Long id) {
-		News news = newsRepository.getOne(id);
-		return modelToDto(news);
-	}	
-	
-	@Override
-	public NewsDto findById(Long id) {
-		News news = newsRepository.findById(id).orElseThrow(() -> new InvalidDataException("No existe una noticia con ese id"));
+	public NewsDto findById(Long id) throws NotFoundException {
+		News news = newsRepository.findById(id).orElseThrow(() -> new NotFoundException("No existe una noticia con ese id"));
     	return modelToDto(news);
 	}
 	

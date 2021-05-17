@@ -3,9 +3,7 @@ package com.team32.ong.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
-
 import javax.validation.constraints.Email;
 
 import com.team32.ong.model.Slide;
@@ -25,7 +23,6 @@ public class OrganizationDTO {
 
     private Integer phone;
 
-    @Email
     private String email;
 
     private String welcomeText;
