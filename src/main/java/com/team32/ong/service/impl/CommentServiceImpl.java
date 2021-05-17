@@ -99,22 +99,11 @@ public class CommentServiceImpl implements CommentService {
 
 		//todo: validar usuario
 
-		//Comment newComment = new Comment();
-		//newComment.setId(oldComment.getId());
-		//newComment.setBody(commentBody.getBody());
-		//newComment.setDeleted(false);
-		//newComment.setUser(oldComment.getUser());
-		//newComment.setNews(oldComment.getNews());
 		oldComment.setBody(commentBody.getBody());
 
 		commentRepository.save(oldComment);
 
 		return commentBody;
-	}
-
-	@Override
-	public boolean existsById(Long id) throws Exception {
-		return false;
 	}
 
 
