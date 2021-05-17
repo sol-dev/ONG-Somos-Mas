@@ -11,6 +11,7 @@ import com.team32.ong.model.Role;
 import com.team32.ong.model.User;
 import com.team32.ong.repository.RoleRepository;
 import com.team32.ong.repository.UserRepository;
+import com.team32.ong.security.JWTUtil;
 import com.team32.ong.service.EmailService;
 import com.team32.ong.service.UserService;
 import javassist.NotFoundException;
@@ -48,6 +49,9 @@ public class UserImplService implements UserService, UserDetailsService {
     @Autowired
     private EmailService emailService;
 
+	@Autowired
+	private JWTUtil jwtUtil;
+
 	@Override
 	public UserDTOResponse save(UserDTORequest userDTORequest) throws NotFoundException, BadRequestException, IOException {
 
@@ -75,11 +79,8 @@ public class UserImplService implements UserService, UserDetailsService {
 			throw new BadRequestException(errorsFound.toString());
 		}
 		userDTORequest.setPassword(encoder.encode(userDTORequest.getPassword()));
-
 		Role role = roleRepo.findByName("USER");
-
 		User userEntity = dtoToEntity(userDTORequest);
-
 		userEntity.setRole(role);
 		User userSave = userRepo.save(userEntity);
 
@@ -87,17 +88,25 @@ public class UserImplService implements UserService, UserDetailsService {
 
 		return entityToDto(userSave);
 
+    }
+
+    @Override
+    public UserDTOResponse getMe(String jwt) throws NotFoundException{
+
+		String emailUser = jwtUtil.extractUsername(jwt.substring(7));
+
+    	User userEntity = userRepo.findByEmail(emailUser);
+
+    	if (userEntity == null){
+    		throw new NotFoundException(ConstantExceptionMessage.MSG_EMAIL_NOT_FOUND);
+		}
+    	return entityToDto(userEntity);
+
 	}
     
     @Override
-    public UserDTOResponse getOne(Long id) {
-    	User user = userRepo.getOne(id);
-		return entityToDto(user);
-    }
-    
-    @Override
-    public UserDTOResponse findById(Long id) {
-    	User user = userRepo.findById(id).orElseThrow(() -> new InvalidDataException("No existe un usuario con ese id"));
+    public UserDTOResponse findById(Long id) throws NotFoundException{
+    	User user = userRepo.findById(id).orElseThrow(() -> new NotFoundException("No existe un usuario con ese id"));
     	return entityToDto(user);
 
     }
