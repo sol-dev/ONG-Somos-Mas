@@ -11,6 +11,7 @@ import com.team32.ong.model.Role;
 import com.team32.ong.model.User;
 import com.team32.ong.repository.RoleRepository;
 import com.team32.ong.repository.UserRepository;
+import com.team32.ong.security.JWTUtil;
 import com.team32.ong.service.EmailService;
 import com.team32.ong.service.UserService;
 import javassist.NotFoundException;
@@ -26,8 +27,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.Optional;
 
@@ -45,10 +47,15 @@ public class UserImplService implements UserService, UserDetailsService {
     
     @Autowired
     private EmailService emailService;
+    
+    @Autowired
+    private JWTUtil jwtUtil;
 
     @Override
-    public UserDTOResponse save(UserDTORequest userDTORequest) throws NotFoundException, BadRequestException, IOException {
-
+    public Map<String,Object> save(UserDTORequest userDTORequest) throws NotFoundException, BadRequestException, IOException {
+    	
+    	Map<String,Object> response = new HashMap<>();
+    	
         if (userRepo.existsByEmail(userDTORequest.getEmail())){
             throw new NotFoundException(ConstantExceptionMessage.MSG_EMAIL_IN_USE);
         }else if (userDTORequest.getEmail() == null){
@@ -60,6 +67,7 @@ public class UserImplService implements UserService, UserDetailsService {
         }else if (userDTORequest.getPassword() == null){
             throw new BadRequestException(ConstantExceptionMessage.MSG_PASSWORD_BAD_REQUEST);
         }
+        
         userDTORequest.setPassword(encoder.encode(userDTORequest.getPassword()));
 
         Role role = roleRepo.findByName("USER");
@@ -71,7 +79,13 @@ public class UserImplService implements UserService, UserDetailsService {
         
         emailService.sendEmail(userSave.getEmail());
 
-        return entityToDto(userSave);
+       
+        String jwt = jwtUtil.generateToken(userSave);
+        
+        response.put("userSave", entityToDto(userSave));
+        response.put("jwt", jwt);
+        
+        return response;
 
     }
     

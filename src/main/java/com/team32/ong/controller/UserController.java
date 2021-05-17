@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.team32.ong.dto.UserDtoRequestForAdmin;
@@ -43,7 +44,7 @@ public class UserController {
     }
     
     @PostMapping
-    public ResponseEntity<UserDTOResponse> createUser(@RequestBody UserDTORequest userDTORequest) throws NotFoundException, BadRequestException, IOException {
+    public ResponseEntity<Map<String, Object>> createUser(@RequestBody UserDTORequest userDTORequest) throws NotFoundException, BadRequestException, IOException {
         return new ResponseEntity<>(userService.save(userDTORequest), HttpStatus.CREATED);
     }
     
