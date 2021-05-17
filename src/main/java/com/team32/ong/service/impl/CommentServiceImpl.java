@@ -10,12 +10,15 @@ import org.springframework.transaction.annotation.Transactional;
 import com.team32.ong.dto.AddCommentBody;
 import com.team32.ong.dto.CommentDto;
 import com.team32.ong.dto.NewsDto;
+import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.exception.custom.EmptyInputException;
 import com.team32.ong.model.Comment;
 import com.team32.ong.repository.CommentRepository;
 import com.team32.ong.service.CommentService;
 import com.team32.ong.service.NewsService;
 import com.team32.ong.service.UserService;
+
+import javassist.NotFoundException;
 
 
 @Service
@@ -30,7 +33,7 @@ public class CommentServiceImpl implements CommentService {
 	private UserService userService;
 
 	@Override
-	public CommentDto save(CommentDto commentDto) {
+	public CommentDto save(CommentDto commentDto) throws BadRequestException{
 		Comment comment = this.dtoToModel(commentDto);
 		comment.setDeleted(false);
 		Comment newComment = commentRepository.save(comment);	
@@ -49,7 +52,7 @@ public class CommentServiceImpl implements CommentService {
     	return modelToDto(comment);
 	}
 
-	public ResponseEntity<CommentDto> createNewComment(Long newsId, Long userId, AddCommentBody commentBody){
+	public ResponseEntity<CommentDto> createNewComment(Long newsId, Long userId, AddCommentBody commentBody)throws BadRequestException, NotFoundException{
 		
 		CommentDto commentDto = new CommentDto();
 		
