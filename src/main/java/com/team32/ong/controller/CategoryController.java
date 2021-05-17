@@ -1,6 +1,7 @@
 package com.team32.ong.controller;
 
 import com.team32.ong.dto.CategoryDTO;
+import com.team32.ong.dto.ListCategoryNameDTO;
 import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.exception.custom.InvalidDataException;
 import com.team32.ong.service.CategoryService;
@@ -34,9 +35,11 @@ public class CategoryController {
     public ResponseEntity<?> listCategories() throws Exception {
 
         Map<String,Object> response = new HashMap<>();
-        List<String> categories = null;
+        ListCategoryNameDTO  categories = new ListCategoryNameDTO();
+       // List<String> categories = null;
 
-        categories = categoryService.viewAll();
+        //categories = categoryService.viewAll();
+        categories.setCategoriesNames(categoryService.viewAll());
 
         response.put("categories", categories);
 

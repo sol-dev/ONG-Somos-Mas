@@ -3,6 +3,7 @@ package com.team32.ong.service.impl;
 
 import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.CategoryDTO;
+import com.team32.ong.dto.ListCategoryNameDTO;
 import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.model.Category;
 import com.team32.ong.repository.CategoryRepository;
@@ -36,8 +37,9 @@ public class CategoryImplService implements CategoryService {
     @Override
     public List<String> viewAll() throws Exception {
 
-        List<Category> categories = repo.findAll();
-        return categories.stream().map(category -> category.getName()).collect(Collectors.toList());
+       List<Category> categories1 = repo.findAll();
+
+       return categories1.stream().map(category -> category.getName()).collect(Collectors.toList());
 
     }
 
