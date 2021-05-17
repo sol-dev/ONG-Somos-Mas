@@ -52,11 +52,11 @@ public class CategoryController {
     public ResponseEntity<?> listCategories() throws Exception {
 
         Map<String,Object> response = new HashMap<>();
-        ListCategoryNameDTO  categories = new ListCategoryNameDTO();
-       // List<String> categories = null;
+        //ListCategoryNameDTO  categories = new ListCategoryNameDTO();
+        List<String> categories = null;
 
-        //categories = categoryService.viewAll();
-        categories.setCategoriesNames(categoryService.viewAll());
+        categories = categoryService.viewAll();
+
 
         response.put("categories", categories);
 
