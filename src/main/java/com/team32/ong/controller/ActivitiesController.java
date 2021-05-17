@@ -42,5 +42,4 @@ public class ActivitiesController {
 
        return new ResponseEntity(response, HttpStatus.CREATED);
     }
-
 }

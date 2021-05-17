@@ -17,10 +17,10 @@ public class ConstantExceptionMessage {
     public static final String MSG_IO_Exception = "El nombre del archivo de destino ya existe o ha ocurrido un error de E / S.";
     public static final String MSG_NOT_FOUND_USERS = "No hay usuarios registrados";
     public static final String MSG_DELETE_OK = "Se elimino correctamente al usurio con id ";
-    public static final String MSG_ERROR_SEND_EMAIL= "Ocurrio un error al enviar el email.";
     public static final String MSG_NAME_NOT_NUMBER = "El campo nombre no puede contener numeros. ";
     public static final String MSG_LASTNAME_NOT_NUMBER = "El campo apellido no puede contener numeros. ";
     public static final String MSG_CONTENT_NOT_NUMBER = "El campo contenido no puede ser solo numeros. ";
+    public static final String MSG_ERROR_SEND_EMAIL= "Ocurrio un error al enviar el email.";
     public static final String MSG_COMMENT_NOT_FOUND = "No existe el comentario con id ";
     public static final String MSG_EMPTY_COMMENT_BODY = "El cuerpo del comentario no puede estar vacio";
     public static final String MSG_EMPTY_ACTIVITY = "El contenido de la actividad no puede estar vacio";
