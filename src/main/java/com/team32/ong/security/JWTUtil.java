@@ -4,10 +4,20 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.team32.ong.exception.ErrorResponse;
+
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.MediaType;
 
 import java.util.Date;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 
 @Component
 public class JWTUtil {
@@ -48,5 +58,18 @@ public class JWTUtil {
         return Jwts.parser()
                 .setSigningKey(KEY)
                 .parseClaimsJws(token).getBody();
+    }
+    
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return (request, response, ex) -> {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+
+            ServletOutputStream out = response.getOutputStream();
+            ErrorResponse errorFound = new ErrorResponse(403, new Date(), "Acceso denegado", request.getRequestURI());
+            new ObjectMapper().writeValue(out, errorFound);
+            out.flush();
+        };
     }
 }

@@ -11,4 +11,5 @@ public interface CategoryService {
 
     CategoryDTO save(CategoryDTO categoryDTO);
     void delete(Long id) throws NotFoundException;
+    public CategoryDTO findById(final Long id) throws NotFoundException;
 }

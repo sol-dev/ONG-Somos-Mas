@@ -1,6 +1,8 @@
 package com.team32.ong.service.impl;
 
 
+import java.util.Optional;
+
 import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.CategoryDTO;
 import com.team32.ong.exception.custom.BadRequestException;
@@ -37,11 +39,20 @@ public class CategoryImplService implements CategoryService {
 	public void delete(Long id) throws NotFoundException {
 		boolean categoryExists = repo.existsById(id);
 		if(!categoryExists) {
-			throw new NotFoundException(ConstantMessage.MSG_NOT_FOUND + id);
+			throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND + id);
 		}
 		repo.deleteById(id);
 	}
     
+    public CategoryDTO findById(Long id) throws NotFoundException{
+        Optional<Category> category = repo.findById(id) ;
+        if(!category.isPresent()){
+            throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND+id);
+        }
+        return entityToDto(category.get());
+    }
+
+    //model mapper
     private Category dtoToEntity(CategoryDTO categoryDto){
         ModelMapper mapper = new ModelMapper();
         return mapper.map(categoryDto, Category.class);
