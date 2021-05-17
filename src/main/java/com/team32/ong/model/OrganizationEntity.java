@@ -67,7 +67,7 @@ public class OrganizationEntity {
     @Column(name = "last_modified_date")
     private LocalDateTime modifiedDate;
 
-    @Column(name = "deleted")
+    @Column(name = "deleted", columnDefinition = "boolean default false")
     private Boolean deleted;
 
 
