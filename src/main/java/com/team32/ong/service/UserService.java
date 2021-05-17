@@ -19,8 +19,7 @@ public interface UserService {
 
     UserDTOResponse save(UserDTORequest user) throws NotFoundException, BadRequestException, IOException;
     List<UserDTOResponse> getAllUsers();
-	UserDTOResponse getOne(Long id);
-	UserDTOResponse findById(Long id);
+	UserDTOResponse findById(Long id) throws NotFoundException;
     User dtoToEntity(UserDTORequest userDTORequest);
     UserDTOResponse entityToDto(User user);
     NewUserDto updateAdminOnly(Long id, UserDtoRequestForAdmin newUserDto) throws NotFoundException;

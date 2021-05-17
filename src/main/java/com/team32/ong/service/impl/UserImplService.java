@@ -90,14 +90,8 @@ public class UserImplService implements UserService, UserDetailsService {
 	}
     
     @Override
-    public UserDTOResponse getOne(Long id) {
-    	User user = userRepo.getOne(id);
-		return entityToDto(user);
-    }
-    
-    @Override
-    public UserDTOResponse findById(Long id) {
-    	User user = userRepo.findById(id).orElseThrow(() -> new InvalidDataException("No existe un usuario con ese id"));
+    public UserDTOResponse findById(Long id) throws NotFoundException{
+    	User user = userRepo.findById(id).orElseThrow(() -> new NotFoundException("No existe un usuario con ese id"));
     	return entityToDto(user);
 
     }
