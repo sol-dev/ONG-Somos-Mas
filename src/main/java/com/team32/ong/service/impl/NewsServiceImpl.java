@@ -21,7 +21,6 @@ import com.team32.ong.repository.NewsRepository;
 import com.team32.ong.service.NewsService;
 
 @Service
-@Transactional
 public class NewsServiceImpl implements NewsService {
 	
 	@Autowired
@@ -68,7 +67,7 @@ public class NewsServiceImpl implements NewsService {
 	@Override
 	public boolean deleteNew(Long id) throws NotFoundException{
 		return newsRepository.findById(id).map(news -> {
-			news.setDeleted(true);
+			newsRepository.delete(news);
 			return true;
 		}).orElseThrow(() -> new NotFoundException(ConstantExceptionMessage.MSG_ERROR_DELETE_NEWS));
 	}

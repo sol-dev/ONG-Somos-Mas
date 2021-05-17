@@ -21,5 +21,5 @@ public class ConstantExceptionMessage {
     public static final String MSG_LASTNAME_NOT_NUMBER = "El campo apellido no puede contener numeros. ";
     public static final String MSG_CONTENT_NOT_NUMBER = "El campo contenido no puede ser solo numeros. ";
     public static final String MSG_ERROR_SEND_EMAIL= "Ocurrio un error al enviar el email.";
-    public static final String MSG_ERROR_DELETE_NEWS= "No se encontro la Noticio que desea borrar";
+    public static final String MSG_ERROR_DELETE_NEWS= "No se encontro la Noticia que desea borrar";
 }
