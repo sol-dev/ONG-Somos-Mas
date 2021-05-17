@@ -16,22 +16,18 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
-<<<<<<< HEAD
-=======
 
->>>>>>> af9594b866b2bc30b54396a2257ce8e36226d3a3
   security:
     jwt:
       secret-key: secret-key
       expiration-length: 3600000
-<<<<<<< HEAD
+
       
 amazonProperties:
     endpointUrl: https://s3.us-east-1.amazonaws.com
     accessKey: AKIA5YX3QC3YARN66KVE
     secretKey: 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
     bucketName: alkemy-somos-mas
-=======
 
 app:
   sengrid:
@@ -39,4 +35,4 @@ app:
     emailIssuing: matias-leandro@outlook.com
 
 
->>>>>>> af9594b866b2bc30b54396a2257ce8e36226d3a3
+
