@@ -68,17 +68,7 @@ public class TestimonialServiceImpl implements TestimonialService {
         Testimonial testimonialToUpdate = testimonials.get();
 
         //validate if null
-        if(testimonialDtoToUpdate.getName() == null){
-            testimonialDtoToUpdate.setName(testimonialToUpdate.getName());
-        }
-
-        if(testimonialDtoToUpdate.getContent() == null){
-            testimonialDtoToUpdate.setContent(testimonialToUpdate.getContent());
-        }
-
-        if(testimonialDtoToUpdate.getImage() == null){
-            testimonialDtoToUpdate.setImage(testimonialToUpdate.getImage());
-        }
+        testimonialDtoToUpdate = setNullsAttributes(testimonialDtoToUpdate, testimonialToUpdate);
 
         //validate if empty
         if(testimonialDtoToUpdate.getName().isEmpty()){
@@ -144,6 +134,22 @@ public class TestimonialServiceImpl implements TestimonialService {
             }
         }
         return  hasDigit;
+    }
+
+    private TestimonialDto setNullsAttributes(TestimonialDto dto, Testimonial model){
+        if(dto.getName() == null){
+            dto.setName(model.getName());
+        }
+
+        if(dto.getContent() == null){
+            dto.setContent(model.getContent());
+        }
+
+        if(dto.getImage() == null){
+            dto.setImage(model.getImage());
+        }
+
+        return dto;
     }
 
     private TestimonialDto modelToDto(Testimonial testimonial){
