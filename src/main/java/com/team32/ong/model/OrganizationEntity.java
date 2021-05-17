@@ -4,6 +4,7 @@ package com.team32.ong.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -15,6 +16,8 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.team32.ong.constant.ConstantExceptionMessage;
 
 import java.time.LocalDateTime;
@@ -25,6 +28,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Getter
 public class OrganizationEntity {
 
     @Id
@@ -66,10 +70,12 @@ public class OrganizationEntity {
     @Column(name = "instagramUrl", nullable = true)
     private String instagramUrl;
 
+    @JsonIgnore
     @CreationTimestamp
     @Column(name = "created_date")
     private LocalDateTime createDate;
 
+    @JsonIgnore
     @UpdateTimestamp
     @Column(name = "last_modified_date")
     private LocalDateTime modifiedDate;
@@ -77,5 +83,6 @@ public class OrganizationEntity {
     @Column(name = "deleted", columnDefinition = "boolean default false")
     private Boolean deleted;
 
+    
 
 }

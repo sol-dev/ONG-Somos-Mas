@@ -1,13 +1,13 @@
 package com.team32.ong.service;
 
 import java.util.List;
+import java.util.Map;
 
+import com.github.fge.jsonpatch.JsonPatch;
 import com.team32.ong.dto.OrganizationDTO;
 import com.team32.ong.dto.OrganizationPublicDTO;
 import com.team32.ong.exception.custom.EmptyInputException;
 import com.team32.ong.model.OrganizationEntity;
-
-import org.springframework.data.web.JsonPath;
 
 import javassist.NotFoundException;
 
@@ -25,6 +25,6 @@ public interface IOrganizationService {
 
     public void softDelete(Long id) throws NotFoundException;
 
-    public OrganizationPublicDTO update( Long id, JsonPath patch) throws NotFoundException;
-    
+    public OrganizationPublicDTO update( Long id, JsonPatch patch) throws NotFoundException;
+
 }

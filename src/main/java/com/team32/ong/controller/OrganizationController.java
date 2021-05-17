@@ -1,5 +1,6 @@
 package com.team32.ong.controller;
 
+import com.github.fge.jsonpatch.JsonPatch;
 import com.team32.ong.dto.OrganizationDTO;
 import com.team32.ong.dto.OrganizationPublicDTO;
 import com.team32.ong.exception.custom.BadRequestException;
@@ -9,7 +10,6 @@ import com.team32.ong.service.IOrganizationService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.web.JsonPath;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -57,5 +57,11 @@ public class OrganizationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PatchMapping(value = "/update", consumes = "application/json-patch+json")  
+    public ResponseEntity<OrganizationPublicDTO> update(@RequestParam("id") Long id, @RequestBody JsonPatch patch) throws NotFoundException{
+        System.out.println("controller update");
+        OrganizationPublicDTO organization = organizationService.update(id, patch);
+        return new ResponseEntity<OrganizationPublicDTO>(organization,HttpStatus.OK);
+    }
 
 }
