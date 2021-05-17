@@ -1,10 +1,10 @@
 package com.team32.ong.service.impl;
 
 import com.team32.ong.constant.ConstantExceptionMessage;
-import com.team32.ong.constant.ConstantMessage;
-
 
 import com.team32.ong.dto.UserDTOResponse;
+import com.team32.ong.exception.custom.BadRequestException;
+import com.team32.ong.exception.custom.InvalidDataException;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +65,7 @@ public class CommentServiceImpl implements CommentService {
 
 		UserDTOResponse userResponse = userService.findById(userId);
 		if(!userResponse.equals(null)) {
-			commentDto.setUser(userResponse);
+			//commentDto.setUser(userResponse);
 		}
 	
 		if(commentBody == null) {
@@ -85,7 +85,7 @@ public class CommentServiceImpl implements CommentService {
 	@Override
 	public AddCommentBody update(Long id, AddCommentBody commentBody) throws Exception {
 
-		Comment oldComment = commentRepository.findById(id).get();
+		Comment oldComment = commentRepository.findById(id).orElse(null);
 		if (oldComment == null){
 			throw new NotFoundException(ConstantExceptionMessage.MSG_COMMENT_NOT_FOUND.concat(id.toString()));
 		}
@@ -96,14 +96,15 @@ public class CommentServiceImpl implements CommentService {
 
 		//todo: validar usuario
 
-		Comment newComment = new Comment();
-		newComment.setId(oldComment.getId());
-		newComment.setBody(commentBody.getBody());
-		newComment.setDeleted(false);
-		newComment.setUser(oldComment.getUser());
-		newComment.setNews(oldComment.getNews());
+		//Comment newComment = new Comment();
+		//newComment.setId(oldComment.getId());
+		//newComment.setBody(commentBody.getBody());
+		//newComment.setDeleted(false);
+		//newComment.setUser(oldComment.getUser());
+		//newComment.setNews(oldComment.getNews());
+		oldComment.setBody(commentBody.getBody());
 
-		commentRepository.save(newComment);
+		commentRepository.save(oldComment);
 
 		return commentBody;
 	}
