@@ -84,6 +84,12 @@ public class UserImplService implements UserService, UserDetailsService {
 
 		User userEntity = dtoToEntity(userDTORequest);
 
+		userEntity.setRole(role);
+
+		User userSave = userRepo.save(userEntity);
+
+		return entityToDto(userSave);
+
     }
 
     @Override
