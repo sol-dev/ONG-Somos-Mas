@@ -2,6 +2,7 @@ package com.team32.ong.controller;
 
 import com.team32.ong.dto.UserDTORequest;
 import com.team32.ong.dto.UserDTOResponse;
+import com.team32.ong.security.JWTUtil;
 import com.team32.ong.service.UserService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.web.bind.annotation.*;
+
 import com.team32.ong.dto.UserDtoRequestForAdmin;
 import com.team32.ong.exception.custom.BadRequestException;
+
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -41,6 +45,12 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getUser(@PathVariable("id") Long id){
         return null;
+    }
+
+    @GetMapping("/auth/me")
+    public ResponseEntity<UserDTOResponse> getMe(@RequestHeader("authorization") String jwt) throws NotFoundException{
+
+        return new ResponseEntity<>(userService.getMe(jwt), HttpStatus.OK);
     }
     
     @PostMapping

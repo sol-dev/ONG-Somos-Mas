@@ -1,6 +1,8 @@
 package com.team32.ong.service.impl;
 
 
+import java.util.Optional;
+
 import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.CategoryDTO;
 import com.team32.ong.exception.custom.BadRequestException;
@@ -13,6 +15,8 @@ import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javassist.NotFoundException;
 
 @Service
 public class CategoryImplService implements CategoryService {
@@ -41,7 +45,16 @@ public class CategoryImplService implements CategoryService {
 		}
 		repo.deleteById(id);
 	}
-    
+
+    public CategoryDTO findById(Long id) throws NotFoundException{
+        Optional<Category> category = repo.findById(id) ;
+        if(!category.isPresent()){
+            throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND+id);
+        }
+        return entityToDto(category.get());
+    }
+
+    //model mapper
     private Category dtoToEntity(CategoryDTO categoryDto){
         ModelMapper mapper = new ModelMapper();
         return mapper.map(categoryDto, Category.class);

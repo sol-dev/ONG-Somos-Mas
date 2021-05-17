@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.Optional;
 
@@ -48,56 +50,68 @@ public class UserImplService implements UserService, UserDetailsService {
     @Autowired
     private EmailService emailService;
     
-    @Autowired
-    private JWTUtil jwtUtil;
+	@Autowired
+	private JWTUtil jwtUtil;
 
-    @Override
-    public Map<String,Object> save(UserDTORequest userDTORequest) throws NotFoundException, BadRequestException, IOException {
-    	
-    	Map<String,Object> response = new HashMap<>();
-    	
-        if (userRepo.existsByEmail(userDTORequest.getEmail())){
-            throw new NotFoundException(ConstantExceptionMessage.MSG_EMAIL_IN_USE);
-        }else if (userDTORequest.getEmail() == null){
-            throw new BadRequestException(ConstantExceptionMessage.MSG_EMAIL_BAD_REQUEST);
-        }else if (userDTORequest.getFirstName() == null){
-            throw new BadRequestException(ConstantExceptionMessage.MSG_NAME_BAD_REQUEST);
-        }else if (userDTORequest.getLastName() == null){
-            throw new BadRequestException(ConstantExceptionMessage.MSG_LASTNAME_BAD_REQUEST);
-        }else if (userDTORequest.getPassword() == null){
-            throw new BadRequestException(ConstantExceptionMessage.MSG_PASSWORD_BAD_REQUEST);
-        }
-        
-        userDTORequest.setPassword(encoder.encode(userDTORequest.getPassword()));
+	@Override
+	public Map<String,Object> save(UserDTORequest userDTORequest) throws NotFoundException, BadRequestException, IOException {
+		Map<String,Object> response = new HashMap<>();
+		StringBuffer errorsFound = new StringBuffer();
 
-        Role role = roleRepo.findByName("USER");
+		if (userRepo.existsByEmail(userDTORequest.getEmail())){
+			throw new NotFoundException(ConstantExceptionMessage.MSG_EMAIL_IN_USE);
+		}else if (userDTORequest.getEmail().isEmpty()){
+			throw new BadRequestException(ConstantExceptionMessage.MSG_EMAIL_BAD_REQUEST);
+		}else if (userDTORequest.getFirstName().isEmpty()){
+			throw new BadRequestException(ConstantExceptionMessage.MSG_NAME_BAD_REQUEST);
+		}else if (userDTORequest.getLastName().isEmpty()){
+			throw new BadRequestException(ConstantExceptionMessage.MSG_LASTNAME_BAD_REQUEST);
+		}else if (userDTORequest.getPassword().isEmpty()){
+			throw new BadRequestException(ConstantExceptionMessage.MSG_PASSWORD_BAD_REQUEST);
+		}else if(!validateEmail(userDTORequest.getEmail())) {
+			errorsFound.append(ConstantExceptionMessage.MSG_EMAIL_BAD_REQUEST);
+		}else if(!validateString(userDTORequest.getLastName())) {
+			errorsFound.append(ConstantExceptionMessage.MSG_LASTNAME_NOT_NUMBER);
+		}else if(!validateString(userDTORequest.getFirstName())) {
+			errorsFound.append(ConstantExceptionMessage.MSG_NAME_NOT_NUMBER);
+		}else if(!validateString(userDTORequest.getLastName())) {
+			errorsFound.append(ConstantExceptionMessage.MSG_LASTNAME_NOT_NUMBER);
+		}else if(errorsFound.length() > 0) {
+			throw new BadRequestException(errorsFound.toString());
+		}
+		userDTORequest.setPassword(encoder.encode(userDTORequest.getPassword()));
+		Role role = roleRepo.findByName("USER");
+		User userEntity = dtoToEntity(userDTORequest);
+		userEntity.setRole(role);
+		User userSave = userRepo.save(userEntity);
 
-        User userEntity = dtoToEntity(userDTORequest);
+		emailService.sendEmail(userSave.getEmail());
 
-        userEntity.setRole(role);
-        User userSave = userRepo.save(userEntity);
-        
-        emailService.sendEmail(userSave.getEmail());
-
-       
         String jwt = jwtUtil.generateToken(userSave);
         
         response.put("userSave", entityToDto(userSave));
         response.put("jwt", jwt);
         
         return response;
+    }
 
-    }
+    @Override
+    public UserDTOResponse getMe(String jwt) throws NotFoundException{
+
+		String emailUser = jwtUtil.extractUsername(jwt.substring(7));
+
+    	User userEntity = userRepo.findByEmail(emailUser);
+
+    	if (userEntity == null){
+    		throw new NotFoundException(ConstantExceptionMessage.MSG_EMAIL_NOT_FOUND);
+		}
+    	return entityToDto(userEntity);
+
+	}
     
     @Override
-    public UserDTOResponse getOne(Long id) {
-    	User user = userRepo.getOne(id);
-		return entityToDto(user);
-    }
-    
-    @Override
-    public UserDTOResponse findById(Long id) {
-    	User user = userRepo.findById(id).orElseThrow(() -> new InvalidDataException("No existe un usuario con ese id"));
+    public UserDTOResponse findById(Long id) throws NotFoundException{
+    	User user = userRepo.findById(id).orElseThrow(() -> new NotFoundException("No existe un usuario con ese id"));
     	return entityToDto(user);
 
     }
@@ -175,6 +189,7 @@ public class UserImplService implements UserService, UserDetailsService {
 		}
 		User userEntity = UserDtoRequestForUserToEntity(userDto);
 		userEntity.setId(userDtoFound.get().getId());
+		userEntity.setPassword(encoder.encode(userDto.getPassword()));
 		Role roleEntity = roleRepo.findByName(userDto.getRole().getName());
 		userEntity.setRole(roleEntity);
 		userRepo.save(userEntity);
@@ -203,6 +218,7 @@ public class UserImplService implements UserService, UserDetailsService {
 		}
 		Role roleEntity = roleRepo.findByName("ROLE_USER");
 		User userEntity = dtoToEntity(userDto);
+		userEntity.setPassword(encoder.encode(userDto.getPassword()));
 		userEntity.setId(userDtoFound.get().getId());
 		userEntity.setRole(roleEntity);
 		userRepo.save(userEntity);
@@ -216,5 +232,22 @@ public class UserImplService implements UserService, UserDetailsService {
 		}
 		userRepo.deleteById(id);
 		return ConstantExceptionMessage.MSG_DELETE_OK + id;
+	}
+
+	private boolean validateEmail(String email) {
+		Pattern regex = Pattern.compile("^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$");
+		Matcher m = regex.matcher(email);
+		return m.find() ? true : false;
+	}
+
+	private boolean validateString(String validation) {
+		boolean flag = true;
+		for(int i=0;i < validation.length();i++) {
+			if(Character.isDigit(validation.charAt(i))) {
+				flag=false;
+				break;
+			}
+		}
+		return flag;
 	}
 }
