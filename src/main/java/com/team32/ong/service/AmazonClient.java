@@ -35,7 +35,7 @@ public class AmazonClient {
     @Value("${amazonProperties.secretKey}")
     private String secretKey;
 
-    public void checkConnection() throws Throwable {
+    public AmazonS3 makeS3Client() throws Throwable {
     	try {
     		BasicAWSCredentials creds = new BasicAWSCredentials(this.accessKey, this.secretKey);
     	    AmazonS3 s3client = AmazonS3ClientBuilder.standard()
@@ -43,12 +43,13 @@ public class AmazonClient {
                     .withCredentials(new AWSStaticCredentialsProvider(creds))
                     .build();
     	    if(!s3client.doesBucketExistV2(bucketName)){
-    	    	throw new IOException("Problemas con Amazon. Nombre del bucket equivocado");
+    	    	throw new NotFoundException("Problemas con Amazon. Nombre del bucket equivocado");
     	    } 
+    	    return s3client;
     	} catch (AmazonServiceException e) {
-    		throw new Forbidden("Problemas con Amazon. AmazonServiceException. accessKey o secretKey son incorrectas");
+    		throw new Forbidden("Problemas con Amazon. AmazonServiceException: accessKey o secretKey son incorrectas");
         } catch (SdkClientException e) {
-        	throw new Forbidden("Problemas con Amazon. SdkClientException");
+        	throw new Forbidden("Problemas con Amazon. SdkClientException: no se pudo establecer la conexión");
         }
 
     }
@@ -66,12 +67,7 @@ public class AmazonClient {
 	}
 	
 	private void uploadFileTos3bucket(String fileName, File file) throws Throwable {
-		checkConnection();
-		BasicAWSCredentials creds = new BasicAWSCredentials(this.accessKey, this.secretKey);
-	    AmazonS3 s3client = AmazonS3ClientBuilder.standard()
-                .withRegion("us-east-1")
-                .withCredentials(new AWSStaticCredentialsProvider(creds))
-                .build();
+		AmazonS3 s3client = makeS3Client();
 	    s3client.putObject(new PutObjectRequest(bucketName, fileName, file)
             .withCannedAcl(CannedAccessControlList.PublicRead));
 	    
@@ -95,15 +91,10 @@ public class AmazonClient {
 		if(fileUrl.isEmpty()|fileUrl.isBlank()) {
 			throw new EmptyInputException("Tiene que poner la dirección URL del archivo que quiere borrar");
 		}
-		checkConnection();
 	    String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
-	    BasicAWSCredentials creds = new BasicAWSCredentials(this.accessKey, this.secretKey);
-	    AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
-                .withRegion("us-east-1")
-                .withCredentials(new AWSStaticCredentialsProvider(creds))
-                .build();
-	    if(s3Client.doesObjectExist(bucketName, fileName)) {
-	    	s3Client.deleteObject(bucketName, fileName);
+	    AmazonS3 s3client = makeS3Client();
+	    if(s3client.doesObjectExist(bucketName, fileName)) {
+	    	s3client.deleteObject(bucketName, fileName);
 	    } else {
 	    	throw new NotFoundException("El archivo " + fileName + " no existe");
 	    }
@@ -114,14 +105,9 @@ public class AmazonClient {
 		if(imageUrl.isEmpty()|imageUrl.isBlank()) {
 			throw new EmptyInputException("Tiene que poner la dirección URL de la imagen");
 		}
-		checkConnection();
 	    String fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
-	    BasicAWSCredentials creds = new BasicAWSCredentials(this.accessKey, this.secretKey);
-	    AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
-                .withRegion("us-east-1")
-                .withCredentials(new AWSStaticCredentialsProvider(creds))
-                .build();
-	    if(s3Client.doesObjectExist(bucketName, fileName)) {
+	    AmazonS3 s3client = makeS3Client();
+	    if(s3client.doesObjectExist(bucketName, fileName)) {
 	    	return true;
 	    } 
 		return false;

@@ -11,6 +11,7 @@ import com.team32.ong.model.Role;
 import com.team32.ong.model.User;
 import com.team32.ong.repository.RoleRepository;
 import com.team32.ong.repository.UserRepository;
+import com.team32.ong.security.JWTUtil;
 import com.team32.ong.service.EmailService;
 import com.team32.ong.service.UserService;
 import javassist.NotFoundException;
@@ -48,6 +49,9 @@ public class UserImplService implements UserService, UserDetailsService {
     @Autowired
     private EmailService emailService;
 
+	@Autowired
+	private JWTUtil jwtUtil;
+
 	@Override
 	public UserDTOResponse save(UserDTORequest userDTORequest) throws NotFoundException, BadRequestException, IOException {
 
@@ -75,17 +79,28 @@ public class UserImplService implements UserService, UserDetailsService {
 			throw new BadRequestException(errorsFound.toString());
 		}
 		userDTORequest.setPassword(encoder.encode(userDTORequest.getPassword()));
-
 		Role role = roleRepo.findByName("USER");
-
 		User userEntity = dtoToEntity(userDTORequest);
-
 		userEntity.setRole(role);
 		User userSave = userRepo.save(userEntity);
 
 		emailService.sendEmail(userSave.getEmail());
 
 		return entityToDto(userSave);
+
+    }
+
+    @Override
+    public UserDTOResponse getMe(String jwt) throws NotFoundException{
+
+		String emailUser = jwtUtil.extractUsername(jwt.substring(7));
+
+    	User userEntity = userRepo.findByEmail(emailUser);
+
+    	if (userEntity == null){
+    		throw new NotFoundException(ConstantExceptionMessage.MSG_EMAIL_NOT_FOUND);
+		}
+    	return entityToDto(userEntity);
 
 	}
     
@@ -167,6 +182,7 @@ public class UserImplService implements UserService, UserDetailsService {
 		}
 		User userEntity = UserDtoRequestForUserToEntity(userDto);
 		userEntity.setId(userDtoFound.get().getId());
+		userEntity.setPassword(encoder.encode(userDto.getPassword()));
 		Role roleEntity = roleRepo.findByName(userDto.getRole().getName());
 		userEntity.setRole(roleEntity);
 		userRepo.save(userEntity);
@@ -195,6 +211,7 @@ public class UserImplService implements UserService, UserDetailsService {
 		}
 		Role roleEntity = roleRepo.findByName("ROLE_USER");
 		User userEntity = dtoToEntity(userDto);
+		userEntity.setPassword(encoder.encode(userDto.getPassword()));
 		userEntity.setId(userDtoFound.get().getId());
 		userEntity.setRole(roleEntity);
 		userRepo.save(userEntity);

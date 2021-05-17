@@ -20,6 +20,7 @@ import org.springframework.web.client.HttpClientErrorException.Forbidden;
 import org.springframework.web.client.HttpClientErrorException.Unauthorized;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.team32.ong.exception.custom.BadRequestException;
@@ -88,8 +89,15 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
     
     @Override
-    protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException ex, HttpHeaders headers, HttpStatus status, WebRequest req) {
         String error = "Falta el parámetro " + ex.getParameterName();
+        ErrorResponse errorFound = new ErrorResponse(400, new Date(), error, req.getContextPath());
+        return new ResponseEntity<Object>(error, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
+    
+    protected ResponseEntity<Object> handleMissingServletRequestPart(MissingServletRequestPartException ex, HttpHeaders headers, HttpStatus status, WebRequest req) {
+        String error = "No se envió el parámetro " + ex.getRequestPartName();
+        ErrorResponse errorFound = new ErrorResponse(400, new Date(), error, req.getContextPath());
         return new ResponseEntity<Object>(error, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
     
