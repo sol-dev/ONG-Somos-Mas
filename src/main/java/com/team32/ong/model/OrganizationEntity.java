@@ -4,15 +4,20 @@ package com.team32.ong.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+
+import com.team32.ong.constant.ConstantExceptionMessage;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -30,11 +35,11 @@ public class OrganizationEntity {
     @Column(name = "id")
     private Long id;
 
-    @NotEmpty
+    @NotEmpty(message = ConstantExceptionMessage.MSG_NAME_BAD_REQUEST)
     @Column(name = "name", nullable = false)
     private String name;
 
-    @NotEmpty
+    @NotEmpty(message = ConstantExceptionMessage.MSG_IMAGE_BAD_REQUEST)
     @Column(name = "image", nullable = false)
     private String image;
 
@@ -45,8 +50,8 @@ public class OrganizationEntity {
     private Integer phone;
 
     @Column(name = "email", nullable = false)
-    @NotEmpty
-    @Email
+    @NotEmpty(message = ConstantExceptionMessage.MSG_EMAIL_BAD_REQUEST)
+    @Email(message = ConstantExceptionMessage.MSG_EMAIL_INVALID)
     private String email;
 
     @Column (name = "welcome_text")
@@ -54,6 +59,15 @@ public class OrganizationEntity {
 
     @Column(name = "aboutUsText")
     private String aboutUsText;
+
+    @Column(name = "facebookUrl", nullable = true)
+    private String facebookUrl;
+
+    @Column(name = "linkedinUrl", nullable = true)
+    private String linkedinUrl;
+
+    @Column(name = "instagramUrl", nullable = true)
+    private String instagramUrl;
 
     @CreationTimestamp
     @Column(name = "created_date")
@@ -63,8 +77,9 @@ public class OrganizationEntity {
     @Column(name = "last_modified_date")
     private LocalDateTime modifiedDate;
 
-    @Column(name = "deleted")
+    @Column(name = "deleted", columnDefinition = "boolean default false")
     private Boolean deleted;
 
+    
 
 }
