@@ -73,5 +73,4 @@ public class OrganizationEntity {
     @Column(name = "deleted", columnDefinition = "boolean default false")
     private Boolean deleted;
     
-    
 }
