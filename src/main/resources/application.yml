@@ -26,11 +26,7 @@ spring:
 amazonProperties:
     accessKey: AKIA5YX3QC3YARN66KVE
     secretKey: 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
-<<<<<<< HEAD
-    bucketName: alkemy-somos-mas
 
-=======
->>>>>>> 975786ef36f0f106c6084877a5337ad8421104da
 
 app:
   sengrid:
