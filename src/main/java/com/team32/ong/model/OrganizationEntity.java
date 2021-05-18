@@ -26,12 +26,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-<<<<<<< HEAD
-@Getter
-=======
 @SQLDelete(sql = "UPDATE organization SET deleted=true WHERE id = ?")
 @Where(clause = "deleted = false")
->>>>>>> 5600f396f47ae53163769d1b5048e17c897518e6
 public class OrganizationEntity {
 
     @Id
@@ -73,12 +69,10 @@ public class OrganizationEntity {
     @Column(name = "instagramUrl", nullable = true)
     private String instagramUrl;
 
-    @JsonIgnore
     @CreationTimestamp
     @Column(name = "created_date")
     private LocalDateTime createDate;
 
-    @JsonIgnore
     @UpdateTimestamp
     @Column(name = "last_modified_date")
     private LocalDateTime modifiedDate;
