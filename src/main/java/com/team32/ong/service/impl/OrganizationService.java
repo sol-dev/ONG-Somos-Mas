@@ -9,8 +9,8 @@ import javax.validation.Valid;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.fge.jsonpatch.JsonPatch;
-import com.github.fge.jsonpatch.JsonPatchException;
+//import com.github.fge.jsonpatch.JsonPatch;
+//import com.github.fge.jsonpatch.JsonPatchException;
 import com.team32.ong.constant.*;
 import com.team32.ong.dto.OrganizationDTO;
 import com.team32.ong.dto.OrganizationPublicDTO;
@@ -99,26 +99,6 @@ public class OrganizationService implements IOrganizationService{
             throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND+id);
         }
         organizationRepository.deleteById(id);
-    }
-
-    public OrganizationPublicDTO update(Long id, JsonPatch patch) throws NotFoundException {
-        OrganizationEntity organization = findById(id);
-        OrganizationEntity patchedEntity= null;
-        try{
-            patchedEntity= applyPatch(patch, organization);  
-            System.out.println("patch applied");      
-        }catch(JsonPatchException | JsonProcessingException e) {
-            System.out.println("INTERNAL ERROR SERVER: PATCH");
-            System.out.println(e.getMessage());
-        }
-        return convertToPublicDto(organizationRepository.saveAndFlush(patchedEntity));    
-    }
-
-    private OrganizationEntity applyPatch(JsonPatch patch, OrganizationEntity organization) throws JsonPatchException, JsonProcessingException{
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode patched = patch.apply(objectMapper.convertValue(organization, JsonNode.class));
-        System.out.println("convert value");
-        return objectMapper.treeToValue(patched, OrganizationEntity.class);
     }
 
 }

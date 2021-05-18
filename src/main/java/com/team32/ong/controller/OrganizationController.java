@@ -1,6 +1,5 @@
 package com.team32.ong.controller;
 
-import com.github.fge.jsonpatch.JsonPatch;
 import com.team32.ong.dto.OrganizationDTO;
 import com.team32.ong.dto.OrganizationPublicDTO;
 import com.team32.ong.exception.custom.BadRequestException;
@@ -50,12 +49,5 @@ public class OrganizationController {
         organizationService.softDelete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-    @PatchMapping(value = "/update", consumes = "application/json-patch+json")  
-    public ResponseEntity<OrganizationPublicDTO> update(@RequestParam("id") Long id, @RequestBody JsonPatch patch) throws NotFoundException{
-        System.out.println("controller update");
-        OrganizationPublicDTO organization = organizationService.update(id, patch);
-        return new ResponseEntity<OrganizationPublicDTO>(organization,HttpStatus.OK);
-    }
-
+   
 }
