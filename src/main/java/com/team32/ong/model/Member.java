@@ -1,7 +1,5 @@
 package com.team32.ong.model;
 
-
-import java.sql.Date;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -10,14 +8,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.AllArgsConstructor;
@@ -39,6 +36,7 @@ public class Member{
     private Long memberId;
 
     @NotEmpty
+    @Pattern(regexp = "[^0-9]*", message = "El campo name no debe contener numeros!!")
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -55,6 +53,7 @@ public class Member{
     @Column(name=" image", nullable = false)
     private String image;
 
+    @Pattern(regexp = "[^0-9]*", message = "El campo name no debe contener numeros!!")
     @Column(name = "description", nullable = true)
     private String description;
     
