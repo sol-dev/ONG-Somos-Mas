@@ -12,9 +12,12 @@ public interface IOrganizationService {
 
     public OrganizationDTO save(OrganizationDTO dto) throws EmptyInputException;
 
-    public OrganizationDTO findById(final Long id) throws NotFoundException;
+    public OrganizationDTO findDtoById(Long id)throws NotFoundException;
+  
+    public OrganizationPublicDTO findPublicDtoById(Long id) throws NotFoundException;
 
     public List<OrganizationPublicDTO> findAll();
 
     public void softDelete(Long id) throws NotFoundException;
+
 }
