@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import com.team32.ong.service.AmazonClient;
+import com.team32.ong.component.AmazonClient;
 
 @RestController
 @RequestMapping("/api/v1/storage/")
