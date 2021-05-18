@@ -16,8 +16,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javassist.NotFoundException;
-
 @Service
 public class CategoryImplService implements CategoryService {
 
@@ -41,7 +39,7 @@ public class CategoryImplService implements CategoryService {
 	public void delete(Long id) throws NotFoundException {
 		boolean categoryExists = repo.existsById(id);
 		if(!categoryExists) {
-			throw new NotFoundException(ConstantMessage.MSG_NOT_FOUND + id);
+			throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND + id);
 		}
 		repo.deleteById(id);
 	}

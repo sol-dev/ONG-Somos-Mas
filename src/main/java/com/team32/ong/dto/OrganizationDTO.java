@@ -26,4 +26,10 @@ public class OrganizationDTO {
 
     private String aboutUsText;
 
+    private String facebookUrl;
+
+    private String linkedinUrl;
+
+    private String instagramUrl;
+
 }

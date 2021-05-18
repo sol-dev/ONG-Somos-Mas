@@ -6,8 +6,6 @@ import javassist.NotFoundException;
 
 import org.springframework.stereotype.Service;
 
-import javassist.NotFoundException;
-
 @Service
 public interface CategoryService {
 
