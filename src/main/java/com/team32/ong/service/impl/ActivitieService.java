@@ -3,6 +3,7 @@ package com.team32.ong.service.impl;
 import com.amazonaws.services.mq.model.NotFoundException;
 import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.ActivitiesDTO;
+import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.exception.custom.EmptyInputException;
 import com.team32.ong.model.Activities;
 import com.team32.ong.repository.ActivitiesRepository;
@@ -48,6 +49,10 @@ public class ActivitieService implements IActivitiesServices {
 
         if (!activitiesRepository.existsById(idActivities)){
             throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUD_ACTIVITY);
+        }else if (activitiesDTO.getContent().isEmpty()){
+            throw new BadRequestException(ConstantExceptionMessage.MSG_CONTENT_BAD_REQUEST);
+        }else if (activitiesDTO.getName().isEmpty()){
+            throw new BadRequestException(ConstantExceptionMessage.MSG_NAME_BAD_REQUEST);
         }
 
         Activities activities = dtoToModel(activitiesDTO);
