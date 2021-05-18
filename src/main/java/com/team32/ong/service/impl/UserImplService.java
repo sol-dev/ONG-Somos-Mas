@@ -28,11 +28,11 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.Optional;
-
 
 @Service
 public class UserImplService implements UserService, UserDetailsService {
@@ -138,6 +138,8 @@ public class UserImplService implements UserService, UserDetailsService {
         return new org.springframework.security.core.userdetails.
                 User(user.getEmail(), user.getPassword(), rol);
     }
+
+    
     @Override
     public User dtoToEntity(UserDTORequest userDTORequest){
         ModelMapper mapper = new ModelMapper();
