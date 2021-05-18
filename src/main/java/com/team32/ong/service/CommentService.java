@@ -1,5 +1,6 @@
 package com.team32.ong.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
@@ -18,5 +19,6 @@ public interface CommentService {
 	CommentDto getOne(Long id);
 	CommentDto findById(Long id);
 	ResponseEntity<CommentDto> createNewComment(Long newsId, Long userId, AddCommentBody commentBody) throws BadRequestException, NotFoundException;
-
+	List<String> getAll();
+	
 }

@@ -1,6 +1,9 @@
 package com.team32.ong.service.impl;
 
 import com.team32.ong.dto.UserDTOResponse;
+
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -93,6 +96,11 @@ public class CommentServiceImpl implements CommentService {
 		ModelMapper mapper = new ModelMapper();
 		Comment comment = mapper.map(commentDto, Comment.class);
 		return comment;
+	}
+
+	@Override
+	public List<String> getAll() {
+		return commentRepository.findAllByBody();
 	}
 
 

@@ -67,12 +67,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT,"/api/v1/categories").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE,"/api/v1/categories/{id}").hasRole("ADMIN")
                 //COMMENT
-                .antMatchers(HttpMethod.GET,"/api/v1/comment/id").permitAll()
-                .antMatchers(HttpMethod.GET,"/api/v1/comment/posts/id/comments").hasAnyRole("USER","ADMIN")
-                .antMatchers(HttpMethod.GET,"/api/v1/comment").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST,"/api/v1/comment/addComment").hasAnyRole("USER","ADMIN")
-                .antMatchers(HttpMethod.PUT,"/api/v1/comment/{id}").hasAnyRole("USER","ADMIN")
-                .antMatchers(HttpMethod.DELETE,"/api/v1/comment/{id}").hasAnyRole("USER","ADMIN")
+                .antMatchers(HttpMethod.GET,"/api/v1/news/comment/id").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/v1/news/comment/posts/id/comments").hasAnyRole("USER","ADMIN")
+                .antMatchers(HttpMethod.GET,"/api/v1/news/comment/comments").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/api/v1/news/comment/addComment").hasAnyRole("USER","ADMIN")
+                .antMatchers(HttpMethod.PUT,"/api/v1/news/comment/{id}").hasAnyRole("USER","ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/api/v1/news/comment/{id}").hasAnyRole("USER","ADMIN")
                 //CONTACT
                 .antMatchers(HttpMethod.GET,"/api/v1/contacts/{id}").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/v1/contacts/").hasRole("ADMIN")
@@ -115,7 +115,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE,"/api/v1/users/delete/{id}").hasAnyRole("USER","ADMIN")
                 //AUTH
                 //.antMatchers(HttpMethod.POST,"/api/v1/auth/authenticate").hasRole("USER")
-                .antMatchers("/api/v1/storage/**").hasAnyRole("USER","ADMIN")
+                .antMatchers("/api/v1/storage/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
