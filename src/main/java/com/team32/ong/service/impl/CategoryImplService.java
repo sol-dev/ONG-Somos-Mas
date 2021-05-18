@@ -11,13 +11,13 @@ import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.model.Category;
 import com.team32.ong.repository.CategoryRepository;
 import com.team32.ong.service.CategoryService;
+
+import javassist.NotFoundException;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javassist.NotFoundException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CategoryImplService implements CategoryService {
@@ -40,6 +40,15 @@ public class CategoryImplService implements CategoryService {
         return entityToDto(category);
     }
 
+    @Override
+	public void delete(Long id) throws NotFoundException {
+		boolean categoryExists = repo.existsById(id);
+		if(!categoryExists) {
+			throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND + id);
+		}
+		repo.deleteById(id);
+	}
+    
     public CategoryDTO findById(Long id) throws NotFoundException{
         Optional<Category> category = repo.findById(id) ;
         if(!category.isPresent()){
@@ -67,5 +76,4 @@ public class CategoryImplService implements CategoryService {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(category, CategoryDTO.class);
     }
-
 }
