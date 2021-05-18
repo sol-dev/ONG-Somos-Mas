@@ -116,7 +116,4 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     	ErrorResponse errorFound = new ErrorResponse(500, new Date(), message, req.getRequestURI());
         return new ResponseEntity<>(errorFound, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    
 }
-
-

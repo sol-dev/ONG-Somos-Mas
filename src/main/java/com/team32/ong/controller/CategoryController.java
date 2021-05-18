@@ -4,12 +4,13 @@ package com.team32.ong.controller;
 import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.CategoryDTO;
 import com.team32.ong.exception.custom.BadRequestException;
-import com.team32.ong.exception.custom.InvalidDataException;
 import com.team32.ong.service.CategoryService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,6 +41,12 @@ public class CategoryController {
     @GetMapping(value = "/id")
     public ResponseEntity<CategoryDTO> findById(@RequestParam("id") Long id) throws NotFoundException{
         return new ResponseEntity<CategoryDTO>(categoryService.findById(id), HttpStatus.OK);
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteCategory(@PathVariable Long id) throws NotFoundException{
+    	categoryService.delete(id);
+    	return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
