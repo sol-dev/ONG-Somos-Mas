@@ -49,14 +49,15 @@ public class CategoryImplService implements CategoryService {
             if (categoryDTO.getName() == null || categoryDTO.getName() == ""){
                 throw new BadRequestException(ConstantMessage.MSG_NAME_BAD_REQUEST);
             }
-            if (categoryDTO.getDescription() == null || categoryDTO.getName() == ""){
+            if (categoryDTO.getDescription() == null || categoryDTO.getDescription() == ""){
                 throw new BadRequestException(ConstantMessage.MSG_DESCRIPTION_EMPTY);
             }
 
-            
+            oldcategory = modifyDtoToEntitity(categoryDTO);
+            oldcategory.setId(id);
 
-            repo.save(dtoToEntity(categoryDTO));
-            return categoryDTO;
+            repo.save((oldcategory));
+            return entityToDto(oldcategory);
 
 
     }

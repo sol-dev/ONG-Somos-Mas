@@ -3,16 +3,13 @@ package com.team32.ong.controller;
 import com.team32.ong.dto.CategoryDTO;
 import com.team32.ong.dto.ModifyCategoryDTO;
 import com.team32.ong.exception.custom.BadRequestException;
-import com.team32.ong.exception.custom.InvalidDataException;
 import com.team32.ong.service.CategoryService;
-import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,7 +35,6 @@ public class CategoryController {
 
         CategoryDTO updatedCategory = categoryService.update(id, categoryDTO);
 
-        response.put("message", "Categoria actualizada!");
         response.put("categorie", updatedCategory);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
