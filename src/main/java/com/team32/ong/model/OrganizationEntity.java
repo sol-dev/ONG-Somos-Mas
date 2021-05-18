@@ -4,6 +4,7 @@ package com.team32.ong.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Where;
 import org.hibernate.annotations.CreationTimestamp;
@@ -62,6 +63,15 @@ public class OrganizationEntity {
     @OneToMany(targetEntity=Slide.class, mappedBy="organization", fetch = FetchType.LAZY, cascade=CascadeType.ALL)
 	private List<Slide> slides = new ArrayList<>();
 
+    @Column(name = "facebookUrl", nullable = true)
+    private String facebookUrl;
+
+    @Column(name = "linkedinUrl", nullable = true)
+    private String linkedinUrl;
+
+    @Column(name = "instagramUrl", nullable = true)
+    private String instagramUrl;
+
     @CreationTimestamp
     @Column(name = "created_date")
     private LocalDateTime createDate;
@@ -72,5 +82,11 @@ public class OrganizationEntity {
 
     @Column(name = "deleted", columnDefinition = "boolean default false")
     private Boolean deleted;
+<<<<<<< HEAD
     
+=======
+
+    
+
+>>>>>>> 9f6d49100e8e45e85d54b0882ec4923d27c94d96
 }

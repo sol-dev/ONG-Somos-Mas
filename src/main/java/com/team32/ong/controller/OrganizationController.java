@@ -41,7 +41,7 @@ public class OrganizationController {
 
     @GetMapping(value = "/id")
     public ResponseEntity<OrganizationDTO> findById( @RequestParam("id") Long id) throws NotFoundException{
-        return new ResponseEntity<OrganizationDTO>(organizationService.findById(id), HttpStatus.OK);
+        return new ResponseEntity<OrganizationDTO>(organizationService.findDtoById(id), HttpStatus.OK);
     }
 
     @DeleteMapping(value="/delete")
@@ -49,7 +49,5 @@ public class OrganizationController {
         organizationService.softDelete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-
-
+   
 }

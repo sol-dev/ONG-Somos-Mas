@@ -31,4 +31,10 @@ public class OrganizationDTO {
     
     private List<Slide> slides;
 
+    private String facebookUrl;
+
+    private String linkedinUrl;
+
+    private String instagramUrl;
+
 }
