@@ -6,14 +6,10 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.fge.jsonpatch.JsonPatch;
-import com.github.fge.jsonpatch.JsonPatchException;
 import com.team32.ong.constant.*;
 import com.team32.ong.dto.OrganizationDTO;
 import com.team32.ong.dto.OrganizationPublicDTO;
+import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.exception.custom.EmptyInputException;
 import com.team32.ong.model.OrganizationEntity;
 import com.team32.ong.repository.IOrganizationRepository;
@@ -101,24 +97,29 @@ public class OrganizationService implements IOrganizationService{
         organizationRepository.deleteById(id);
     }
 
-    public OrganizationPublicDTO update(Long id, JsonPatch patch) throws NotFoundException {
-        OrganizationEntity organization = findById(id);
-        OrganizationEntity patchedEntity= null;
-        try{
-            patchedEntity= applyPatch(patch, organization);  
-            System.out.println("patch applied");      
-        }catch(JsonPatchException | JsonProcessingException e) {
-            System.out.println("INTERNAL ERROR SERVER: PATCH");
-            System.out.println(e.getMessage());
+    public OrganizationPublicDTO update(Long id,OrganizationPublicDTO updates) throws NotFoundException{
+        Optional<OrganizationEntity> organization = organizationRepository.findById(id) ;
+        if(!organization.isPresent()){
+            throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND+id);
         }
-        return convertToPublicDto(organizationRepository.saveAndFlush(patchedEntity));    
-    }
-
-    private OrganizationEntity applyPatch(JsonPatch patch, OrganizationEntity organization) throws JsonPatchException, JsonProcessingException{
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode patched = patch.apply(objectMapper.convertValue(organization, JsonNode.class));
-        System.out.println("convert value");
-        return objectMapper.treeToValue(patched, OrganizationEntity.class);
+        OrganizationEntity updatedOrganization = organization.get();
+        int i=0;
+        if(updates.getFacebookUrl().length()> 0 || updates.getFacebookUrl().isBlank() == false){
+            updatedOrganization.setFacebookUrl(updates.getFacebookUrl()); 
+            i++;
+        }
+        if(updates.getInstagramUrl().length()>0 || updates.getInstagramUrl().isBlank() == false){
+            updatedOrganization.setInstagramUrl(updates.getInstagramUrl());
+            i++;
+        }
+        if( updates.getLinkedinUrl().length()>0 || updates.getLinkedinUrl().isBlank() == false){
+            updatedOrganization.setLinkedinUrl(updates.getLinkedinUrl());
+            i++;
+        }
+        if (i==0){
+            throw new BadRequestException(ConstantExceptionMessage.MSG_EMPTY_URL);
+        }
+        return convertToPublicDto(organizationRepository.save(updatedOrganization));
     }
 
 }
