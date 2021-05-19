@@ -27,4 +27,5 @@ public class ConstantExceptionMessage {
     public static final String MSG_EMPTY_ACTIVITY = "El contenido de la actividad no puede estar vacio";
     public static final String MSG_ERROR_DELETE_NEWS= "No se encontro la Noticia que desea borrar";
 
+
 }
