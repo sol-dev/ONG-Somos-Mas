@@ -21,10 +21,12 @@ spring:
     jwt:
       secret-key: secret-key
       expiration-length: 3600000
+
       
 amazonProperties:
     accessKey: AKIA5YX3QC3YARN66KVE
     secretKey: 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
+
 
 app:
   sengrid:
