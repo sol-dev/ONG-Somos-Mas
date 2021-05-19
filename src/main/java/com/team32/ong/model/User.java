@@ -40,6 +40,9 @@ public class User implements Serializable, UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
+    @Column(unique = true)
+    private String username;
+    @NotNull
     @Column(length = 50)
     private String firstName;
     @NotNull
