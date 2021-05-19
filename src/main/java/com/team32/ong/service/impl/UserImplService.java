@@ -1,5 +1,22 @@
 package com.team32.ong.service.impl;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.team32.ong.component.Validation;
 import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.NewUserDto;
 import com.team32.ong.dto.UserDTORequest;
@@ -13,27 +30,8 @@ import com.team32.ong.repository.UserRepository;
 import com.team32.ong.security.JWTUtil;
 import com.team32.ong.service.EmailService;
 import com.team32.ong.service.UserService;
+
 import javassist.NotFoundException;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service
 public class UserImplService implements UserService, UserDetailsService {
@@ -52,6 +50,9 @@ public class UserImplService implements UserService, UserDetailsService {
 
 	@Autowired
 	private JWTUtil jwtUtil;
+	
+	@Autowired
+	private Validation validations;
 
 	@Override
 	public UserDTOResponse save(UserDTORequest userDTORequest) throws NotFoundException, BadRequestException, IOException {
@@ -68,14 +69,12 @@ public class UserImplService implements UserService, UserDetailsService {
 			throw new BadRequestException(ConstantExceptionMessage.MSG_LASTNAME_BAD_REQUEST);
 		}else if (userDTORequest.getPassword().isEmpty()){
 			throw new BadRequestException(ConstantExceptionMessage.MSG_PASSWORD_BAD_REQUEST);
-		}else if(!validateEmail(userDTORequest.getEmail())) {
+		}else if(!validations.validateEmail(userDTORequest.getEmail())) {
 			errorsFound.append(ConstantExceptionMessage.MSG_EMAIL_BAD_REQUEST);
-		}else if(!validateString(userDTORequest.getLastName())) {
+		}else if(validations.stringHasDigit(userDTORequest.getLastName())) {
 			errorsFound.append(ConstantExceptionMessage.MSG_LASTNAME_NOT_NUMBER);
-		}else if(!validateString(userDTORequest.getFirstName())) {
+		}else if(validations.stringHasDigit(userDTORequest.getFirstName())) {
 			errorsFound.append(ConstantExceptionMessage.MSG_NAME_NOT_NUMBER);
-		}else if(!validateString(userDTORequest.getLastName())) {
-			errorsFound.append(ConstantExceptionMessage.MSG_LASTNAME_NOT_NUMBER);
 		}else if(errorsFound.length() > 0) {
 			throw new BadRequestException(errorsFound.toString());
 		}
@@ -207,13 +206,13 @@ public class UserImplService implements UserService, UserDetailsService {
 		if(userEntity.getPassword().isEmpty()) {
 			errorsFound.append(ConstantExceptionMessage.MSG_PASSWORD_BAD_REQUEST);
 		}
-		if(!validateEmail(userEntity.getEmail())) {
+		if(!validations.validateEmail(userEntity.getEmail())) {
 			errorsFound.append(ConstantExceptionMessage.MSG_EMAIL_BAD_REQUEST);
 		}
-		if(!validateString(userEntity.getFirstName())) {
+		if(validations.stringHasDigit(userEntity.getFirstName())) {
 			errorsFound.append(ConstantExceptionMessage.MSG_NAME_NOT_NUMBER);
 		}
-		if(!validateString(userEntity.getLastName())) {
+		if(validations.stringHasDigit(userEntity.getLastName())) {
 			errorsFound.append(ConstantExceptionMessage.MSG_LASTNAME_NOT_NUMBER);
 		}
 		if(userEntity.getRole().getName().equalsIgnoreCase("ROLE_ADMIN")) {
@@ -265,13 +264,13 @@ public class UserImplService implements UserService, UserDetailsService {
 		if(userEntity.getPassword().isEmpty()) {
 			errorsFound.append(ConstantExceptionMessage.MSG_PASSWORD_BAD_REQUEST);
 		}
-		if(!validateEmail(userEntity.getEmail())) {
+		if(!validations.validateEmail(userEntity.getEmail())) {
 			errorsFound.append(ConstantExceptionMessage.MSG_EMAIL_BAD_REQUEST);
 		}
-		if(!validateString(userEntity.getFirstName())) {
+		if(validations.stringHasDigit(userEntity.getFirstName())) {
 			errorsFound.append(ConstantExceptionMessage.MSG_NAME_NOT_NUMBER);
 		}
-		if(!validateString(userEntity.getLastName())) {
+		if(validations.stringHasDigit(userEntity.getLastName())) {
 			errorsFound.append(ConstantExceptionMessage.MSG_LASTNAME_NOT_NUMBER);
 		}
 		if(errorsFound.length() > 0) {
@@ -293,21 +292,4 @@ public class UserImplService implements UserService, UserDetailsService {
 		userRepo.deleteById(id);
 		return ConstantExceptionMessage.MSG_DELETE_OK + id;
 	}
-	
-	private boolean validateEmail(String email) {
-    	Pattern regex = Pattern.compile("^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$");
-    	Matcher m = regex.matcher(email);
-    	return m.find() ? true : false;
-    }
-	
-	private boolean validateString(String validation) {
-		boolean flag = true;		
-    	for(int i=0;i < validation.length();i++) {
-    		if(Character.isDigit(validation.charAt(i))) {
-    			flag=false;
-    			break;
-    		}
-    	}
-    	return flag;
-    }
 }
