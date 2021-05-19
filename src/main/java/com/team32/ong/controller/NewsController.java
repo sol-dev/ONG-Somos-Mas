@@ -25,8 +25,8 @@ public class NewsController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<NewsDto> update(@PathVariable("id") Long id, @RequestBody NewsDto newsDto){
-		return new ResponseEntity<>(newsService.save(id,newsDto), HttpStatus.CREATED);
+	public ResponseEntity<NewsDto> update(@PathVariable("id") Long id, @RequestBody NewsDto newsDto) throws NotFoundException {
+		return new ResponseEntity<>(newsService.update(id, newsDto), HttpStatus.CREATED);
 	}
 
 	@DeleteMapping("/{idNews}")

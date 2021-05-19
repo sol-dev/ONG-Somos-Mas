@@ -13,7 +13,7 @@ import javassist.NotFoundException;
 @Service
 public interface NewsService {
 	
-	NewsDto save(Long id, NewsDto newsDto);
+	NewsDto save(NewsDto newsDto);
 	NewsDto findById(Long id) throws NotFoundException;
 
 	NewsDto save(NewsDto newsDto, MultipartFile image)throws IOException;
