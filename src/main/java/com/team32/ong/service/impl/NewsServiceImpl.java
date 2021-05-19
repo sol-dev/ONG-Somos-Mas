@@ -5,21 +5,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
+
+import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.NewsDto;
 import com.team32.ong.exception.custom.BadRequestException;
-import com.team32.ong.exception.custom.InvalidDataException;
 import com.team32.ong.model.News;
 import com.team32.ong.repository.NewsRepository;
 import com.team32.ong.service.NewsService;
 
+
 @Service
-@Transactional
 public class NewsServiceImpl implements NewsService {
 	
 	@Autowired
@@ -63,16 +63,17 @@ public class NewsServiceImpl implements NewsService {
 		return modelToDto(newsCreated);
 	}
 
-	
 	@Override
-	public NewsDto getOne(Long id) {
-		News news = newsRepository.getOne(id);
-		return modelToDto(news);
-	}	
-	
+	public boolean deleteNew(Long id) throws NotFoundException{
+		return newsRepository.findById(id).map(news -> {
+			newsRepository.delete(news);
+			return true;
+		}).orElseThrow(() -> new NotFoundException(ConstantExceptionMessage.MSG_ERROR_DELETE_NEWS));
+	}
+
 	@Override
-	public NewsDto findById(Long id) {
-		News news = newsRepository.findById(id).orElseThrow(() -> new InvalidDataException("No existe una noticia con ese id"));
+	public NewsDto findById(Long id) throws NotFoundException {
+		News news = newsRepository.findById(id).orElseThrow(() -> new NotFoundException("No existe una noticia con ese id"));
     	return modelToDto(news);
 	}
 	

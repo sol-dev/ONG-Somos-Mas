@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
+
 import com.team32.ong.constant.*;
 import com.team32.ong.dto.OrganizationDTO;
 import com.team32.ong.dto.OrganizationPublicDTO;
@@ -30,12 +31,20 @@ public class OrganizationService implements IOrganizationService{
     @Autowired
     private ModelMapper modelMapper;
 
+    //OrganizationDTO
     private OrganizationDTO convertToDto(@Valid OrganizationEntity entity){
-        OrganizationDTO dto = modelMapper.map(entity, OrganizationDTO.class);
-        return dto;
+        return modelMapper.map(entity, OrganizationDTO.class);
     }
 
-    protected OrganizationEntity convertToEntity(OrganizationDTO dto){
+    private OrganizationEntity convertDtoToEntity(OrganizationDTO dto){
+        return modelMapper.map(dto, OrganizationEntity.class);
+    }
+    //OrganizationPublicDTO
+    private OrganizationPublicDTO convertToPublicDto(@Valid OrganizationEntity entity){
+        return modelMapper.map(entity, OrganizationPublicDTO.class);
+    }
+
+    private OrganizationEntity convertPublicDtoToEntity(OrganizationPublicDTO dto){
         return modelMapper.map(dto, OrganizationEntity.class);
     }
     
@@ -50,17 +59,26 @@ public class OrganizationService implements IOrganizationService{
         if(dto.getName()==null || dto.getName().isBlank()){
             throw new EmptyInputException(ConstantExceptionMessage.MSG_NAME_BAD_REQUEST);
         }
-        OrganizationEntity entity = convertToEntity(dto);
+        OrganizationEntity entity = convertDtoToEntity(dto);
         entity.setDeleted(false);
         return convertToDto(organizationRepository.save(entity));
     }
 
-    public OrganizationDTO findById(Long id) throws NotFoundException{
+    //controller findById
+    public OrganizationDTO findDtoById(Long id)throws NotFoundException{
+        return convertToDto(findById(id));
+    }
+
+    public OrganizationPublicDTO findPublicDtoById(Long id) throws NotFoundException{
+        return convertToPublicDto(findById(id));
+    }
+    //intern findById
+    protected OrganizationEntity findById(Long id) throws NotFoundException{
         Optional<OrganizationEntity> organization = organizationRepository.findById(id) ;
         if(!organization.isPresent()){
             throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND+id);
         }
-        return convertToDto(organization.get());
+        return organization.get();
     }
 
     public List<OrganizationPublicDTO> findAll() {

@@ -20,8 +20,11 @@ import org.springframework.web.client.HttpClientErrorException.Forbidden;
 import org.springframework.web.client.HttpClientErrorException.Unauthorized;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.SdkClientException;
 import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.exception.custom.EmptyInputException;
 
@@ -88,12 +91,29 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
     
     @Override
-    protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException ex, HttpHeaders headers, HttpStatus status, WebRequest req) {
         String error = "Falta el parámetro " + ex.getParameterName();
-        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "No se puede responder a la petición porque faltan parámetros", error);
-        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
+        ErrorResponse errorFound = new ErrorResponse(400, new Date(), error, req.getContextPath());
+        return new ResponseEntity<Object>(errorFound, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
     
+    protected ResponseEntity<Object> handleMissingServletRequestPart(MissingServletRequestPartException ex, HttpHeaders headers, HttpStatus status, WebRequest req) {
+        String error = "No se envió el parámetro " + ex.getRequestPartName();
+        ErrorResponse errorFound = new ErrorResponse(400, new Date(), error, req.getContextPath());
+        return new ResponseEntity<Object>(errorFound, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
+    
+    @ExceptionHandler(AmazonServiceException.class)
+    protected ResponseEntity<?> handleAmazonServiceException(AmazonServiceException e, HttpServletRequest req){
+    	String message = "La clave de acceso o la clave secreta de S3 son incorrectas";
+    	ErrorResponse errorFound = new ErrorResponse(403, new Date(), message, req.getRequestURI());
+        return new ResponseEntity<>(errorFound, HttpStatus.FORBIDDEN);
+    }
+    
+    @ExceptionHandler(SdkClientException.class)
+    protected ResponseEntity<?> handleAmazonSdkClientException(SdkClientException e, HttpServletRequest req){
+    	String message = "No se pudo establecer la conexión con AWS";
+    	ErrorResponse errorFound = new ErrorResponse(500, new Date(), message, req.getRequestURI());
+        return new ResponseEntity<>(errorFound, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
-
-

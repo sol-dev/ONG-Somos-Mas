@@ -10,6 +10,7 @@ import com.team32.ong.model.Role;
 import com.team32.ong.model.User;
 import com.team32.ong.repository.RoleRepository;
 import com.team32.ong.repository.UserRepository;
+import com.team32.ong.security.JWTUtil;
 import com.team32.ong.service.EmailService;
 import com.team32.ong.service.UserService;
 import javassist.NotFoundException;
@@ -26,13 +27,13 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 
 @Service
 public class UserImplService implements UserService, UserDetailsService {
@@ -48,6 +49,9 @@ public class UserImplService implements UserService, UserDetailsService {
     
     @Autowired
     private EmailService emailService;
+
+	@Autowired
+	private JWTUtil jwtUtil;
 
 	@Override
 	public UserDTOResponse save(UserDTORequest userDTORequest) throws NotFoundException, BadRequestException, IOException {
@@ -76,11 +80,8 @@ public class UserImplService implements UserService, UserDetailsService {
 			throw new BadRequestException(errorsFound.toString());
 		}
 		userDTORequest.setPassword(encoder.encode(userDTORequest.getPassword()));
-
-		Role role = roleRepo.findByName("USER");
-
+		Role role = roleRepo.findByName("ROLE_USER");
 		User userEntity = dtoToEntity(userDTORequest);
-
 		userEntity.setRole(role);
 		User userSave = userRepo.save(userEntity);
 
@@ -88,19 +89,26 @@ public class UserImplService implements UserService, UserDetailsService {
 
 		return entityToDto(userSave);
 
-	}
-    
-    @Override
-    public UserDTOResponse getOne(Long id) {
-    	User user = userRepo.getOne(id);
-		return entityToDto(user);
     }
+
+    @Override
+    public UserDTOResponse getMe(String jwt) throws NotFoundException{
+
+		String emailUser = jwtUtil.extractUsername(jwt.substring(7));
+
+    	User userEntity = userRepo.findByEmail(emailUser);
+
+    	if (userEntity == null){
+    		throw new NotFoundException(ConstantExceptionMessage.MSG_EMAIL_NOT_FOUND);
+		}
+    	return entityToDto(userEntity);
+
+	}
     
     @Override
     public UserDTOResponse findById(Long id) throws NotFoundException {
     	User user = userRepo.findById(id).orElseThrow(() -> new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND + id));
     	return entityToDto(user);
-
     }
     
     public UserDtoRequestForAdmin findByIdRequest(Long id) {
@@ -136,6 +144,8 @@ public class UserImplService implements UserService, UserDetailsService {
         return new org.springframework.security.core.userdetails.
                 User(user.getEmail(), user.getPassword(), rol);
     }
+
+    
     @Override
     public User dtoToEntity(UserDTORequest userDTORequest){
         ModelMapper mapper = new ModelMapper();
@@ -219,6 +229,9 @@ public class UserImplService implements UserService, UserDetailsService {
 			throw new BadRequestException(errorsFound.toString());
 		}
 		userEntity.setId(userDtoFound.get().getId());
+		userEntity.setPassword(encoder.encode(userDto.getPassword()));
+		Role roleEntity = roleRepo.findByName(userDto.getRole().getName());
+		userEntity.setRole(roleEntity);
 		userRepo.save(userEntity);
 		return entityToNewDto(userEntity);
 	}
@@ -267,6 +280,7 @@ public class UserImplService implements UserService, UserDetailsService {
 			throw new BadRequestException(errorsFound.toString());
 		}
 		Role roleEntity = roleRepo.findByName("ROLE_USER");
+		userEntity.setPassword(encoder.encode(userDto.getPassword()));
 		userEntity.setId(userDtoFound.get().getId());
 		userEntity.setRole(roleEntity);
 		userRepo.save(userEntity);
