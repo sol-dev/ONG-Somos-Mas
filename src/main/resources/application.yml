@@ -1,7 +1,11 @@
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/somos_mas?serverTimezone=UTC
+<<<<<<< HEAD
     username: root
+=======
+    username:
+>>>>>>> 97780162fb25f5531a063c4f9f00f7e63bad0278
     password:
     driver-class: com.mysql.cj.jdbc.Driver
     
@@ -21,10 +25,12 @@ spring:
     jwt:
       secret-key: secret-key
       expiration-length: 3600000
+
       
 amazonProperties:
     accessKey: AKIA5YX3QC3YARN66KVE
     secretKey: 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
+
 
 app:
   sengrid:
