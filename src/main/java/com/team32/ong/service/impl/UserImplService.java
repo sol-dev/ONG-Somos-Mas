@@ -230,8 +230,6 @@ public class UserImplService implements UserService, UserDetailsService {
 		}
 		userEntity.setId(userDtoFound.get().getId());
 		userEntity.setPassword(encoder.encode(userDto.getPassword()));
-		Role roleEntity = roleRepo.findByName(userDto.getRole().getName());
-		userEntity.setRole(roleEntity);
 		userRepo.save(userEntity);
 		return entityToNewDto(userEntity);
 	}
