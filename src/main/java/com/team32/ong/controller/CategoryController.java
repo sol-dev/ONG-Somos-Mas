@@ -55,13 +55,11 @@ public class CategoryController {
     public ResponseEntity<?> update(@PathVariable("id") Long id,@RequestBody ModifyCategoryDTO categoryDTO)
                                                 throws Exception {
 
-        Map<String, Object> response = new HashMap<>();
 
         CategoryDTO updatedCategory = categoryService.update(id, categoryDTO);
 
-        response.put("categorie", updatedCategory);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(updatedCategory, HttpStatus.OK);
     }
 
 }
