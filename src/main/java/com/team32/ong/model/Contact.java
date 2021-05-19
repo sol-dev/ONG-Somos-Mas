@@ -9,6 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 
@@ -29,6 +30,7 @@ public class Contact {
     private String name;
 
     @NotEmpty()
+    @Email
     @Column(name="email", nullable = false)
     private String email;
 
@@ -44,8 +46,8 @@ public class Contact {
     private LocalDateTime createdDate;
 
     @UpdateTimestamp
-    @Column(name = "createdAt")
-    private LocalDateTime createdAt;
+    @Column(name = "deletedAt")
+    private LocalDateTime deletedAt;
 
     @Column(name="deleted")
     private Boolean deleted;

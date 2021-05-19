@@ -7,5 +7,4 @@ import com.team32.ong.dto.ContactDTO;
 public interface ContactService {
 
 	List<ContactDTO> getAll();
-
 }

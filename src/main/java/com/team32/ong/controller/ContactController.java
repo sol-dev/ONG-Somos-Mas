@@ -23,5 +23,4 @@ public class ContactController {
 	public ResponseEntity<List<ContactDTO>> getAll(){
 		return new ResponseEntity<List<ContactDTO>>(contactService.getAll(),HttpStatus.OK);
 	}
-
 }
