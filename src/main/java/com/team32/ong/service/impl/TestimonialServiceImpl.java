@@ -1,5 +1,6 @@
 package com.team32.ong.service.impl;
 
+import com.team32.ong.component.Validation;
 import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.TestimonialDto;
 import com.team32.ong.exception.custom.BadRequestException;
@@ -13,8 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 @Service
@@ -23,6 +22,9 @@ public class TestimonialServiceImpl implements TestimonialService {
 
     @Autowired
     private TestimonialRepository testimonialRepository;
+
+    @Autowired
+    private Validation validations;
 
     @Override
     public TestimonialDto save(TestimonialDto testimonialDto) {
@@ -40,11 +42,11 @@ public class TestimonialServiceImpl implements TestimonialService {
             throw new BadRequestException(ConstantExceptionMessage.MSG_IMAGE_BAD_REQUEST);
         }
 
-        if(stringHasDigit(testimonialDto.getName())){
+        if(validations.stringHasDigit(testimonialDto.getName())){
             throw new BadRequestException(ConstantExceptionMessage.MSG_NAME_NOT_NUMBER);
         }
 
-        if(stringIsOnlyDigits(testimonialDto.getContent())){
+        if(validations.stringIsOnlyDigits(testimonialDto.getContent())){
             throw new BadRequestException(ConstantExceptionMessage.MSG_CONTENT_NOT_NUMBER);
         }
 
@@ -84,11 +86,11 @@ public class TestimonialServiceImpl implements TestimonialService {
         }
 
         //validate if has a digit
-        if(stringHasDigit(testimonialDtoToUpdate.getName())){
+        if(validations.stringHasDigit(testimonialDtoToUpdate.getName())){
             throw new BadRequestException(ConstantExceptionMessage.MSG_NAME_NOT_NUMBER);
         }
         //validate if only digit
-        if(stringIsOnlyDigits(testimonialDtoToUpdate.getContent())){
+        if(validations.stringIsOnlyDigits(testimonialDtoToUpdate.getContent())){
             throw new BadRequestException(ConstantExceptionMessage.MSG_CONTENT_NOT_NUMBER);
         }
 
@@ -109,31 +111,6 @@ public class TestimonialServiceImpl implements TestimonialService {
             throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND + id);
         }
         testimonialRepository.deleteById(id);
-    }
-
-    private Boolean stringIsOnlyDigits(String str){
-        String regex = "[0-9]+";
-
-        Pattern p = Pattern.compile(regex);
-
-        // Find match between given string
-        // and regular expression
-        // using Pattern.matcher()
-        Matcher m = p.matcher(str);
-
-        // Return if the string
-        // matched the ReGex
-        return m.matches();
-    }
-    private Boolean stringHasDigit(String str){
-        Boolean hasDigit = false;
-        for(int i = 0; i < str.length(); i++){
-            if(Character.isDigit(str.charAt(i))){
-                hasDigit = true;
-                break;
-            }
-        }
-        return  hasDigit;
     }
 
     private TestimonialDto setNullsAttributes(TestimonialDto dto, Testimonial model){
