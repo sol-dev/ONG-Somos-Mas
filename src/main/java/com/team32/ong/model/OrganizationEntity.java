@@ -1,6 +1,5 @@
 package com.team32.ong.model;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -54,14 +53,14 @@ public class OrganizationEntity {
     @Email(message = ConstantExceptionMessage.MSG_EMAIL_INVALID)
     private String email;
 
-    @Column (name = "welcome_text")
+    @Column(name = "welcome_text")
     private String welcomeText;
 
     @Column(name = "aboutUsText")
     private String aboutUsText;
-    
-    @OneToMany(targetEntity=Slide.class, mappedBy="organization", fetch = FetchType.LAZY, cascade=CascadeType.ALL)
-	private List<Slide> slides = new ArrayList<>();
+
+    @OneToMany(targetEntity = Slide.class, mappedBy = "organization", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Slide> slides = new ArrayList<>();
 
     @Column(name = "facebookUrl", nullable = true)
     private String facebookUrl;
@@ -82,11 +81,5 @@ public class OrganizationEntity {
 
     @Column(name = "deleted", columnDefinition = "boolean default false")
     private Boolean deleted;
-<<<<<<< HEAD
-    
-=======
 
-    
-
->>>>>>> 9f6d49100e8e45e85d54b0882ec4923d27c94d96
 }
