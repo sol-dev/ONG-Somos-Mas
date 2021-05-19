@@ -44,8 +44,8 @@ public class Contact {
     private LocalDateTime createdDate;
 
     @UpdateTimestamp
-    @Column(name = "createdAt")
-    private LocalDateTime createdAt;
+    @Column(name = "deletedAt")
+    private LocalDateTime deletedAt;
 
     @Column(name="deleted")
     private Boolean deleted;
