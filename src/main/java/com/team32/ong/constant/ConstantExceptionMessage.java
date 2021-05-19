@@ -21,10 +21,12 @@ public class ConstantExceptionMessage {
     public static final String MSG_NAME_NOT_NUMBER = "El campo nombre no puede contener numeros. ";
     public static final String MSG_LASTNAME_NOT_NUMBER = "El campo apellido no puede contener numeros. ";
     public static final String MSG_CONTENT_NOT_NUMBER = "El campo contenido no puede ser solo numeros. ";
+    public static final String MSG_NOT_FOUD_ACTIVITY = "No existe una Actividad con ese Id";
     public static final String MSG_COMMENT_NOT_FOUND = "No existe el comentario con id ";
     public static final String MSG_EMPTY_COMMENT_BODY = "El cuerpo del comentario no puede estar vacio";
     public static final String MSG_EMPTY_ACTIVITY = "El contenido de la actividad no puede estar vacio";
     public static final String MSG_ERROR_DELETE_NEWS= "No se encontro la Noticia que desea borrar";
     public static final String MSG_NEWS_NOT_FOUND = "No se encontro la noticia con el id ";
+
 
 }
