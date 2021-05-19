@@ -30,4 +30,5 @@ public class ConstantExceptionMessage {
     public static final String MSG_DESCRIPTION_EMPTY = "La descripcion no puede estar vacia";
 
 
+
 }
