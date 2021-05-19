@@ -13,7 +13,7 @@ import com.team32.ong.dto.ContactDTO;
 import com.team32.ong.service.ContactService;
 
 @RestController
-@RequestMapping("api/v1/contacts")
+@RequestMapping("api/v1/contact")
 public class ContactController {
 	
 	@Autowired
