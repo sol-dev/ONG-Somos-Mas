@@ -1,5 +1,6 @@
 package com.team32.ong.service.impl;
 
+import com.team32.ong.component.Validation;
 import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.ContactDTO;
 import com.team32.ong.exception.custom.BadRequestException;
@@ -21,6 +22,9 @@ public class ContactServiceImpl implements ContactService {
     @Autowired
     private ContactRepository contactRepository;
 
+    @Autowired
+    private Validation valid;
+
     @Override
     public ContactDTO save(ContactDTO contactDTO) {
 
@@ -28,7 +32,7 @@ public class ContactServiceImpl implements ContactService {
             throw new BadRequestException(ConstantExceptionMessage.MSG_EMAIL_BAD_REQUEST);
         }else if (contactDTO.getName().isEmpty()){
             throw new BadRequestException(ConstantExceptionMessage.MSG_NAME_BAD_REQUEST);
-        }else if (!validateEmail(contactDTO.getEmail())){
+        }else if (!valid.validateEmail(contactDTO.getEmail())){
             throw new BadRequestException(ConstantExceptionMessage.MSG_EMAIL_INVALID);
         }
 
@@ -46,11 +50,4 @@ public class ContactServiceImpl implements ContactService {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(contactDTO, Contact.class);
     }
-
-    private boolean validateEmail(String email) {
-        Pattern regex = Pattern.compile("^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$");
-        Matcher m = regex.matcher(email);
-        return m.find() ? true : false;
-    }
-
 }
