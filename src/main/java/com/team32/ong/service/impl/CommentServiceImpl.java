@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.AddCommentBody;
 import com.team32.ong.dto.CommentDto;
 import com.team32.ong.dto.NewsDto;
@@ -80,7 +82,14 @@ public class CommentServiceImpl implements CommentService {
 		return new ResponseEntity<>(commentDto,HttpStatus.OK);
 	}
 	
-	
+	@Override
+	public void delete(Long id) throws NotFoundException {
+		boolean commentExists = commentRepository.existsById(id);
+		if(!commentExists) {
+			throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND + id);
+		}
+		commentRepository.deleteById(id);
+	}	
 	
 	public CommentDto modelToDto(Comment comment) {
 		ModelMapper mapper = new ModelMapper();
