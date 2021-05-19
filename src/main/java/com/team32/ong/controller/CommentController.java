@@ -37,13 +37,11 @@ public class CommentController {
 	public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody AddCommentBody commentBody)
 			throws Exception {
 
-		Map<String, Object> response = new HashMap<>();
 		AddCommentBody commentResponse = null;
 
 		commentResponse = commentService.update(id, commentBody);
 
-		response.put("comment", commentResponse);
 
-		return new ResponseEntity(response, HttpStatus.OK);
+		return new ResponseEntity(commentResponse, HttpStatus.OK);
 	}
 }
