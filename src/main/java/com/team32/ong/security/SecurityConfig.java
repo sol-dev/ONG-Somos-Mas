@@ -123,18 +123,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.exceptionHandling().accessDeniedHandler(jwtUtil.accessDeniedHandler());
         http.addFilterBefore(jwtFilterRequest, UsernamePasswordAuthenticationFilter.class);
     }
-    
-    
-	public Boolean rolValidation(String token) {
-		String email = jwtUtil.extractUsername(token);
-		User user = userRepo.findByEmail(email);
-		if (user != null) {
-			if (user.getRole().getId() == 1) {
-				return true;
-			}
-		}
-		return false;
-	}
 
     @Override
     @Bean
