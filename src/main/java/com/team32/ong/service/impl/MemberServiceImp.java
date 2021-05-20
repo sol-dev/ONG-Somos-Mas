@@ -6,6 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javassist.NotFoundException;
+
+import java.util.Optional;
+
 import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.MemberDTO;
 import com.team32.ong.exception.custom.BadRequestException;
@@ -42,6 +46,26 @@ public class MemberServiceImp implements IMemberService {
 	
     private Member dtoToModel(MemberDTO memberDTO){
         return mapper.map(memberDTO, Member.class);
+    }
+
+    //admin
+    @Override
+    public MemberDTO update(Long id, MemberDTO updates) throws NotFoundException {
+        Optional<Member> member = repositoryMember.findById(id);
+        if(!member.isPresent()){
+            throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND+id);
+        }
+        if(updates.getName().isBlank()|| updates.getName().length() == 0){
+            throw new BadRequestException(ConstantExceptionMessage.MSG_NAME_BAD_REQUEST);
+        }
+        if(updates.getImage().isBlank()|| updates.getImage().length() == 0){
+            throw new BadRequestException(ConstantExceptionMessage.MSG_IMAGE_BAD_REQUEST);
+        }
+        Member updatedMember = member.get();
+        updatedMember.setName(updates.getName());
+        updatedMember.setImage(updates.getImage());
+
+        return modelToDTO(repositoryMember.save(updatedMember));
     }
 
 }
