@@ -42,4 +42,9 @@ public class ActivitiesController {
 
        return new ResponseEntity(response, HttpStatus.CREATED);
     }
+
+    @PutMapping("update/{idActivity}")
+    public ResponseEntity<?> updateActivity(@PathVariable("idActivity") Long idActivity, @RequestBody ActivitiesDTO activitiesDTO){
+        return new ResponseEntity<>(activitieService.update(idActivity,activitiesDTO), HttpStatus.OK);
+    }
 }
