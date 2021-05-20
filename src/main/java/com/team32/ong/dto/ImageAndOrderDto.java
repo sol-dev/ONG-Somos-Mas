@@ -9,9 +9,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SlideDto {
-	private String imageUrl;
-	private String text;
-	private int order;
-	private OrganizationDTO organization;
+public class ImageAndOrderDto {
+
+    private int Order;
+    private String imageUrl;
+
 }

@@ -4,16 +4,21 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import javassist.NotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
+import com.team32.ong.dto.ImageAndOrderDto;
+import com.team32.ong.dto.OrganizationDTO;
+import com.team32.ong.dto.OrganizationPublicDTO;
 import com.team32.ong.dto.SlideDto;
+import com.team32.ong.model.OrganizationEntity;
 import com.team32.ong.model.Slide;
 import com.team32.ong.repository.SlideRepository;
 import com.team32.ong.service.SlideService;
+import com.team32.ong.service.impl.OrganizationService;
 
 @Service
 @Transactional
@@ -30,13 +35,33 @@ public class SlideServiceImpl implements SlideService {
     }
 
     @Override
-    public Map<Integer, String> imageAndOrder() {
+    public Map<String, List<ImageAndOrderDto>> imageAndOrder() {
         List<SlideDto> slideDtoList = slideList();
-        Map<Integer, String> map = new HashMap<>();
+        List<String> organizations = new ArrayList<>();
+        List<OrganizationDTO> orgs = new ArrayList<>();
+        Map<String, List<ImageAndOrderDto>> result = new HashMap<>();
         for (SlideDto s : slideDtoList) {
-            map.put(s.getOrder(), s.getImageUrl());
+            if (!organizations.contains(s.getOrganization().getName())) {
+                organizations.add(s.getOrganization().getName());
+                orgs.add(s.getOrganization());
+            }
         }
-        return map;
+        for (OrganizationDTO org : orgs) {
+            // Long org_id = OrganizationService.convertPublicDtoToEntity(org).getId();
+            List<Slide> slides = slideRepository.findAllSlidesByOrganization(org.getId());
+            result.put(org.getName(), mapList(slides, ImageAndOrderDto.class));
+        }
+        return result;
+    }
+
+    @Override
+    public List<String> getOrganizationSlides(Long id) throws NotFoundException {
+        List<Slide> slides = slideRepository.findAllSlidesByOrganization(id);
+        List<String> urls = new ArrayList<>();
+        for (Slide s : slides) {
+            urls.add(s.getImageUrl());
+        }
+        return urls;
     }
 
     private SlideDto modelToDto(Slide slide) {
@@ -51,7 +76,7 @@ public class SlideServiceImpl implements SlideService {
         return slide;
     }
 
-    private static <S, T> List<T> mapList(List<S> source, Class<T> targetClass) {
+    public static <S, T> List<T> mapList(List<S> source, Class<T> targetClass) {
         ModelMapper mapper = new ModelMapper();
         return source.stream().map(element -> mapper.map(element, targetClass)).collect(Collectors.toList());
     }
