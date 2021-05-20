@@ -17,7 +17,7 @@ public interface NewsService {
 	NewsDto findById(Long id) throws NotFoundException;
 
 	NewsDto save(NewsDto newsDto, MultipartFile image)throws IOException;
-
+	NewsDto update(Long id, NewsDto newsDto) throws NotFoundException;
 	boolean deleteNew(Long id) throws NotFoundException;
 
 	NewsDto modelToDto(News news);
