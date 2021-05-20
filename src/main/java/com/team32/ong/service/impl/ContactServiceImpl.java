@@ -1,5 +1,8 @@
 package com.team32.ong.service.impl;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.team32.ong.component.Validation;
 import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.ContactDTO;
@@ -11,7 +14,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 @Service
 @Transactional
@@ -37,7 +39,15 @@ public class ContactServiceImpl implements ContactService {
         Contact contactSave = contactRepository.save(dtoToModel(contactDTO));
         return modelToDTO(contactSave);
     }
-
+    
+    @Override
+	public List<ContactDTO> getAll() {
+		List<Contact> listFound = contactRepository.findAll();
+		return listFound
+                .stream()
+                .map(this::modelToDTO)
+                .collect(Collectors.toList());
+	}
 
     ContactDTO modelToDTO(Contact contact){
         ModelMapper mapper = new ModelMapper();
