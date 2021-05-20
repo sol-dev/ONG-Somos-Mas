@@ -40,6 +40,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+	
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -54,6 +55,13 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
+	
+		<dependency>
+		   <groupId>com.amazonaws</groupId>
+		   <artifactId>aws-java-sdk</artifactId>
+		   <version>1.11.321</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>com.sendgrid</groupId>
 			<artifactId>sendgrid-java</artifactId>
@@ -69,11 +77,13 @@
 			<artifactId>spring-boot-starter-freemarker</artifactId>
 		</dependency>
 	</dependencies>
+	
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${project.parent.version}</version>
 				<configuration>
 					<excludes>
 						<exclude>
@@ -83,6 +93,7 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			
 		</plugins>
 	</build>
 

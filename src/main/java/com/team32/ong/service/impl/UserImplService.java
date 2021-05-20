@@ -1,19 +1,11 @@
 package com.team32.ong.service.impl;
 
-import com.team32.ong.constant.ConstantExceptionMessage;
-import com.team32.ong.dto.NewUserDto;
-import com.team32.ong.dto.UserDTORequest;
-import com.team32.ong.dto.UserDTOResponse;
-import com.team32.ong.dto.UserDtoRequestForAdmin;
-import com.team32.ong.exception.custom.BadRequestException;
-import com.team32.ong.exception.custom.InvalidDataException;
-import com.team32.ong.model.Role;
-import com.team32.ong.model.User;
-import com.team32.ong.repository.RoleRepository;
-import com.team32.ong.repository.UserRepository;
-import com.team32.ong.service.EmailService;
-import com.team32.ong.service.UserService;
-import javassist.NotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,12 +16,22 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import com.team32.ong.component.Validation;
+import com.team32.ong.constant.ConstantExceptionMessage;
+import com.team32.ong.dto.NewUserDto;
+import com.team32.ong.dto.UserDTORequest;
+import com.team32.ong.dto.UserDTOResponse;
+import com.team32.ong.dto.UserDtoRequestForAdmin;
+import com.team32.ong.exception.custom.BadRequestException;
+import com.team32.ong.model.Role;
+import com.team32.ong.model.User;
+import com.team32.ong.repository.RoleRepository;
+import com.team32.ong.repository.UserRepository;
+import com.team32.ong.security.JWTUtil;
+import com.team32.ong.service.EmailService;
+import com.team32.ong.service.UserService;
 
-import java.util.stream.Collectors;
-import java.util.Optional;
+import javassist.NotFoundException;
 
 @Service
 public class UserImplService implements UserService, UserDetailsService {
@@ -46,45 +48,71 @@ public class UserImplService implements UserService, UserDetailsService {
     @Autowired
     private EmailService emailService;
 
-    @Override
-    public UserDTOResponse save(UserDTORequest userDTORequest) throws NotFoundException, BadRequestException, IOException {
+	@Autowired
+	private JWTUtil jwtUtil;
+	
+	@Autowired
+	private Validation validations;
 
-        if (userRepo.existsByEmail(userDTORequest.getEmail())){
-            throw new NotFoundException(ConstantExceptionMessage.MSG_EMAIL_IN_USE);
-        }else if (userDTORequest.getEmail() == null){
-            throw new BadRequestException(ConstantExceptionMessage.MSG_EMAIL_BAD_REQUEST);
-        }else if (userDTORequest.getFirstName() == null){
-            throw new BadRequestException(ConstantExceptionMessage.MSG_NAME_BAD_REQUEST);
-        }else if (userDTORequest.getLastName() == null){
-            throw new BadRequestException(ConstantExceptionMessage.MSG_LASTNAME_BAD_REQUEST);
-        }else if (userDTORequest.getPassword() == null){
-            throw new BadRequestException(ConstantExceptionMessage.MSG_PASSWORD_BAD_REQUEST);
-        }
-        userDTORequest.setPassword(encoder.encode(userDTORequest.getPassword()));
+	@Override
+	public UserDTOResponse save(UserDTORequest userDTORequest) throws NotFoundException, BadRequestException, IOException {
 
-        Role role = roleRepo.findByName("USER");
+		StringBuffer errorsFound = new StringBuffer();
 
-        User userEntity = dtoToEntity(userDTORequest);
+		if (userRepo.existsByEmail(userDTORequest.getEmail())){
+			throw new NotFoundException(ConstantExceptionMessage.MSG_EMAIL_IN_USE);
+		}else if (userDTORequest.getEmail().isEmpty()){
+			throw new BadRequestException(ConstantExceptionMessage.MSG_EMAIL_BAD_REQUEST);
+		}else if (userDTORequest.getFirstName().isEmpty()){
+			throw new BadRequestException(ConstantExceptionMessage.MSG_NAME_BAD_REQUEST);
+		}else if (userDTORequest.getLastName().isEmpty()){
+			throw new BadRequestException(ConstantExceptionMessage.MSG_LASTNAME_BAD_REQUEST);
+		}else if (userDTORequest.getPassword().isEmpty()){
+			throw new BadRequestException(ConstantExceptionMessage.MSG_PASSWORD_BAD_REQUEST);
+		}else if(!validations.validateEmail(userDTORequest.getEmail())) {
+			errorsFound.append(ConstantExceptionMessage.MSG_EMAIL_BAD_REQUEST);
+		}else if(validations.stringHasDigit(userDTORequest.getLastName())) {
+			errorsFound.append(ConstantExceptionMessage.MSG_LASTNAME_NOT_NUMBER);
+		}else if(validations.stringHasDigit(userDTORequest.getFirstName())) {
+			errorsFound.append(ConstantExceptionMessage.MSG_NAME_NOT_NUMBER);
+		}else if(errorsFound.length() > 0) {
+			throw new BadRequestException(errorsFound.toString());
+		}
+		userDTORequest.setPassword(encoder.encode(userDTORequest.getPassword()));
+		Role role = roleRepo.findByName("ROLE_USER");
+		User userEntity = dtoToEntity(userDTORequest);
+		userEntity.setRole(role);
+		User userSave = userRepo.save(userEntity);
 
-        userEntity.setRole(role);
-        User userSave = userRepo.save(userEntity);
-        
-        emailService.sendEmail(userSave.getEmail());
+		emailService.sendEmail(userSave.getEmail());
 
-        return entityToDto(userSave);
+		return entityToDto(userSave);
 
     }
+
+    @Override
+    public UserDTOResponse getMe(String jwt) throws NotFoundException{
+
+		String emailUser = jwtUtil.extractUsername(jwt.substring(7));
+
+    	User userEntity = userRepo.findByEmail(emailUser);
+
+    	if (userEntity == null){
+    		throw new NotFoundException(ConstantExceptionMessage.MSG_EMAIL_NOT_FOUND);
+		}
+    	return entityToDto(userEntity);
+
+	}
     
     @Override
-    public UserDTOResponse getOne(Long id) {
-    	User user = userRepo.getOne(id);
-		return entityToDto(user);
-    }
-    
-    @Override
-    public UserDTOResponse findById(Long id) {
-    	User user = userRepo.findById(id).orElseThrow(() -> new InvalidDataException("No existe un usuario con ese id"));
+    public UserDTOResponse findById(Long id) throws NotFoundException {
+    	User user = userRepo.findById(id).orElseThrow(() -> new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND + id));
     	return entityToDto(user);
+    }
+    
+    public UserDtoRequestForAdmin findByIdRequest(Long id) {
+    	Optional<User> user = userRepo.findById(id);
+    	return entityToUserDtoRequestForUser(user.get());
 
     }
 
@@ -138,31 +166,69 @@ public class UserImplService implements UserService, UserDetailsService {
     	ModelMapper mapper = new ModelMapper();
         return mapper.map(userDto, User.class);
 	}
+    
+    private UserDtoRequestForAdmin entityToUserDtoRequestForUser(User user) {
+    	ModelMapper mapper = new ModelMapper();
+        return mapper.map(user, UserDtoRequestForAdmin.class);
+	}
 	
 	@Override
 	public NewUserDto updateAdminOnly(Long id, UserDtoRequestForAdmin userDto) throws NotFoundException {
 		Optional<UserDTOResponse> userDtoFound =  Optional.of(findById(id));
+		Optional<UserDtoRequestForAdmin> userDtoFoundRequest =  Optional.of(findByIdRequest(id));
 		StringBuffer errorsFound = new StringBuffer();
-		
-		if(userDto.getFirstName().isEmpty()) {
+		User userEntity = UserDtoRequestForUserToEntity(userDto);
+		User userEntityForGetPassRol = UserDtoRequestForUserToEntity(userDtoFoundRequest.get());		
+		if(userDto.getFirstName() == null) {
+			userEntity.setFirstName(userDtoFound.get().getFirstName());
+		}
+		if(userDto.getLastName() == null) {
+			userEntity.setLastName(userDtoFound.get().getLastName());
+		}
+		if(userDto.getEmail() == null) {
+			userEntity.setEmail(userDtoFound.get().getEmail());
+		}
+		if(userDto.getPassword() == null) {
+			userEntity.setPassword(userEntityForGetPassRol.getPassword());
+		}
+		if(userDto.getRole() == null) {
+			userEntity.setRole(userEntityForGetPassRol.getRole());
+		}
+		if(userEntity.getFirstName().isEmpty()) {
 			errorsFound.append(ConstantExceptionMessage.MSG_NAME_BAD_REQUEST);
 		}
-		if(userDto.getLastName().isEmpty()) {
+		if(userEntity.getLastName().isEmpty()) {
 			errorsFound.append(ConstantExceptionMessage.MSG_LASTNAME_BAD_REQUEST);
 		}
-		if(userDto.getEmail().isEmpty()) {
+		if(userEntity.getEmail().isEmpty()) {
 			errorsFound.append(ConstantExceptionMessage.MSG_EMAIL_BAD_REQUEST);
 		}
-		if(userDto.getPassword().isEmpty()) {
+		if(userEntity.getPassword().isEmpty()) {
 			errorsFound.append(ConstantExceptionMessage.MSG_PASSWORD_BAD_REQUEST);
+		}
+		if(!validations.validateEmail(userEntity.getEmail())) {
+			errorsFound.append(ConstantExceptionMessage.MSG_EMAIL_BAD_REQUEST);
+		}
+		if(validations.stringHasDigit(userEntity.getFirstName())) {
+			errorsFound.append(ConstantExceptionMessage.MSG_NAME_NOT_NUMBER);
+		}
+		if(validations.stringHasDigit(userEntity.getLastName())) {
+			errorsFound.append(ConstantExceptionMessage.MSG_LASTNAME_NOT_NUMBER);
+		}
+		if(userEntity.getRole().getName().equalsIgnoreCase("ROLE_ADMIN")) {
+			Role roleEntity = roleRepo.findByName("ROLE_ADMIN");
+			userEntity.setRole(roleEntity);
+		}else if(userEntity.getRole().getName().equalsIgnoreCase("ROLE_USER")){
+			Role roleEntity = roleRepo.findByName("ROLE_USER");
+			userEntity.setRole(roleEntity);
+		}else {
+			errorsFound.append(ConstantExceptionMessage.MSG_ROL_BAD_REQUEST);
 		}
 		if(errorsFound.length() > 0) {
 			throw new BadRequestException(errorsFound.toString());
 		}
-		User userEntity = UserDtoRequestForUserToEntity(userDto);
 		userEntity.setId(userDtoFound.get().getId());
-		Role roleEntity = roleRepo.findByName(userDto.getRole().getName());
-		userEntity.setRole(roleEntity);
+		userEntity.setPassword(encoder.encode(userDto.getPassword()));
 		userRepo.save(userEntity);
 		return entityToNewDto(userEntity);
 	}
@@ -170,25 +236,48 @@ public class UserImplService implements UserService, UserDetailsService {
 	@Override
 	public NewUserDto updateForUser(Long id, UserDTORequest userDto) throws NotFoundException {
 		Optional<UserDTOResponse> userDtoFound =  Optional.of(findById(id));
+		Optional<UserDtoRequestForAdmin> userDtoFoundRequest =  Optional.of(findByIdRequest(id));
+		User userEntity = dtoToEntity(userDto);
+		User userEntityForGetPassRol = UserDtoRequestForUserToEntity(userDtoFoundRequest.get());
 		StringBuffer errorsFound = new StringBuffer();
-		
-		if(userDto.getFirstName().isEmpty()) {
+		if(userDto.getFirstName() == null) {
+			userEntity.setFirstName(userDtoFound.get().getFirstName());
+		}
+		if(userDto.getLastName() == null) {
+			userEntity.setLastName(userDtoFound.get().getLastName());
+		}
+		if(userDto.getEmail() == null) {
+			userEntity.setEmail(userDtoFound.get().getEmail());
+		}
+		if(userDto.getPassword() == null) {
+			userEntity.setPassword(userEntityForGetPassRol.getPassword());
+		}
+		if(userEntity.getFirstName().isEmpty()) {
 			errorsFound.append(ConstantExceptionMessage.MSG_NAME_BAD_REQUEST);
 		}
-		if(userDto.getLastName().isEmpty()) {
+		if(userEntity.getLastName().isEmpty()) {
 			errorsFound.append(ConstantExceptionMessage.MSG_LASTNAME_BAD_REQUEST);
 		}
-		if(userDto.getEmail().isEmpty()) {
+		if(userEntity.getEmail().isEmpty()) {
 			errorsFound.append(ConstantExceptionMessage.MSG_EMAIL_BAD_REQUEST);
 		}
-		if(userDto.getPassword().isEmpty()) {
+		if(userEntity.getPassword().isEmpty()) {
 			errorsFound.append(ConstantExceptionMessage.MSG_PASSWORD_BAD_REQUEST);
+		}
+		if(!validations.validateEmail(userEntity.getEmail())) {
+			errorsFound.append(ConstantExceptionMessage.MSG_EMAIL_BAD_REQUEST);
+		}
+		if(validations.stringHasDigit(userEntity.getFirstName())) {
+			errorsFound.append(ConstantExceptionMessage.MSG_NAME_NOT_NUMBER);
+		}
+		if(validations.stringHasDigit(userEntity.getLastName())) {
+			errorsFound.append(ConstantExceptionMessage.MSG_LASTNAME_NOT_NUMBER);
 		}
 		if(errorsFound.length() > 0) {
 			throw new BadRequestException(errorsFound.toString());
 		}
 		Role roleEntity = roleRepo.findByName("ROLE_USER");
-		User userEntity = dtoToEntity(userDto);
+		userEntity.setPassword(encoder.encode(userDto.getPassword()));
 		userEntity.setId(userDtoFound.get().getId());
 		userEntity.setRole(roleEntity);
 		userRepo.save(userEntity);
