@@ -6,5 +6,6 @@ import com.team32.ong.dto.ContactDTO;
 
 public interface ContactService {
 
+	ContactDTO save(ContactDTO contactDTO);
 	List<ContactDTO> getAll();
 }

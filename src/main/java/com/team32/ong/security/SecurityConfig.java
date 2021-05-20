@@ -74,11 +74,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT,"/api/v1/comment/{id}").hasAnyRole("USER","ADMIN")
                 .antMatchers(HttpMethod.DELETE,"/api/v1/comment/{id}").hasAnyRole("USER","ADMIN")
                 //CONTACT
-                .antMatchers(HttpMethod.GET,"/api/v1/contact/{id}").permitAll()
+                //.antMatchers(HttpMethod.GET,"/api/v1/contact/{id}").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/v1/contact/contacts").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST,"/api/v1/contact").hasAnyRole("USER","ADMIN")
-                .antMatchers(HttpMethod.PUT,"/api/v1/contact").permitAll()
-                .antMatchers(HttpMethod.DELETE,"/api/v1/contact").permitAll()
+                //.antMatchers(HttpMethod.PUT,"/api/v1/contact").permitAll()
+                //.antMatchers(HttpMethod.DELETE,"/api/v1/contact").permitAll()
                 //MEMBER
                 .antMatchers(HttpMethod.GET,"/api/v1/member/{id}").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/v1/member").hasRole("ADMIN")
@@ -109,7 +109,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //USE
                 .antMatchers(HttpMethod.GET,"/api/v1/users").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET,"/api/v1/users/{id}").permitAll()
-                .antMatchers(HttpMethod.POST,"/api/v1/users").hasAnyRole("USER","ADMIN")
+                .antMatchers(HttpMethod.POST,"/api/v1/users").hasAnyRole("USER", "ADMIN")
                 .antMatchers(HttpMethod.PUT,"/api/v1/users/admin/update/{id}").hasRole("ADMIN")
                 .antMatchers(HttpMethod.PUT,"/api/v1/users/update/{id}").hasAnyRole("USER","ADMIN")
                 .antMatchers(HttpMethod.DELETE,"/api/v1/users/delete/{id}").hasAnyRole("USER","ADMIN")
