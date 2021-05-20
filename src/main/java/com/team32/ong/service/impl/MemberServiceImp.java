@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.MemberDTO;
 import com.team32.ong.exception.custom.BadRequestException;
@@ -42,6 +45,13 @@ public class MemberServiceImp implements IMemberService {
 	
     private Member dtoToModel(MemberDTO memberDTO){
         return mapper.map(memberDTO, Member.class);
+    }
+
+    @Override
+    public List<MemberDTO> findAll() {
+        List<Member> lEntities= repositoryMember.findAll();
+        List<MemberDTO> lDto = Arrays.asList(mapper.map(lEntities, MemberDTO[].class));
+        return lDto;
     }
 
 }
