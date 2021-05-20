@@ -19,6 +19,9 @@ public class MemberServiceImp implements IMemberService {
 	@Autowired
 	private MemberRepository repositoryMember;
 	
+    @Autowired
+    private ModelMapper mapper;
+
 	@Override
     @Transactional
     public MemberDTO save(MemberDTO memberDTO){
@@ -34,16 +37,11 @@ public class MemberServiceImp implements IMemberService {
     }
 	
 	MemberDTO modelToDTO(Member member){
-        ModelMapper mapper = new ModelMapper();
-        MemberDTO map = mapper.map(member, MemberDTO.class);
-        return map;
+        return mapper.map(member, MemberDTO.class);
     }
 	
     private Member dtoToModel(MemberDTO memberDTO){
-        ModelMapper mapper = new ModelMapper();
-        Member map = mapper.map(memberDTO, Member.class);
-        return map;
-
+        return mapper.map(memberDTO, Member.class);
     }
 
 }
