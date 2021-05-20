@@ -3,7 +3,10 @@ package com.team32.ong.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.List;
+import javax.validation.constraints.Email;
 
+import com.team32.ong.model.Slide;
 
 @Data
 @AllArgsConstructor
@@ -25,6 +28,8 @@ public class OrganizationDTO {
     private String welcomeText;
 
     private String aboutUsText;
+    
+    private List<Slide> slides;
 
     private String facebookUrl;
 
