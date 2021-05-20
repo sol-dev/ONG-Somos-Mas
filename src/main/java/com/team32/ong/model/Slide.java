@@ -23,7 +23,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Entity
 @Getter
 @Setter
@@ -33,38 +32,38 @@ import lombok.Setter;
 @SQLDelete(sql = "UPDATE news SET deleted=true WHERE id=?")
 @Where(clause = "deleted = false")
 @Table(name = "slides")
-public class Slide implements Serializable{
+public class Slide implements Serializable {
 
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-	
-	@URL
-	@Column(name = "image_url")
-	private String imageUrl;
-	
-	@Column(name = "text")
-	private String text;
-	
-	@Column(name = "order")
-	private int order;
-	
+
+    @URL
+    @Column(name = "image_url")
+    private String imageUrl;
+
+    @Column(name = "text")
+    private String text;
+
+    @Column(name = "position")
+    private int order;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="organization_id", nullable = false)
-    private OrganizationEntity organization; 
+    @JoinColumn(name = "organization_id", nullable = false)
+    private OrganizationEntity organization;
 
     @CreationTimestamp
-    @Column(name="created_date")
-     private LocalDateTime createDate;
-    
+    @Column(name = "created_date")
+    private LocalDateTime createDate;
+
     @UpdateTimestamp
-    @Column(name="last_modified_date")
+    @Column(name = "last_modified_date")
     private Date modifiedDate;
 
-    @Column(name="deleted")
+    @Column(name = "deleted")
     private boolean deleted;
-	
-	private static final long serialVersionUID = 1L;
-	
+
+    private static final long serialVersionUID = 1L;
+
 }
