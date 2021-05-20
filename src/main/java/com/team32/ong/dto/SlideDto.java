@@ -1,6 +1,5 @@
 package com.team32.ong.dto;
 
-import com.team32.ong.model.OrganizationEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,10 +11,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class SlideDto {
 
-    private Long id;
 	private String imageUrl;
 	private String text;
 	private int order;
-    private OrganizationEntity organization; 
+    private OrganizationPublicDTO organization; 
 
 }
