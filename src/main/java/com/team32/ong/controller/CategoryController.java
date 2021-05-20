@@ -1,11 +1,10 @@
 package com.team32.ong.controller;
 
 
-import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.CategoryDTO;
+import com.team32.ong.dto.ModifyCategoryDTO;
 import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.service.CategoryService;
-import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javassist.NotFoundException;
 
 import javax.validation.Valid;
+import org.springframework.web.bind.annotation.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/categories")
@@ -47,6 +49,17 @@ public class CategoryController {
     public ResponseEntity<?> deleteCategory(@PathVariable Long id) throws NotFoundException{
     	categoryService.delete(id);
     	return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable("id") Long id,@RequestBody ModifyCategoryDTO categoryDTO)
+                                                throws Exception {
+
+
+        CategoryDTO updatedCategory = categoryService.update(id, categoryDTO);
+
+
+        return new ResponseEntity<>(updatedCategory, HttpStatus.OK);
     }
 
 }
