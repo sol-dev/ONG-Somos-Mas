@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.team32.ong.dto.AddCommentBody;
+import com.team32.ong.dto.CommentBodyDTO;
 import com.team32.ong.dto.CommentDto;
 import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.service.CommentService;
@@ -38,7 +39,7 @@ public class CommentController {
 	}
 	
 	@GetMapping("/comments")
-	public ResponseEntity<List<String>> getAll(){
-		return new ResponseEntity<>(commentService.getAll(),HttpStatus.OK);
+	public ResponseEntity<List<CommentBodyDTO>> getAllOnlyBody(){
+		return new ResponseEntity<>(commentService.getAllOnlyBody(),HttpStatus.OK);
 	}
 }
