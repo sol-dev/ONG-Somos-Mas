@@ -87,7 +87,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     })
     protected ResponseEntity<?> exception(Exception e, HttpServletRequest req){
     	ErrorResponse errorFound = new ErrorResponse(500, new Date(), e.getMessage(), req.getRequestURI());
-        return new ResponseEntity<>(errorFound, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(errorFound, HttpStatus.BAD_REQUEST);
     }
     
     @Override
