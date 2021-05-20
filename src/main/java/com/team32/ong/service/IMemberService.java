@@ -1,13 +1,15 @@
 package com.team32.ong.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.team32.ong.dto.MemberDTO;
+
+import javassist.NotFoundException;
 
 @Service
 public interface IMemberService {
 
 	public MemberDTO save(MemberDTO memberDTO);
+	public MemberDTO updateById(MemberDTO  memberDTO, Long id) throws NotFoundException;
 	
 }
