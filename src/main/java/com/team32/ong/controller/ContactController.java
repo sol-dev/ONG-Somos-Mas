@@ -16,21 +16,17 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/contact")
 public class ContactController {
+
     @Autowired
     private ContactService contactService;
-	
-	@GetMapping("/contacts")
-	public ResponseEntity<List<ContactDTO>> getAll(){
-		return new ResponseEntity<List<ContactDTO>>(contactService.getAll(),HttpStatus.OK);
-	}
+
+    @GetMapping("/backoffice/contacts")
+    public ResponseEntity<List<ContactDTO>> getAll(){
+        return new ResponseEntity<List<ContactDTO>>(contactService.getAll(),HttpStatus.OK);
+    }
 
     @PostMapping
     public ResponseEntity<ContactDTO> create(ContactDTO contactDTO){
         return new ResponseEntity<>(contactService.save(contactDTO), HttpStatus.CREATED);
-    }
-
-    @GetMapping("/backoffice/contacts")
-    public ResponseEntity<List<ContactDTO>> getAllContacts() {
-        return new ResponseEntity<>(contactService.getAllContacts(), HttpStatus.OK);
     }
 }

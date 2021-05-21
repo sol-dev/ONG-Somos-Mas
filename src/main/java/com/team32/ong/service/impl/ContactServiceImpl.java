@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class ContactServiceImpl implements ContactService {
+
     @Autowired
     private ContactRepository contactRepository;
 
@@ -41,28 +42,13 @@ public class ContactServiceImpl implements ContactService {
         Contact contactSave = contactRepository.save(dtoToModel(contactDTO));
         return modelToDTO(contactSave);
     }
-    
+
     @Override
-	public List<ContactDTO> getAll() {
-		List<Contact> listFound = contactRepository.findAll();
-		return listFound
+    public List<ContactDTO> getAll() {
+        List<Contact> listFound = contactRepository.findAll();
+        return listFound
                 .stream()
                 .map(this::modelToDTO)
-                .collect(Collectors.toList());
-	}
-
-    @Override
-    public List<ContactDTO> getAllContacts() {
-        List<Contact> contactList = contactRepository.findAll();
-
-        return mapContactListToContacDTOList(contactList, ContactDTO.class);
-    }
-
-    private List<ContactDTO> mapContactListToContacDTOList(List<Contact> contactList, Class<ContactDTO> contactDTO) {
-        ModelMapper mapper = new ModelMapper();
-        return contactList
-                .stream()
-                .map(element -> mapper.map(element, contactDTO))
                 .collect(Collectors.toList());
     }
 

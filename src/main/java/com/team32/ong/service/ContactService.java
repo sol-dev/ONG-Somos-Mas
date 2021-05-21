@@ -6,5 +6,4 @@ import java.util.List;
 public interface ContactService {
 	ContactDTO save(ContactDTO contactDTO);
 	List<ContactDTO> getAll();
-	List<ContactDTO> getAllContacts();
 }
