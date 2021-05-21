@@ -55,17 +55,20 @@ public class MemberServiceImp implements IMemberService {
         if(!member.isPresent()){
             throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND+id);
         }
-        if(updates.getName().isBlank()|| updates.getName().length() == 0){
-            throw new BadRequestException(ConstantExceptionMessage.MSG_NAME_BAD_REQUEST);
-        }
-        if(updates.getImage().isBlank()|| updates.getImage().length() == 0){
-            throw new BadRequestException(ConstantExceptionMessage.MSG_IMAGE_BAD_REQUEST);
-        }
         Member updatedMember = member.get();
-        updatedMember.setName(updates.getName());
-        updatedMember.setImage(updates.getImage());
-
+        if(isValid(updates.getName()) ){
+            updatedMember.setName(updates.getName());
+        }
+        if(isValid(updates.getImage()) ){
+            updatedMember.setImage(updates.getImage());
+        }
         return modelToDTO(repositoryMember.save(updatedMember));
     }
 
+    private boolean isValid(String string){
+        boolean valid = false;
+        if(string.length() >0 || !string.isBlank())
+            valid = true;
+        return valid;
+    }
 }
