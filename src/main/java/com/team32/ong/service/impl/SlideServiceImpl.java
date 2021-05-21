@@ -30,6 +30,14 @@ public class SlideServiceImpl implements SlideService {
     }
 
     @Override
+    public SlideDto save(SlideDto slide) {
+        Slide slideSave = slideRepository.save(dtoToModel(slide));
+
+        return modelToDto(slideSave);
+    }
+
+
+    @Override
     public Map<Integer, String> imageAndOrder() {
         List<SlideDto> slideDtoList = slideList();
         Map<Integer, String> map = new HashMap<>();

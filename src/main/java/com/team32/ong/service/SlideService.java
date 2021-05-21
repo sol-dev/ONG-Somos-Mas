@@ -12,6 +12,8 @@ public interface SlideService {
 
     public List<SlideDto> slideList();
 
+    SlideDto save(SlideDto slide);
+
     public Map<Integer, String> imageAndOrder();
 
 }
