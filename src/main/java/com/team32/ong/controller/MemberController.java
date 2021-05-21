@@ -34,7 +34,6 @@ public class MemberController {
 	
 	@GetMapping
 	public ResponseEntity<?> getAll(){
-        List<MemberDTO> list = memberService.findAll();
-        return new ResponseEntity<>(list,HttpStatus.OK);
+        return new ResponseEntity<>(memberService.findAll(),HttpStatus.OK);
     }
 }

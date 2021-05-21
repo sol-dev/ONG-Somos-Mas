@@ -49,9 +49,7 @@ public class MemberServiceImp implements IMemberService {
 
     @Override
     public List<MemberDTO> findAll() {
-        List<Member> lEntities= repositoryMember.findAll();
-        List<MemberDTO> lDto = Arrays.asList(mapper.map(lEntities, MemberDTO[].class));
-        return lDto;
+        return Arrays.asList(mapper.map(repositoryMember.findAll(), MemberDTO[].class));
     }
 
 }
