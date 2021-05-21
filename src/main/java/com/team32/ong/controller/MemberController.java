@@ -1,10 +1,13 @@
 package com.team32.ong.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.amazonaws.services.s3.event.S3EventNotification.ResponseElementsEntity;
 import com.team32.ong.dto.MemberDTO;
 import com.team32.ong.service.IMemberService;
 
@@ -35,4 +39,9 @@ public class MemberController {
 	public ResponseEntity<MemberDTO> update(@RequestParam("id") Long id, @RequestBody MemberDTO member) throws NotFoundException{
 		return new ResponseEntity<MemberDTO>(memberService.update(id, member), HttpStatus.OK);
 	}
+	
+	@GetMapping
+	public ResponseEntity<?> getAll(){
+        return new ResponseEntity<>(memberService.findAll(),HttpStatus.OK);
+    }
 }

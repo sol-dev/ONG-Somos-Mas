@@ -7,8 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javassist.NotFoundException;
-
 import java.util.Optional;
+import java.util.Arrays;
+import java.util.List;
 
 import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.MemberDTO;
@@ -71,4 +72,10 @@ public class MemberServiceImp implements IMemberService {
             valid = true;
         return valid;
     }
+    
+    @Override
+    public List<MemberDTO> findAll() {
+        return Arrays.asList(mapper.map(repositoryMember.findAll(), MemberDTO[].class));
+    }
+
 }
