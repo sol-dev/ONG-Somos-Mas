@@ -103,23 +103,22 @@ public class OrganizationService implements IOrganizationService{
             throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND+id);
         }
         OrganizationEntity updatedOrganization = organization.get();
-        int i=0;
-        if(updates.getFacebookUrl().length()> 0 || updates.getFacebookUrl().isBlank() == false){
+        if( isValid(updates.getFacebookUrl()) ){
             updatedOrganization.setFacebookUrl(updates.getFacebookUrl()); 
-            i++;
         }
-        if(updates.getInstagramUrl().length()>0 || updates.getInstagramUrl().isBlank() == false){
+        if( isValid(updates.getInstagramUrl()) ){
             updatedOrganization.setInstagramUrl(updates.getInstagramUrl());
-            i++;
         }
-        if( updates.getLinkedinUrl().length()>0 || updates.getLinkedinUrl().isBlank() == false){
+        if( isValid(updates.getLinkedinUrl()) ){
             updatedOrganization.setLinkedinUrl(updates.getLinkedinUrl());
-            i++;
-        }
-        if (i==0){
-            throw new BadRequestException(ConstantExceptionMessage.MSG_EMPTY_URL);
         }
         return convertToPublicDto(organizationRepository.save(updatedOrganization));
     }
 
+    private boolean isValid(String string){
+        boolean valid = false;
+        if(string.length() >0 || !string.isBlank())
+            valid = true;
+        return valid;
+    }
 }

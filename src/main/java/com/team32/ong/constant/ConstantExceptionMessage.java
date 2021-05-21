@@ -25,7 +25,6 @@ public class ConstantExceptionMessage {
     public static final String MSG_COMMENT_NOT_FOUND = "No existe el comentario con id ";
     public static final String MSG_EMPTY_COMMENT_BODY = "El cuerpo del comentario no puede estar vacio";
     public static final String MSG_EMPTY_ACTIVITY = "El contenido de la actividad no puede estar vacio";
-    public static final String MSG_EMPTY_URL = "No ingresó ninguna URL";
     public static final String MSG_ERROR_DELETE_NEWS= "No se encontro la Noticia que desea borrar";
 
 }
