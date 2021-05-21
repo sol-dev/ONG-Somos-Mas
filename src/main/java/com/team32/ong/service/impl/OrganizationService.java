@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import com.team32.ong.constant.*;
+import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.OrganizationDTO;
 import com.team32.ong.dto.OrganizationPublicDTO;
 import com.team32.ong.exception.custom.BadRequestException;
@@ -51,13 +51,13 @@ public class OrganizationService implements IOrganizationService{
     
     //controller methods
     public OrganizationDTO save(OrganizationDTO dto) throws EmptyInputException {
-        if(dto.getImage()==null || dto.getImage().isBlank()){
+        if(dto.getImage() ==null || !isValid(dto.getImage()) ){
             throw new EmptyInputException(ConstantExceptionMessage.MSG_IMAGE_BAD_REQUEST);
         }
-        if(dto.getEmail()==null || dto.getEmail().isBlank()){
+        if(dto.getEmail()==null || !isValid(dto.getEmail()) ){
             throw new EmptyInputException(ConstantExceptionMessage.MSG_EMAIL_BAD_REQUEST);
         }
-        if(dto.getName()==null || dto.getName().isBlank()){
+        if(dto.getName()==null || !isValid(dto.getName()) ){
             throw new EmptyInputException(ConstantExceptionMessage.MSG_NAME_BAD_REQUEST);
         }
         OrganizationEntity entity = convertDtoToEntity(dto);
