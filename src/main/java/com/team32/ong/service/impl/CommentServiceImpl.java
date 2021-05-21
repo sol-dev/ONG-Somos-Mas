@@ -54,6 +54,7 @@ public class CommentServiceImpl implements CommentService {
     	return modelToDto(comment);
 	}
 
+
 	public ResponseEntity<CommentDto> createNewComment(Long newsId, Long userId, AddCommentBody commentBody)throws BadRequestException, NotFoundException{
 		
 		CommentDto commentDto = new CommentDto();
