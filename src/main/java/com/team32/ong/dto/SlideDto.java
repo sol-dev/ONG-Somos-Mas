@@ -13,5 +13,5 @@ public class SlideDto {
 	private String imageUrl;
 	private String text;
 	private int order;
-	private OrganizationDTO organization;
+	private OrganizationPublicDTO organization;
 }

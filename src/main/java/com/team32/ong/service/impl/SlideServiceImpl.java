@@ -11,14 +11,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import com.team32.ong.dto.ImageAndOrderDto;
-import com.team32.ong.dto.OrganizationDTO;
-import com.team32.ong.dto.OrganizationPublicDTO;
 import com.team32.ong.dto.SlideDto;
-import com.team32.ong.model.OrganizationEntity;
 import com.team32.ong.model.Slide;
 import com.team32.ong.repository.SlideRepository;
 import com.team32.ong.service.SlideService;
-import com.team32.ong.service.impl.OrganizationService;
 
 @Service
 @Transactional
@@ -36,27 +32,19 @@ public class SlideServiceImpl implements SlideService {
 
     @Override
     public Map<String, List<ImageAndOrderDto>> imageAndOrder() {
-        List<SlideDto> slideDtoList = slideList();
-        List<String> organizations = new ArrayList<>();
-        List<OrganizationDTO> orgs = new ArrayList<>();
+        List<String> organizations = slideRepository.findAllOrganizationsName();
         Map<String, List<ImageAndOrderDto>> result = new HashMap<>();
-        for (SlideDto s : slideDtoList) {
-            if (!organizations.contains(s.getOrganization().getName())) {
-                organizations.add(s.getOrganization().getName());
-                orgs.add(s.getOrganization());
-            }
-        }
-        for (OrganizationDTO org : orgs) {
-            // Long org_id = OrganizationService.convertPublicDtoToEntity(org).getId();
-            List<Slide> slides = slideRepository.findAllSlidesByOrganization(org.getId());
-            result.put(org.getName(), mapList(slides, ImageAndOrderDto.class));
+        for (String name : organizations) {
+            List<ImageAndOrderDto> orgSlides = mapList(slideRepository.findAllSlidesByOrganizationName(name),
+                    ImageAndOrderDto.class);
+            result.put(name, orgSlides);
         }
         return result;
     }
 
     @Override
     public List<String> getOrganizationSlides(Long id) throws NotFoundException {
-        List<Slide> slides = slideRepository.findAllSlidesByOrganization(id);
+        List<Slide> slides = slideRepository.findAllSlidesByOrganizationId(id);
         List<String> urls = new ArrayList<>();
         for (Slide s : slides) {
             urls.add(s.getImageUrl());
