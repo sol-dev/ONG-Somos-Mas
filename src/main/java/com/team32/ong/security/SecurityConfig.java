@@ -69,11 +69,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, "/api/v1/comment/{id}").hasAnyRole("USER", "ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/api/v1/comment/{id}").hasAnyRole("USER", "ADMIN")
                 // CONTACT
-                .antMatchers(HttpMethod.GET, "/api/v1/contacts/{id}").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/v1/contacts/").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST, "/api/v1/contacts").hasAnyRole("USER", "ADMIN")
-                .antMatchers(HttpMethod.PUT, "/api/v1/contacts").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/api/v1/contacts").permitAll()
+                // .antMatchers(HttpMethod.GET,"/api/v1/contact/{id}").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/v1/contact/contacts").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/api/v1/contact").hasAnyRole("USER", "ADMIN")
+                // .antMatchers(HttpMethod.PUT,"/api/v1/contact").permitAll()
+                // .antMatchers(HttpMethod.DELETE,"/api/v1/contact").permitAll()
                 // MEMBER
                 .antMatchers(HttpMethod.GET, "/api/v1/member/{id}").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/member").hasRole("ADMIN")
@@ -101,7 +101,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/v1/slides").hasRole("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/v1/slides/{id}").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/api/v1/slides/{id}").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST, "/api/v1/slides/Image").hasRole("ADMIN") // Borrar después de pruebas
                 // USE
                 .antMatchers(HttpMethod.GET, "/api/v1/users").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/api/v1/users/{id}").permitAll()
@@ -115,17 +114,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.exceptionHandling().accessDeniedHandler(jwtUtil.accessDeniedHandler());
         http.addFilterBefore(jwtFilterRequest, UsernamePasswordAuthenticationFilter.class);
-    }
-
-    public Boolean rolValidation(String token) {
-        String email = jwtUtil.extractUsername(token);
-        User user = userRepo.findByEmail(email);
-        if (user != null) {
-            if (user.getRole().getId() == 1) {
-                return true;
-            }
-        }
-        return false;
     }
 
     @Override
