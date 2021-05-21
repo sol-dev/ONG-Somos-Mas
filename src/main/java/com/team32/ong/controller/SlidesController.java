@@ -6,10 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.List;
-import java.util.Map;
-import com.team32.ong.dto.ImageAndOrderDto;
-import com.team32.ong.repository.SlideRepository;
+import java.util.TreeMap;
 import com.team32.ong.service.SlideService;
 
 @RestController
@@ -19,12 +16,9 @@ public class SlidesController {
 	@Autowired
 	private SlideService slideService;
 
-	@Autowired
-	private SlideRepository slideRepository;
-
 	@GetMapping(value = "/list")
-	public ResponseEntity<Map<String, List<ImageAndOrderDto>>> getImageAndOrderList() {
-		return new ResponseEntity<>(slideService.imageAndOrder(), HttpStatus.OK);
+	public ResponseEntity<TreeMap<String, TreeMap<Integer, String>>> getImageAndOrderList() {
+		return new ResponseEntity<>(slideService.imageAndOrderByOrganization(), HttpStatus.OK);
 	}
 
 }

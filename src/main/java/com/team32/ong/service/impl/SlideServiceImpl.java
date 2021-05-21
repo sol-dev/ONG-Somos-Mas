@@ -5,12 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javassist.NotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
-import com.team32.ong.dto.ImageAndOrderDto;
 import com.team32.ong.dto.SlideDto;
 import com.team32.ong.model.Slide;
 import com.team32.ong.repository.SlideRepository;
@@ -30,26 +27,23 @@ public class SlideServiceImpl implements SlideService {
         return slideDtoList;
     }
 
-    @Override
-    public Map<String, List<ImageAndOrderDto>> imageAndOrder() {
+    public TreeMap<String, TreeMap<Integer, String>> imageAndOrderByOrganization() {
         List<String> organizations = slideRepository.findAllOrganizationsName();
-        Map<String, List<ImageAndOrderDto>> result = new HashMap<>();
+        TreeMap<String, TreeMap<Integer, String>> result = new TreeMap<>();
         for (String name : organizations) {
-            List<ImageAndOrderDto> orgSlides = mapList(slideRepository.findAllSlidesByOrganizationName(name),
-                    ImageAndOrderDto.class);
-            result.put(name, orgSlides);
+            List<Slide> slides = slideRepository.findAllSlidesByOrganizationName(name);
+            TreeMap<Integer, String> imageOrder = new TreeMap<>();
+            for (Slide s : slides) {
+                imageOrder.put(s.getOrder(), s.getImageUrl());
+            }
+            result.put(name, imageOrder);
         }
         return result;
     }
 
     @Override
     public List<String> getOrganizationSlides(Long id) throws NotFoundException {
-        List<Slide> slides = slideRepository.findAllSlidesByOrganizationId(id);
-        List<String> urls = new ArrayList<>();
-        for (Slide s : slides) {
-            urls.add(s.getImageUrl());
-        }
-        return urls;
+        return slideRepository.findAllSlideUrlByOrganizationId(id);
     }
 
     private SlideDto modelToDto(Slide slide) {
