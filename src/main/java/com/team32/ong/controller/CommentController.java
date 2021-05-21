@@ -34,12 +34,14 @@ public class CommentController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody AddCommentBody commentBody)
+	public ResponseEntity<?> update(@PathVariable("id") Long id,
+									@RequestBody AddCommentBody commentBody,
+									@RequestHeader("authorization") String token)
 			throws Exception {
 
 		AddCommentBody commentResponse = null;
 
-		commentResponse = commentService.update(id, commentBody);
+		commentResponse = commentService.update(id, commentBody, token);
 
 
 		return new ResponseEntity(commentResponse, HttpStatus.OK);

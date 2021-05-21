@@ -5,11 +5,15 @@ import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.UserDTOResponse;
 import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.exception.custom.InvalidDataException;
+import com.team32.ong.model.User;
+import com.team32.ong.repository.UserRepository;
+import com.team32.ong.security.JWTUtil;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.team32.ong.dto.AddCommentBody;
@@ -24,6 +28,7 @@ import com.team32.ong.service.NewsService;
 import com.team32.ong.service.UserService;
 
 import javassist.NotFoundException;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 
 @Service
@@ -36,6 +41,10 @@ public class CommentServiceImpl implements CommentService {
 	private NewsService newsService;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private UserRepository userRepository;
+	@Autowired
+	private JWTUtil jwtUtil;
 
 	@Override
 	public CommentDto save(CommentDto commentDto) throws BadRequestException{
@@ -87,7 +96,7 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
-	public AddCommentBody update(Long id, AddCommentBody commentBody) throws Exception {
+	public AddCommentBody update(Long id, AddCommentBody commentBody, String token) throws Exception {
 
 		Comment oldComment = commentRepository.findById(id).orElse(null);
 		if (oldComment == null){
@@ -98,6 +107,10 @@ public class CommentServiceImpl implements CommentService {
 			throw new EmptyInputException(ConstantExceptionMessage.MSG_EMPTY_COMMENT_BODY);
 		}
 
+		User user = userRepository.findByEmail(jwtUtil.extractUsername(token.substring(7)));
+		if (oldComment.getUser().getId() != user.getId() || ! user.getRole().equals("ROLE_ADMIN")){
+			throw new AccessDeniedException(ConstantExceptionMessage.MSG_ACCES_DENIED);
+		}
 		//todo: validar usuario
 
 		oldComment.setBody(commentBody.getBody());

@@ -28,4 +28,5 @@ public class ConstantExceptionMessage {
     public static final String MSG_ERROR_DELETE_NEWS= "No se encontro la Noticia que desea borrar";
     public static final String MSG_CATEGORY_NOT_FOUND = "No se encontro la categoria con id ";
     public static final String MSG_DESCRIPTION_EMPTY = "La descripcion no puede estar vacia";
+    public static final String MSG_ACCES_DENIED = "Usuario no Autorizado";
 }

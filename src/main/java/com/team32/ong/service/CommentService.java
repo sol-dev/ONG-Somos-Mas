@@ -20,6 +20,6 @@ public interface CommentService {
 	CommentDto getOne(Long id);
 	CommentDto findById(Long id);
 	ResponseEntity<CommentDto> createNewComment(Long newsId, Long userId, AddCommentBody commentBody) throws BadRequestException, NotFoundException;
-    AddCommentBody update(Long id, AddCommentBody commentDto) throws Exception;
+    AddCommentBody update(Long id, AddCommentBody commentDto, String token) throws Exception;
 
 }
