@@ -36,10 +36,9 @@ public class NewsController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<NewsDto> getNew(@PathVariable("id") Long id) throws NotFoundException {
+		
 
-		NewsDto newsDto = newsService.findById(id);
-
-		return new ResponseEntity<NewsDto>(newsDto, HttpStatus.OK);
+		return new ResponseEntity<NewsDto>( newsService.findById(id), HttpStatus.OK);
 
 	}
 
