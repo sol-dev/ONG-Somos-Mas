@@ -64,12 +64,28 @@ public class NewsServiceImpl implements NewsService {
 	}
 
 	@Override
+	public NewsDto update(Long id, NewsDto newsDto) throws NotFoundException {
+		if (!newsRepository.existsById(id)){
+			throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND);
+		}else if(newsDto.getName().isEmpty()){
+			throw new BadRequestException(ConstantExceptionMessage.MSG_NAME_BAD_REQUEST);
+		}else if (newsDto.getContent().isEmpty()){
+			throw new BadRequestException(ConstantExceptionMessage.MSG_CONTENT_BAD_REQUEST);
+		}
+		News news = dtoToModel(newsDto);
+		news.setId(id);
+		return modelToDto(newsRepository.save(news));
+	}
+
+	@Override
 	public boolean deleteNew(Long id) throws NotFoundException{
 		return newsRepository.findById(id).map(news -> {
 			newsRepository.delete(news);
 			return true;
 		}).orElseThrow(() -> new NotFoundException(ConstantExceptionMessage.MSG_ERROR_DELETE_NEWS));
 	}
+
+
 
 	@Override
 	public NewsDto findById(Long id) throws NotFoundException {

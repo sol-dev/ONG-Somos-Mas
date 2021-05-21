@@ -24,6 +24,11 @@ public class NewsController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(newsDto);	
 	}
 
+	@PutMapping("/{id}")
+	public ResponseEntity<NewsDto> update(@PathVariable("id") Long id, @RequestBody NewsDto newsDto) throws NotFoundException {
+		return new ResponseEntity<>(newsService.update(id, newsDto), HttpStatus.CREATED);
+	}
+
 	@DeleteMapping("/{idNews}")
 	public ResponseEntity<?> delete(@PathVariable("idNews") Long id) throws NotFoundException {
 		if (newsService.deleteNew(id)){
