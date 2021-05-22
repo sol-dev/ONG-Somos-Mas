@@ -84,7 +84,7 @@ public class UserImplService implements UserService, UserDetailsService {
 		userEntity.setRole(role);
 		User userSave = userRepo.save(userEntity);
 
-		emailService.sendEmail(userSave.getEmail());
+		emailService.sendEmail(userSave.getEmail(),EmailService.WELCOME);
 
 		return entityToDto(userSave);
 
