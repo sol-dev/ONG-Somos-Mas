@@ -39,9 +39,9 @@ public class EmailServiceImpl implements EmailService {
     private Configuration config;
 
     @Override
-    public void sendEmail(String email) throws IOException{
+    public void sendEmail(String email, String template) throws IOException{
         try {
-        	Mail mail = prepareMail(email);
+        	Mail mail = prepareMail(email, template);
             Request request = new Request();
             request.setMethod(Method.POST);
             request.setEndpoint("mail/send");
@@ -55,11 +55,21 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
-    public Mail prepareMail(String email) throws TemplateException, IOException{
+    public Mail prepareMail(String email, String template) throws TemplateException, IOException{
         Mail mail = new Mail();
 
         Email fromEmail = new Email();
-        Content content = new Content("text/html", prepareWelcomeTemplate(email));
+        Content content = new Content();
+        if (template.equals(WELCOME)){
+            content.setType("text/html");
+            content.setValue(prepareWelcomeTemplate(email));
+        }else if (template.equals(CONTACT)){
+            content.setType("text/html");
+            content.setValue(prepareContactTemplate(email));
+        }else {
+            throw new IOException(ConstantExceptionMessage.MSG_ERROR_TEMPLATE_INVALID);
+        }
+
 
         fromEmail.setEmail(emailIssuing);
         mail.setFrom(fromEmail);
@@ -71,7 +81,7 @@ public class EmailServiceImpl implements EmailService {
         personalization.addTo(toEmail);
 
         mail.addContent(content);
-        mail.setSubject("¡Bienvenido a Somos Mas!");
+        mail.setSubject("¡Somos Mas!");
         mail.addPersonalization(personalization);
         return mail;
     }
@@ -82,6 +92,18 @@ public class EmailServiceImpl implements EmailService {
         User user = userRepository.findByEmail(email);
 
         model.put("title", "¡Bienvenido a Somos Mas!");
+        model.put("firstName", user.getFirstName());
+        model.put("lastName", user.getLastName());
+
+        return FreeMarkerTemplateUtils.processTemplateIntoString(config.getTemplate("plantilla_email.html"), model);
+    }
+
+    public String prepareContactTemplate(String email) throws IOException, TemplateException {
+        Map<String, Object> model = new HashMap<>();
+
+        User user = userRepository.findByEmail(email);
+
+        model.put("title", "El contacto ha sido exitoso");
         model.put("firstName", user.getFirstName());
         model.put("lastName", user.getLastName());
 

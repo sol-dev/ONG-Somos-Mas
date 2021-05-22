@@ -6,6 +6,12 @@ import freemarker.template.TemplateException;
 import java.io.IOException;
 
 public interface EmailService {
-    void sendEmail(String email) throws IOException;
-    Mail prepareMail(String email) throws TemplateException, IOException;
+
+    String WELCOME = "WELCOME";
+    String CONTACT = "CONTACT";
+
+    void sendEmail(String email, String template) throws IOException;
+    Mail prepareMail(String email, String template) throws TemplateException, IOException;
+
+
 }
