@@ -30,6 +30,4 @@ public class ConstantExceptionMessage {
     public static final String MSG_DESCRIPTION_EMPTY = "La descripcion no puede estar vacia";
     public static final String MSG_ERROR_TEMPLATE_INVALID = "No es un template valido";
 
-
-
 }
