@@ -18,7 +18,7 @@ import java.util.Map;
 @Service
 public interface UserService {
 
-	Map<String, Object> save(UserDTORequest user) throws NotFoundException, BadRequestException, IOException;
+	UserDTOResponse save(UserDTORequest user) throws NotFoundException, BadRequestException, IOException;
     List<UserDTOResponse> getAllUsers();
     UserDTOResponse getMe(String jwt) throws NotFoundException;
 	UserDTOResponse findById(Long id) throws NotFoundException;
