@@ -8,7 +8,9 @@ import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
 import com.sendgrid.helpers.mail.objects.Personalization;
 import com.team32.ong.constant.ConstantExceptionMessage;
+import com.team32.ong.model.Contact;
 import com.team32.ong.model.User;
+import com.team32.ong.repository.ContactRepository;
 import com.team32.ong.repository.UserRepository;
 import com.team32.ong.service.EmailService;
 import freemarker.template.Configuration;
@@ -36,6 +38,9 @@ public class EmailServiceImpl implements EmailService {
     private UserRepository userRepository;
 
     @Autowired
+    private ContactRepository contactRepository;
+
+    @Autowired
     private Configuration config;
 
     @Override
@@ -60,11 +65,10 @@ public class EmailServiceImpl implements EmailService {
 
         Email fromEmail = new Email();
         Content content = new Content();
+        content.setType("text/html");
         if (template.equals(WELCOME)){
-            content.setType("text/html");
             content.setValue(prepareWelcomeTemplate(email));
         }else if (template.equals(CONTACT)){
-            content.setType("text/html");
             content.setValue(prepareContactTemplate(email));
         }else {
             throw new IOException(ConstantExceptionMessage.MSG_ERROR_TEMPLATE_INVALID);
@@ -101,11 +105,11 @@ public class EmailServiceImpl implements EmailService {
     public String prepareContactTemplate(String email) throws IOException, TemplateException {
         Map<String, Object> model = new HashMap<>();
 
-        User user = userRepository.findByEmail(email);
+        Contact user = contactRepository.findByEmail(email);
 
         model.put("title", "El contacto ha sido exitoso");
-        model.put("firstName", user.getFirstName());
-        model.put("lastName", user.getLastName());
+        model.put("firstName", user.getName());
+        model.put("lastName", user.getEmail());
 
         return FreeMarkerTemplateUtils.processTemplateIntoString(config.getTemplate("plantilla_email.html"), model);
     }
