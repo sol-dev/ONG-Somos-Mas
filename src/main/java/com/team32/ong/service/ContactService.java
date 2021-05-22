@@ -1,10 +1,9 @@
 package com.team32.ong.service;
 
 import com.team32.ong.dto.ContactDTO;
-import org.springframework.stereotype.Service;
+import java.util.List;
 
-@Service
 public interface ContactService {
-
-    ContactDTO save(ContactDTO contactDTO);
+	ContactDTO save(ContactDTO contactDTO);
+	List<ContactDTO> getAll();
 }

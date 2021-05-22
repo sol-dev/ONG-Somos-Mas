@@ -2,6 +2,8 @@ package com.team32.ong.service;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import com.team32.ong.dto.MemberDTO;
 
 import javassist.NotFoundException;
@@ -11,5 +13,6 @@ public interface IMemberService {
 
 	public MemberDTO save(MemberDTO memberDTO);
 	public MemberDTO updateById(MemberDTO  memberDTO, Long id) throws NotFoundException;
+	public List<MemberDTO> findAll();
 	
 }

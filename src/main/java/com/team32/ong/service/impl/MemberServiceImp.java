@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.MemberDTO;
 import com.team32.ong.exception.custom.BadRequestException;
@@ -23,6 +26,9 @@ public class MemberServiceImp implements IMemberService {
 	@Autowired
 	private MemberRepository repositoryMember;
 	
+    @Autowired
+    private ModelMapper mapper;
+
 	@Override
     @Transactional
     public MemberDTO save(MemberDTO memberDTO){
@@ -68,16 +74,16 @@ public class MemberServiceImp implements IMemberService {
     }
 	
 	MemberDTO modelToDTO(Member member){
-        ModelMapper mapper = new ModelMapper();
-        MemberDTO map = mapper.map(member, MemberDTO.class);
-        return map;
+        return mapper.map(member, MemberDTO.class);
     }
 	
     private Member dtoToModel(MemberDTO memberDTO){
-        ModelMapper mapper = new ModelMapper();
-        Member map = mapper.map(memberDTO, Member.class);
-        return map;
+        return mapper.map(memberDTO, Member.class);
+    }
 
+    @Override
+    public List<MemberDTO> findAll() {
+        return Arrays.asList(mapper.map(repositoryMember.findAll(), MemberDTO[].class));
     }
 
 }
