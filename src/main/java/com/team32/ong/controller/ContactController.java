@@ -1,5 +1,6 @@
 package com.team32.ong.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class ContactController {
 	}
 
     @PostMapping
-    public ResponseEntity<ContactDTO> create(ContactDTO contactDTO){
+    public ResponseEntity<ContactDTO> create(ContactDTO contactDTO) throws IOException {
         return new ResponseEntity<>(contactService.save(contactDTO), HttpStatus.CREATED);
     }
 }
