@@ -54,7 +54,7 @@ public class UserController {
     }
     
     @PostMapping
-    public ResponseEntity<Map<String, Object>> createUser(@RequestBody UserDTORequest userDTORequest) throws NotFoundException, BadRequestException, IOException {
+    public ResponseEntity<UserDTOResponse> createUser(@RequestBody UserDTORequest userDTORequest) throws NotFoundException, BadRequestException, IOException {
         return new ResponseEntity<>(userService.save(userDTORequest), HttpStatus.CREATED);
     }
     
