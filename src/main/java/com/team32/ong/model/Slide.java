@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
@@ -41,12 +42,14 @@ public class Slide implements Serializable {
 
     @URL
     @Column(name = "image_url")
+    @NotEmpty
     private String imageUrl;
 
     @Column(name = "text")
     private String text;
 
     @Column(name = "position")
+    @NotEmpty
     private int order;
 
     @ManyToOne(fetch = FetchType.LAZY)
