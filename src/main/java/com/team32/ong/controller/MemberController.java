@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.team32.ong.dto.MemberDTO;
@@ -32,16 +31,11 @@ public class MemberController {
 		return new ResponseEntity<MemberDTO>(memberService.save(newMemberDTO), HttpStatus.CREATED);
     }
 
-	@PutMapping("/{id}")
+	@PutMapping("update/{id}")
     public ResponseEntity<MemberDTO> updateMember( @PathVariable Long id, @RequestBody MemberDTO memberDtoToUpdate) throws NotFoundException {
         MemberDTO updatedMember = memberService.updateById(memberDtoToUpdate, id);
         return new ResponseEntity<>(updatedMember, HttpStatus.OK);
     }
-
-	@PutMapping(value="/update" , consumes = "application/json")
-	public ResponseEntity<MemberDTO> update(@RequestParam("id") Long id, @RequestBody MemberDTO member) throws NotFoundException{
-		return new ResponseEntity<MemberDTO>(memberService.update(id, member), HttpStatus.OK);
-	}
 	
 	@GetMapping
 	public ResponseEntity<?> getAll(){
