@@ -102,17 +102,12 @@ public class CommentServiceImpl implements CommentService {
 			throw new NotFoundException(ConstantExceptionMessage.MSG_COMMENT_NOT_FOUND.concat(id.toString()));
 		}
 
-		if (commentBody.getBody() == null || commentBody.getBody() == ""){
-			throw new EmptyInputException(ConstantExceptionMessage.MSG_EMPTY_COMMENT_BODY);
-		}
 
-		if (!jwtUtil.extractUsername(token.substring(7)).equals(oldComment.getUser()) ||
-		jwtUtil.)
-		//User user = userRepository.findByEmail(jwtUtil.extractUsername(token.substring(7)));
-		//if (oldComment.getUser().getId() != user.getId() || ! user.getRole().equals("ROLE_ADMIN")){
-		//	throw new AccessDeniedException(ConstantExceptionMessage.MSG_ACCES_DENIED);
-		//}
-		//todo: validar usuario
+		User user = userRepository.findByEmail(jwtUtil.extractUsername(token.substring(7)));
+		if (oldComment.getUser().getId() != user.getId() || ! user.getRole().equals("ROLE_ADMIN")){
+			throw new AccessDeniedException(ConstantExceptionMessage.MSG_ACCES_DENIED);
+		}
+		//todo: user validate
 
 		oldComment.setBody(commentBody.getBody());
 
