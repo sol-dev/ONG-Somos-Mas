@@ -20,7 +20,7 @@ public class NewsDto{
 	private String name;
 	private String content;
 	private String image;
-	private Set<Category> categories;
-	private List<Comment> comments;
+	//private Set<Category> categories;
+	//private List<Comment> comments;
 
 }

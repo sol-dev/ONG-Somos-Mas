@@ -7,13 +7,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class SlideDto {
+@NoArgsConstructor
+public class NewDTO {
 
-	private String imageUrl;
-	private String text;
-	private int order;
-    private OrganizationPublicDTO organization; 
-
+    private Long id;
+    private String name;
+    private String content;
+    private String image;
 }

@@ -1,17 +1,18 @@
 package com.team32.ong.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.team32.ong.dto.AddCommentBody;
+import com.team32.ong.dto.CommentBodyDTO;
 import com.team32.ong.dto.CommentDto;
 import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.service.CommentService;
 
-import java.util.HashMap;
-import java.util.Map;
 import javassist.NotFoundException;
 
 
@@ -31,6 +32,12 @@ public class CommentController {
 		
     	return commentService.createNewComment(newsId, userId, commentBody);
     	
+	}
+
+	@GetMapping("/comments")
+	public ResponseEntity<List<CommentBodyDTO>> getAllOnlyBody(){
+		return new ResponseEntity<>(commentService.getAllOnlyBody(),HttpStatus.OK);
+
 	}
 
 	@PutMapping("/{id}")

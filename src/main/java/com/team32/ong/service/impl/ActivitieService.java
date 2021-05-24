@@ -31,7 +31,6 @@ public class ActivitieService implements IActivitiesServices {
                 throw new EmptyInputException(ConstantExceptionMessage.MSG_NAME_BAD_REQUEST);
             }
             if (activitiesDTO.getContent() == null || activitiesDTO.getContent() == ""){
-
                 throw new EmptyInputException(ConstantExceptionMessage.MSG_EMPTY_ACTIVITY);
             }
 

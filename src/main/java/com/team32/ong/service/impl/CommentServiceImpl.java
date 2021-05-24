@@ -1,22 +1,18 @@
 package com.team32.ong.service.impl;
 
-import com.team32.ong.constant.ConstantExceptionMessage;
-
 import com.team32.ong.dto.UserDTOResponse;
-import com.team32.ong.exception.custom.BadRequestException;
-import com.team32.ong.exception.custom.InvalidDataException;
-import com.team32.ong.model.User;
-import com.team32.ong.repository.UserRepository;
-import com.team32.ong.security.JWTUtil;
-import javassist.NotFoundException;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.team32.ong.dto.AddCommentBody;
+import com.team32.ong.dto.CommentBodyDTO;
 import com.team32.ong.dto.CommentDto;
 import com.team32.ong.dto.NewsDto;
 import com.team32.ong.exception.custom.BadRequestException;
@@ -28,8 +24,11 @@ import com.team32.ong.service.NewsService;
 import com.team32.ong.service.UserService;
 
 import javassist.NotFoundException;
-import org.springframework.web.bind.annotation.RequestHeader;
-
+import com.team32.ong.model.User;
+import com.team32.ong.repository.UserRepository;
+import com.team32.ong.security.JWTUtil;
+import com.team32.ong.constant.ConstantExceptionMessage;
+import org.springframework.security.access.AccessDeniedException;
 
 @Service
 @Transactional
@@ -107,10 +106,12 @@ public class CommentServiceImpl implements CommentService {
 			throw new EmptyInputException(ConstantExceptionMessage.MSG_EMPTY_COMMENT_BODY);
 		}
 
-		User user = userRepository.findByEmail(jwtUtil.extractUsername(token.substring(7)));
-		if (oldComment.getUser().getId() != user.getId() || ! user.getRole().equals("ROLE_ADMIN")){
-			throw new AccessDeniedException(ConstantExceptionMessage.MSG_ACCES_DENIED);
-		}
+		if (!jwtUtil.extractUsername(token.substring(7)).equals(oldComment.getUser()) ||
+		jwtUtil.)
+		//User user = userRepository.findByEmail(jwtUtil.extractUsername(token.substring(7)));
+		//if (oldComment.getUser().getId() != user.getId() || ! user.getRole().equals("ROLE_ADMIN")){
+		//	throw new AccessDeniedException(ConstantExceptionMessage.MSG_ACCES_DENIED);
+		//}
 		//todo: validar usuario
 
 		oldComment.setBody(commentBody.getBody());
@@ -133,7 +134,20 @@ public class CommentServiceImpl implements CommentService {
 		Comment comment = mapper.map(commentDto, Comment.class);
 		return comment;
 	}
+	
+	public CommentBodyDTO modelToBodyDto(Comment comment) {
+		ModelMapper mapper = new ModelMapper();
+		CommentBodyDTO commentDto = mapper.map(comment, CommentBodyDTO.class);
+		return commentDto;
+	}
 
-
+	@Override
+	public List<CommentBodyDTO> getAllOnlyBody() {
+		 List<CommentBodyDTO> listFound = commentRepository.findAll()
+											 				.stream()
+											 				.map(this::modelToBodyDto)
+											 				.collect(Collectors.toList());
+		 return listFound;
+	}
 
 }
