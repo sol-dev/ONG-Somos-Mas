@@ -27,6 +27,7 @@ public class ConstantExceptionMessage {
     public static final String MSG_EMPTY_ACTIVITY = "El contenido de la actividad no puede estar vacio";
     public static final String MSG_ERROR_DELETE_NEWS= "No se encontro la Noticia que desea borrar";
     public static final String MSG_CATEGORY_NOT_FOUND = "No se encontro la categoria con id ";
+    public static final String MSG_NEWS_NOT_FOUND = "No se encontro la noticia con el id ";
     public static final String MSG_DESCRIPTION_EMPTY = "La descripcion no puede estar vacia";
     public static final String MSG_ERROR_TEMPLATE_INVALID = "No es un template valido";
 
