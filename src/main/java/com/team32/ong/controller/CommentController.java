@@ -7,13 +7,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.team32.ong.dto.AddCommentBody;
 import com.team32.ong.dto.CommentBodyDTO;
+import com.team32.ong.dto.CommentDTOByIdNews;
 import com.team32.ong.dto.CommentDto;
 import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.service.CommentService;
@@ -23,7 +26,7 @@ import javassist.NotFoundException;
 
 @RestController
 @Validated
-@RequestMapping("api/v1/news/comment")
+@RequestMapping("api/v1/comment")
 public class CommentController {
 	
 	@Autowired
@@ -41,5 +44,10 @@ public class CommentController {
 	@GetMapping("/comments")
 	public ResponseEntity<List<CommentBodyDTO>> getAllOnlyBody(){
 		return new ResponseEntity<>(commentService.getAllOnlyBody(),HttpStatus.OK);
+	}
+	
+	@GetMapping("/news/{id}/comments")
+	public ResponseEntity<List<CommentDTOByIdNews>> getCommentsByNews(@PathVariable Long id) throws NotFoundException {
+    	return new ResponseEntity<>(commentService.getCommentsByNewsId(id),HttpStatus.OK);	
 	}
 }

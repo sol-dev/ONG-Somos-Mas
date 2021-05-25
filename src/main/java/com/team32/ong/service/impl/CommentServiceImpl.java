@@ -1,7 +1,5 @@
 package com.team32.ong.service.impl;
 
-import com.team32.ong.dto.UserDTOResponse;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,10 +9,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.team32.ong.dto.AddCommentBody;
 import com.team32.ong.dto.CommentBodyDTO;
+import com.team32.ong.dto.CommentDTOByIdNews;
 import com.team32.ong.dto.CommentDto;
 import com.team32.ong.dto.NewsDto;
+import com.team32.ong.dto.UserDTOResponse;
 import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.exception.custom.EmptyInputException;
 import com.team32.ong.model.Comment;
@@ -106,6 +107,12 @@ public class CommentServiceImpl implements CommentService {
 		CommentBodyDTO commentDto = mapper.map(comment, CommentBodyDTO.class);
 		return commentDto;
 	}
+	
+	public CommentDTOByIdNews modelToDtoByNewsId(Comment comment) {
+		ModelMapper mapper = new ModelMapper();
+		CommentDTOByIdNews commentDto = mapper.map(comment, CommentDTOByIdNews.class);
+		return commentDto;
+	}
 
 	@Override
 	public List<CommentBodyDTO> getAllOnlyBody() {
@@ -114,5 +121,14 @@ public class CommentServiceImpl implements CommentService {
 											 				.map(this::modelToBodyDto)
 											 				.collect(Collectors.toList());
 		 return listFound;
+	}
+	
+	@Override
+	public List<CommentDTOByIdNews> getCommentsByNewsId(Long id) throws NotFoundException {
+		newsService.findById(id);
+		List<Comment> listFound = commentRepository.findCommentsByNewsId(id);
+		return listFound.stream()
+						.map(this::modelToDtoByNewsId)
+						.collect(Collectors.toList());
 	}
 }
