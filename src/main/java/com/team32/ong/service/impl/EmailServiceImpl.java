@@ -105,11 +105,11 @@ public class EmailServiceImpl implements EmailService {
     public String prepareContactTemplate(String email) throws IOException, TemplateException {
         Map<String, Object> model = new HashMap<>();
 
-        Contact user = contactRepository.findByEmail(email);
+        User user = userRepository.findByEmail(email);
 
         model.put("title", "El contacto ha sido exitoso");
-        model.put("firstName", user.getName());
-        model.put("lastName", user.getEmail());
+        model.put("firstName", user.getFirstName());
+        model.put("lastName", user.getLastName());
 
         return FreeMarkerTemplateUtils.processTemplateIntoString(config.getTemplate("plantilla_email.html"), model);
     }
