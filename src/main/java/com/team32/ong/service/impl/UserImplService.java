@@ -31,6 +31,7 @@ import com.team32.ong.security.JWTUtil;
 import com.team32.ong.service.EmailService;
 import com.team32.ong.service.UserService;
 
+
 import javassist.NotFoundException;
 
 @Service
@@ -47,7 +48,7 @@ public class UserImplService implements UserService, UserDetailsService {
     
     @Autowired
     private EmailService emailService;
-
+    
 	@Autowired
 	private JWTUtil jwtUtil;
 	
@@ -84,11 +85,18 @@ public class UserImplService implements UserService, UserDetailsService {
 		userEntity.setRole(role);
 		User userSave = userRepo.save(userEntity);
 
+        String jwt = jwtUtil.generateToken(userSave);
+        
+        UserDTOResponse response = entityToDto(userSave);
+        response.setJwt(jwt);
+
 		emailService.sendEmail(userSave.getEmail(),EmailService.WELCOME);
 
-		return entityToDto(userSave);
+		return response;
 
     }
+		
+
 
     @Override
     public UserDTOResponse getMe(String jwt) throws NotFoundException{

@@ -80,7 +80,7 @@ public class CategoryImplService implements CategoryService {
 		}
 		repo.deleteById(id);
 	}
-    
+
     public CategoryDTO findById(Long id) throws NotFoundException{
         Optional<Category> category = repo.findById(id) ;
         if(!category.isPresent()){
