@@ -76,9 +76,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // .antMatchers(HttpMethod.DELETE,"/api/v1/contact").permitAll()
                 // MEMBER
                 .antMatchers(HttpMethod.GET, "/api/v1/member/{id}").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/v1/member").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/api/v1/member/").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/api/v1/member").hasAnyRole("USER", "ADMIN")
-                .antMatchers(HttpMethod.PUT, "/api/v1/member/{id}").hasAnyRole("USER", "ADMIN")
+                .antMatchers(HttpMethod.PUT,"/api/v1/member/update{id}").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/api/v1/member").hasAnyRole("USER", "ADMIN")
                 // NEWS
                 .antMatchers(HttpMethod.GET, "/api/v1/news/{id}").hasRole("ADMIN")
@@ -104,7 +104,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // USE
                 .antMatchers(HttpMethod.GET, "/api/v1/users").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/api/v1/users/{id}").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/v1/users").hasAnyRole("USER", "ADMIN")
+                .antMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/v1/users/admin/update/{id}").hasRole("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/v1/users/update/{id}").hasAnyRole("USER", "ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/api/v1/users/delete/{id}").hasAnyRole("USER", "ADMIN")
