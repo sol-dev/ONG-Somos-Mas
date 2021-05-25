@@ -13,11 +13,12 @@ import javassist.NotFoundException;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public interface UserService {
 
-    UserDTOResponse save(UserDTORequest user) throws NotFoundException, BadRequestException, IOException;
+	UserDTOResponse save(UserDTORequest user) throws NotFoundException, BadRequestException, IOException;
     List<UserDTOResponse> getAllUsers();
     UserDTOResponse getMe(String jwt) throws NotFoundException;
 	UserDTOResponse findById(Long id) throws NotFoundException;
