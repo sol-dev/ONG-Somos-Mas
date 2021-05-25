@@ -2,6 +2,7 @@ package com.team32.ong.service.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,6 +32,10 @@ import com.team32.ong.security.JWTUtil;
 import com.team32.ong.service.EmailService;
 import com.team32.ong.service.UserService;
 
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javassist.NotFoundException;
 
 @Service
@@ -47,7 +52,7 @@ public class UserImplService implements UserService, UserDetailsService {
     
     @Autowired
     private EmailService emailService;
-
+    
 	@Autowired
 	private JWTUtil jwtUtil;
 	
@@ -84,11 +89,18 @@ public class UserImplService implements UserService, UserDetailsService {
 		userEntity.setRole(role);
 		User userSave = userRepo.save(userEntity);
 
+        String jwt = jwtUtil.generateToken(userSave);
+        
+        UserDTOResponse response = entityToDto(userSave);
+        response.setJwt(jwt);
+        
 		emailService.sendEmail(userSave.getEmail());
 
-		return entityToDto(userSave);
+		return response;
 
     }
+		
+
 
     @Override
     public UserDTOResponse getMe(String jwt) throws NotFoundException{
