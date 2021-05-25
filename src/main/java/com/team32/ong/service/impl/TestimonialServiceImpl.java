@@ -120,9 +120,11 @@ public class TestimonialServiceImpl implements TestimonialService {
     }
 
     @Override
-    public Page<TestimonialDto> getTestimonials(Pageable page) {
-        Page<Testimonial> testimonials = testimonialRepository.findAll(page);
-        return testimonials.map(this::modelToDto);
+    public List<TestimonialDto> getTestimonials(Pageable page) {
+        List<Testimonial> testimonials = testimonialRepository.findAll(page).toList();
+        return testimonials.stream()
+                .map(this::modelToDto)
+                .collect(Collectors.toList());
     }
 
     private TestimonialDto setNullsAttributes(TestimonialDto dto, Testimonial model){

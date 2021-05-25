@@ -12,5 +12,5 @@ public interface TestimonialService {
     TestimonialDto save(TestimonialDto testimonialDto);
     TestimonialDto updateById(TestimonialDto testimonialDto, Long id) throws NotFoundException;
     void deleteById(Long id) throws NotFoundException;
-    Page<TestimonialDto> getTestimonials(Pageable page);
+    List<TestimonialDto> getTestimonials(Pageable page);
 }

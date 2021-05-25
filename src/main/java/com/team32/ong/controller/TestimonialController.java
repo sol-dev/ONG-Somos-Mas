@@ -27,7 +27,7 @@ public class TestimonialController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<TestimonialDto>> getTestimonials(Pageable page){
+    public ResponseEntity<List<TestimonialDto>> getTestimonials(Pageable page){
         return new ResponseEntity<>(testimonialService.getTestimonials(page), HttpStatus.OK);
     }
 
