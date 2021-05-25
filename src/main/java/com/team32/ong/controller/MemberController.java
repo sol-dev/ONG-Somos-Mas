@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -44,4 +45,10 @@ public class MemberController {
 	public ResponseEntity<?> getAll(){
         return new ResponseEntity<>(memberService.findAll(),HttpStatus.OK);
     }
+
+	@DeleteMapping
+	public ResponseEntity<?> softDelete(@RequestParam("id") Long id) throws NotFoundException{
+		memberService.softDelete(id);
+		return new ResponseEntity<>(HttpStatus.OK);
+	} 
 }
