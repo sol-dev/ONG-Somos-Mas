@@ -90,7 +90,7 @@ public class UserImplService implements UserService, UserDetailsService {
         UserDTOResponse response = entityToDto(userSave);
         response.setJwt(jwt);
 
-		emailService.sendEmail(userSave.getEmail(),EmailService.WELCOME);
+		emailService.sendEmail(userSave.getEmail(),EmailServiceImpl.WELCOME);
 
 		return response;
 

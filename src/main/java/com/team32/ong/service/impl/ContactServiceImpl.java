@@ -45,7 +45,7 @@ public class ContactServiceImpl implements ContactService {
 
         Contact contactSave = contactRepository.save(dtoToModel(contactDTO));
 
-        emailService.sendEmail(contactSave.getEmail(),EmailService.CONTACT);
+        emailService.sendEmail(contactSave.getEmail(),EmailServiceImpl.CONTACT);
 
         return modelToDTO(contactSave);
     }

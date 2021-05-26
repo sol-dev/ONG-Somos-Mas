@@ -44,6 +44,9 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     private Configuration config;
 
+    public static final String WELCOME = ConstantSendEmailMensage.WELCOME;
+    public static final String CONTACT = ConstantSendEmailMensage.CONTACT;
+
     @Override
     public void sendEmail(String email, String template) throws IOException{
         try {
