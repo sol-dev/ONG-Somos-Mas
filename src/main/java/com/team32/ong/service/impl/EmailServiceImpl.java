@@ -8,6 +8,7 @@ import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
 import com.sendgrid.helpers.mail.objects.Personalization;
 import com.team32.ong.constant.ConstantExceptionMessage;
+import com.team32.ong.constant.ConstantSendEmailMensage;
 import com.team32.ong.model.Contact;
 import com.team32.ong.model.User;
 import com.team32.ong.repository.ContactRepository;
@@ -85,7 +86,7 @@ public class EmailServiceImpl implements EmailService {
         personalization.addTo(toEmail);
 
         mail.addContent(content);
-        mail.setSubject("¡Somos Mas!");
+        mail.setSubject(ConstantSendEmailMensage.MSG_SUBJET);
         mail.addPersonalization(personalization);
         return mail;
     }
@@ -95,7 +96,7 @@ public class EmailServiceImpl implements EmailService {
 
         User user = userRepository.findByEmail(email);
 
-        model.put("title", "¡Bienvenido a Somos Mas!");
+        model.put("title", ConstantSendEmailMensage.MSG_TITLE_EMAIL_WELCOME);
         model.put("firstName", user.getFirstName());
         model.put("lastName", user.getLastName());
 
@@ -107,7 +108,7 @@ public class EmailServiceImpl implements EmailService {
 
         User user = userRepository.findByEmail(email);
 
-        model.put("title", "El contacto ha sido exitoso");
+        model.put("title", ConstantSendEmailMensage.MSG_TITLE_EMAIL_CONTACT);
         model.put("firstName", user.getFirstName());
         model.put("lastName", user.getLastName());
 
