@@ -1,15 +1,15 @@
 package com.team32.ong.service.impl;
 
+import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javassist.NotFoundException;
+import com.team32.ong.constant.ConstantExceptionMessage;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
-
-import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.SlideDto;
 import com.team32.ong.model.Slide;
 import com.team32.ong.repository.IOrganizationRepository;
@@ -22,6 +22,15 @@ public class SlideServiceImpl implements SlideService {
 
     @Autowired
     private SlideRepository slideRepository;
+
+    @Override
+    public SlideDto findById(Long id) throws NotFoundException {
+        Optional<Slide> slideFound = slideRepository.findById(id);
+        if (!slideFound.isPresent()) {
+            throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND + id);
+        }
+        return modelToDto(slideFound.get());
+    }
 
     @Autowired
     private IOrganizationRepository organizationRepository;
