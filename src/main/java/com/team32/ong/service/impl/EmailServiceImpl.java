@@ -66,13 +66,15 @@ public class EmailServiceImpl implements EmailService {
 
         Email fromEmail = new Email();
         Content content = new Content();
-        content.setType("text/html");
         if (template.equals(WELCOME)){
+            content.setType("text/html");
             content.setValue(prepareWelcomeTemplate(email));
         }else if (template.equals(CONTACT)){
+            content.setType("text/html");
             content.setValue(prepareContactTemplate(email));
         }else {
-            throw new IOException(ConstantExceptionMessage.MSG_ERROR_TEMPLATE_INVALID);
+            content.setType("text/plain");
+            content.setValue(template);
         }
 
 
