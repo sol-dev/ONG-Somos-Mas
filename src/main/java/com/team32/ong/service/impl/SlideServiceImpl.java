@@ -8,8 +8,11 @@ import javassist.NotFoundException;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
+
+import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.SlideDto;
 import com.team32.ong.model.Slide;
+import com.team32.ong.repository.IOrganizationRepository;
 import com.team32.ong.repository.SlideRepository;
 import com.team32.ong.service.SlideService;
 
@@ -19,6 +22,9 @@ public class SlideServiceImpl implements SlideService {
 
     @Autowired
     private SlideRepository slideRepository;
+
+    @Autowired
+    private IOrganizationRepository organizationRepository;
 
     @Override
     public List<SlideDto> slideList() {
@@ -43,6 +49,9 @@ public class SlideServiceImpl implements SlideService {
 
     @Override
     public List<String> getOrganizationSlides(Long id) throws NotFoundException {
+        if (organizationRepository.findById(id).orElse(null) == null) {
+            throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND + id);
+        }
         return slideRepository.findAllSlideUrlByOrganizationId(id);
     }
 
