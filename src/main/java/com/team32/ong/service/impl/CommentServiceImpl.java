@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +46,7 @@ public class CommentServiceImpl implements CommentService {
 	private UserRepository userRepository;
 	@Autowired
 	private JWTUtil jwtUtil;
+
 
 	@Override
 	public CommentDto save(CommentDto commentDto) throws BadRequestException{
@@ -104,10 +107,9 @@ public class CommentServiceImpl implements CommentService {
 
 
 		User user = userRepository.findByEmail(jwtUtil.extractUsername(token.substring(7)));
-		if (oldComment.getUser().getId() != user.getId() || ! user.getRole().equals("ROLE_ADMIN")){
+		if (oldComment.getUser().getId() != user.getId() && ! user.getRole().getName().equals("ROLE_ADMIN")){
 			throw new AccessDeniedException(ConstantExceptionMessage.MSG_ACCES_DENIED);
 		}
-		//todo: user validate
 
 		oldComment.setBody(commentBody.getBody());
 

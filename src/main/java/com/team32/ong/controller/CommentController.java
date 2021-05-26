@@ -46,11 +46,6 @@ public class CommentController {
 									@RequestHeader("authorization") String token)
 			throws Exception {
 
-		AddCommentBody commentResponse = null;
-
-		commentResponse = commentService.update(id, commentBody, token);
-
-
-		return new ResponseEntity(commentResponse, HttpStatus.OK);
+		return new ResponseEntity(commentService.update(id, commentBody, token), HttpStatus.OK);
 	}
 }
