@@ -51,13 +51,13 @@ public class OrganizationService implements IOrganizationService{
     
     //controller methods
     public OrganizationDTO save(OrganizationDTO dto) throws EmptyInputException {
-        if(dto.getImage() ==null || !isValid(dto.getImage()) ){
+        if(dto.getImage()==null || dto.getImage().isBlank()){
             throw new EmptyInputException(ConstantExceptionMessage.MSG_IMAGE_BAD_REQUEST);
         }
-        if(dto.getEmail()==null || !isValid(dto.getEmail()) ){
+        if(dto.getEmail()==null || dto.getEmail().isBlank()){
             throw new EmptyInputException(ConstantExceptionMessage.MSG_EMAIL_BAD_REQUEST);
         }
-        if(dto.getName()==null || !isValid(dto.getName()) ){
+        if(dto.getName()==null || dto.getName().isBlank()){
             throw new EmptyInputException(ConstantExceptionMessage.MSG_NAME_BAD_REQUEST);
         }
         OrganizationEntity entity = convertDtoToEntity(dto);
