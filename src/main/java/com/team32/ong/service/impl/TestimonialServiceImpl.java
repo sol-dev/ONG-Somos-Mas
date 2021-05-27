@@ -122,9 +122,8 @@ public class TestimonialServiceImpl implements TestimonialService {
     @Override
     public String getTestimonials(Pageable page) {
         Page<Testimonial> testimonials = testimonialRepository.findAll(page);
-        Page<TestimonialDto> testimonialDtos = testimonials.map(this::modelToDto);
 
-        return paginationComponent.changePaginationResponse(testimonialDtos);
+        return paginationComponent.changePaginationResponse(testimonials.map(this::modelToDto));
     }
 
     private TestimonialDto setNullsAttributes(TestimonialDto dto, Testimonial model){
