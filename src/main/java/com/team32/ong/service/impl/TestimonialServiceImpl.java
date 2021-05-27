@@ -1,5 +1,6 @@
 package com.team32.ong.service.impl;
 
+import com.team32.ong.component.Pagination;
 import com.team32.ong.component.Validation;
 import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.TestimonialDto;
@@ -31,6 +32,9 @@ public class TestimonialServiceImpl implements TestimonialService {
 
     @Autowired
     private Validation validations;
+
+    @Autowired
+    private Pagination paginationComponent;
 
     @Override
     public TestimonialDto save(TestimonialDto testimonialDto) {
@@ -120,11 +124,11 @@ public class TestimonialServiceImpl implements TestimonialService {
     }
 
     @Override
-    public List<TestimonialDto> getTestimonials(Pageable page) {
-        List<Testimonial> testimonials = testimonialRepository.findAll(page).toList();
-        return testimonials.stream()
-                .map(this::modelToDto)
-                .collect(Collectors.toList());
+    public String getTestimonials(Pageable page) {
+        Page<Testimonial> testimonials = testimonialRepository.findAll(page);
+        Page<TestimonialDto> testimonialDtos = testimonials.map(this::modelToDto);
+
+        return paginationComponent.changePaginationResponse(testimonialDtos);
     }
 
     private TestimonialDto setNullsAttributes(TestimonialDto dto, Testimonial model){
