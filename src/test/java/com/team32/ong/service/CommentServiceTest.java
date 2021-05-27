@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.team32.ong.constant.ConstantExceptionMessage;
-import com.team32.ong.dto.CommentDTOByIdNews;
+import com.team32.ong.dto.CommentBodyDTO;
 
 import javassist.NotFoundException;
 
@@ -26,7 +26,7 @@ public class CommentServiceTest {
 	public void findCommentsByNewsId_withNewsIdExist_returnAListComment() throws NotFoundException {
 		Long newsId = 1L;
 		
-		List<CommentDTOByIdNews> listFound = commentService.getCommentsByNewsId(newsId);
+		List<CommentBodyDTO> listFound = commentService.getCommentsByNewsId(newsId);
 		
 		assertThat(listFound).isNotEmpty();
 		assertEquals(3, listFound.size());

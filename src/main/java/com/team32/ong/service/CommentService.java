@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.team32.ong.dto.AddCommentBody;
 import com.team32.ong.dto.CommentBodyDTO;
-import com.team32.ong.dto.CommentDTOByIdNews;
 import com.team32.ong.dto.CommentDto;
 import com.team32.ong.exception.custom.BadRequestException;
 
@@ -21,5 +20,5 @@ public interface CommentService {
 	CommentDto findById(Long id);
 	ResponseEntity<CommentDto> createNewComment(Long newsId, Long userId, AddCommentBody commentBody) throws BadRequestException, NotFoundException;
 	List<CommentBodyDTO> getAllOnlyBody();
-	List<CommentDTOByIdNews> getCommentsByNewsId(Long id) throws NotFoundException;
+	List<CommentBodyDTO> getCommentsByNewsId(Long id) throws NotFoundException;
 }

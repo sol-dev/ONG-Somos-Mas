@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.team32.ong.dto.AddCommentBody;
 import com.team32.ong.dto.CommentBodyDTO;
-import com.team32.ong.dto.CommentDTOByIdNews;
 import com.team32.ong.dto.CommentDto;
 import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.service.CommentService;
@@ -47,7 +46,7 @@ public class CommentController {
 	}
 	
 	@GetMapping("/news/{id}/comments")
-	public ResponseEntity<List<CommentDTOByIdNews>> getCommentsByNews(@PathVariable Long id) throws NotFoundException {
+	public ResponseEntity<List<CommentBodyDTO>> getCommentsByNews(@PathVariable Long id) throws NotFoundException {
     	return new ResponseEntity<>(commentService.getCommentsByNewsId(id),HttpStatus.OK);	
 	}
 }

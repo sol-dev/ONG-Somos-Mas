@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.team32.ong.dto.AddCommentBody;
 import com.team32.ong.dto.CommentBodyDTO;
-import com.team32.ong.dto.CommentDTOByIdNews;
 import com.team32.ong.dto.CommentDto;
 import com.team32.ong.dto.NewsDto;
 import com.team32.ong.dto.UserDTOResponse;
@@ -107,12 +106,6 @@ public class CommentServiceImpl implements CommentService {
 		CommentBodyDTO commentDto = mapper.map(comment, CommentBodyDTO.class);
 		return commentDto;
 	}
-	
-	public CommentDTOByIdNews modelToDtoByNewsId(Comment comment) {
-		ModelMapper mapper = new ModelMapper();
-		CommentDTOByIdNews commentDto = mapper.map(comment, CommentDTOByIdNews.class);
-		return commentDto;
-	}
 
 	@Override
 	public List<CommentBodyDTO> getAllOnlyBody() {
@@ -124,11 +117,11 @@ public class CommentServiceImpl implements CommentService {
 	}
 	
 	@Override
-	public List<CommentDTOByIdNews> getCommentsByNewsId(Long id) throws NotFoundException {
+	public List<CommentBodyDTO> getCommentsByNewsId(Long id) throws NotFoundException {
 		newsService.findById(id);
 		List<Comment> listFound = commentRepository.findCommentsByNewsId(id);
 		return listFound.stream()
-						.map(this::modelToDtoByNewsId)
+						.map(this::modelToBodyDto)
 						.collect(Collectors.toList());
 	}
 }
