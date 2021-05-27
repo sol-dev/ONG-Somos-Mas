@@ -2,6 +2,9 @@ package com.team32.ong.service.impl;
 
 import com.team32.ong.dto.UserDTOResponse;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.AddCommentBody;
+import com.team32.ong.dto.CommentBodyDTO;
 import com.team32.ong.dto.CommentDto;
 import com.team32.ong.dto.NewsDto;
 import com.team32.ong.exception.custom.BadRequestException;
@@ -120,6 +124,19 @@ public class CommentServiceImpl implements CommentService {
 		Comment comment = mapper.map(commentDto, Comment.class);
 		return comment;
 	}
+	
+	public CommentBodyDTO modelToBodyDto(Comment comment) {
+		ModelMapper mapper = new ModelMapper();
+		CommentBodyDTO commentDto = mapper.map(comment, CommentBodyDTO.class);
+		return commentDto;
+	}
 
-
+	@Override
+	public List<CommentBodyDTO> getAllOnlyBody() {
+		 List<CommentBodyDTO> listFound = commentRepository.findAll()
+											 				.stream()
+											 				.map(this::modelToBodyDto)
+											 				.collect(Collectors.toList());
+		 return listFound;
+	}
 }

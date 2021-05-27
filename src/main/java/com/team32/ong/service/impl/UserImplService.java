@@ -2,9 +2,7 @@ package com.team32.ong.service.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -57,8 +55,8 @@ public class UserImplService implements UserService, UserDetailsService {
 	private Validation validations;
 
 	@Override
-	public Map<String,Object> save(UserDTORequest userDTORequest) throws NotFoundException, BadRequestException, IOException {
-		Map<String,Object> response = new HashMap<>();
+	public UserDTOResponse save(UserDTORequest userDTORequest) throws NotFoundException, BadRequestException, IOException {
+
 		StringBuffer errorsFound = new StringBuffer();
 
 		if (userRepo.existsByEmail(userDTORequest.getEmail())){
@@ -86,15 +84,18 @@ public class UserImplService implements UserService, UserDetailsService {
 		userEntity.setRole(role);
 		User userSave = userRepo.save(userEntity);
 
-		emailService.sendEmail(userSave.getEmail());
-
         String jwt = jwtUtil.generateToken(userSave);
         
-        response.put("userSave", entityToDto(userSave));
-        response.put("jwt", jwt);
+        UserDTOResponse response = entityToDto(userSave);
+        response.setJwt(jwt);
         
-        return response;
+		emailService.sendEmail(userSave.getEmail());
+
+		return response;
+
     }
+		
+
 
     @Override
     public UserDTOResponse getMe(String jwt) throws NotFoundException{
