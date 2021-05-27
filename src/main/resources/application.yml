@@ -22,11 +22,6 @@ spring:
       secret-key: secret-key
       expiration-length: 3600000
 
-  data:
-    web:
-      pageable:
-        default-page-size: 10
-
       
 amazonProperties:
     accessKey: AKIA5YX3QC3YARN66KVE

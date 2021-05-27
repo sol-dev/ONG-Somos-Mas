@@ -1,6 +1,6 @@
 package com.team32.ong.service.impl;
 
-import com.team32.ong.component.Pagination;
+import com.team32.ong.component.PaginationComponent;
 import com.team32.ong.component.Validation;
 import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.TestimonialDto;
@@ -12,15 +12,11 @@ import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -34,7 +30,7 @@ public class TestimonialServiceImpl implements TestimonialService {
     private Validation validations;
 
     @Autowired
-    private Pagination paginationComponent;
+    private PaginationComponent paginationComponent;
 
     @Override
     public TestimonialDto save(TestimonialDto testimonialDto) {
