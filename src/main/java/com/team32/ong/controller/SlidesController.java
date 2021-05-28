@@ -34,9 +34,14 @@ public class SlidesController {
 
 	@PostMapping("/{idOrganization}")
 	public ResponseEntity<SlideDto> save(@RequestBody SlideDtoRequest slideDto,
-										 @RequestPart MultipartFile file,
 										 @PathVariable("idOrganization") Long idOrganization) throws Throwable{
-		return new ResponseEntity<>(slideService.save(slideDto, file, idOrganization), HttpStatus.CREATED);
+		return new ResponseEntity<>(slideService.save(slideDto, idOrganization), HttpStatus.CREATED);
+	}
+
+	@PutMapping("/{idSlide}")
+	public ResponseEntity<SlideDto> updateImage(@RequestPart(required=true) MultipartFile file, @PathVariable("idSlide") Long id) throws Throwable {
+
+		return new ResponseEntity<>(slideService.updateImage(file,id), HttpStatus.CREATED);
 	}
 
 }
