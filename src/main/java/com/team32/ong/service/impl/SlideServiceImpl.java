@@ -1,7 +1,6 @@
 package com.team32.ong.service.impl;
 
 import com.team32.ong.component.AmazonClient;
-import com.team32.ong.dto.OrganizationDTO;
 import com.team32.ong.dto.OrganizationPublicDTO;
 import com.team32.ong.dto.SlideDtoRequest;
 import com.team32.ong.repository.IOrganizationRepository;
@@ -9,33 +8,29 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import javassist.NotFoundException;
 import com.team32.ong.constant.ConstantExceptionMessage;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
-
 import com.team32.ong.dto.SlideDto;
 import com.team32.ong.model.Slide;
 import com.team32.ong.repository.SlideRepository;
 import com.team32.ong.service.SlideService;
-
-import javassist.NotFoundException;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional
 public class SlideServiceImpl implements SlideService {
-	
-	@Autowired
-	private SlideRepository slideRepository;
 
 	@Autowired
 	private AmazonClient amazonClient;
 
 	@Autowired
     private IOrganizationRepository organizationRepository;
+
+    @Autowired
+    private SlideRepository slideRepository;
 
 	@Override
 	public SlideDto findById(Long id) throws NotFoundException{
@@ -64,14 +59,25 @@ public class SlideServiceImpl implements SlideService {
     }
 
 
-    @Override
-    public Map<Integer, String> imageAndOrder() {
-        List<SlideDto> slideDtoList = slideList();
-        Map<Integer, String> map = new HashMap<>();
-        for (SlideDto s : slideDtoList) {
-            map.put(s.getOrder(), s.getImageUrl());
+    public TreeMap<String, TreeMap<Integer, String>> imageAndOrderByOrganization() {
+        List<String> organizations = slideRepository.findAllOrganizationsName();
+        TreeMap<String, TreeMap<Integer, String>> result = new TreeMap<>();
+        for (String name : organizations) {
+            List<Slide> slides = slideRepository.findAllSlidesByOrganizationName(name);
+            TreeMap<Integer, String> imageOrder = new TreeMap<>();
+            for (Slide s : slides) {
+                imageOrder.put(s.getOrder(), s.getImageUrl());
+            }
+            result.put(name, imageOrder);
         }
-        return map;
+        return result;
+    }
+
+    public List<String> getOrganizationSlides(Long id) throws NotFoundException {
+        if (organizationRepository.findById(id).orElse(null) == null) {
+            throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND + id);
+        }
+        return slideRepository.findAllSlideUrlByOrganizationId(id);
     }
 
     private SlideDto modelToDto(Slide slide) {
@@ -84,6 +90,7 @@ public class SlideServiceImpl implements SlideService {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(slideDto, Slide.class);
     }
+
     private Slide dtoRequestToModel(SlideDtoRequest slideDtoRequest) {
 	    ModelMapper mapper = new ModelMapper();
 	    return mapper.map(slideDtoRequest, Slide.class);

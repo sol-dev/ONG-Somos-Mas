@@ -28,8 +28,6 @@ public class OrganizationDTO {
     private String welcomeText;
 
     private String aboutUsText;
-    
-    private List<Slide> slides;
 
     private String facebookUrl;
 
