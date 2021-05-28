@@ -63,8 +63,8 @@ public class SlideServiceImpl implements SlideService {
 
 	    Slide slide = slideRepository.findById(id).orElseThrow(()-> new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND));
 	    slide.setImageUrl(amazonClient.uplodFileToS3Bucket(multipartFile).getBody());
-	    
-        return modelToDto(slide);
+
+        return modelToDto(slideRepository.save(slide));
     }
 
 
