@@ -2,7 +2,6 @@ package com.team32.ong.service.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,11 +30,6 @@ import com.team32.ong.repository.UserRepository;
 import com.team32.ong.security.JWTUtil;
 import com.team32.ong.service.EmailService;
 import com.team32.ong.service.UserService;
-
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import javassist.NotFoundException;
 
 @Service
@@ -93,8 +87,8 @@ public class UserImplService implements UserService, UserDetailsService {
         
         UserDTOResponse response = entityToDto(userSave);
         response.setJwt(jwt);
-        
-		emailService.sendEmail(userSave.getEmail());
+
+		emailService.sendEmail(userSave.getEmail(),EmailServiceImpl.WELCOME);
 
 		return response;
 
