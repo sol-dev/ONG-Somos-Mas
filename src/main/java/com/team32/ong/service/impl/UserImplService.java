@@ -30,7 +30,6 @@ import com.team32.ong.repository.UserRepository;
 import com.team32.ong.security.JWTUtil;
 import com.team32.ong.service.EmailService;
 import com.team32.ong.service.UserService;
-
 import javassist.NotFoundException;
 
 @Service
@@ -88,8 +87,8 @@ public class UserImplService implements UserService, UserDetailsService {
         
         UserDTOResponse response = entityToDto(userSave);
         response.setJwt(jwt);
-        
-		emailService.sendEmail(userSave.getEmail());
+
+		emailService.sendEmail(userSave.getEmail(),EmailServiceImpl.WELCOME);
 
 		return response;
 
