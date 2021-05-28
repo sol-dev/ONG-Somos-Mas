@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import com.team32.ong.component.Validation;
 import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.OrganizationDTO;
 import com.team32.ong.dto.OrganizationPublicDTO;
@@ -28,9 +29,11 @@ public class OrganizationService implements IOrganizationService {
     @Qualifier("organizationRepository")
     private IOrganizationRepository organizationRepository;
 
-    // model mapper
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private Validation validation;
 
     // OrganizationDTO
     private OrganizationDTO convertToDto(@Valid OrganizationEntity entity) {
@@ -98,22 +101,16 @@ public class OrganizationService implements IOrganizationService {
 
     public OrganizationPublicDTO update(Long id,OrganizationPublicDTO updates) throws NotFoundException{
         OrganizationEntity updatedOrganization = findById(id);
-        if( isValid(updates.getFacebookUrl()) ){
+        if( validation.isNotBlankNotEmpty(updates.getFacebookUrl()) ){
             updatedOrganization.setFacebookUrl(updates.getFacebookUrl()); 
         }
-        if( isValid(updates.getInstagramUrl()) ){
+        if( validation.isNotBlankNotEmpty(updates.getInstagramUrl()) ){
             updatedOrganization.setInstagramUrl(updates.getInstagramUrl());
         }
-        if( isValid(updates.getLinkedinUrl()) ){
+        if( validation.isNotBlankNotEmpty(updates.getLinkedinUrl()) ){
             updatedOrganization.setLinkedinUrl(updates.getLinkedinUrl());
         }
         return convertToPublicDto(organizationRepository.save(updatedOrganization));
     }
 
-    private boolean isValid(String string){
-        boolean valid = false;
-        if(string.length() >0 || !string.isBlank())
-            valid = true;
-        return valid;
-    }
 }
