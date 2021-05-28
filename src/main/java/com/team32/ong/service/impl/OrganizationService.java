@@ -77,11 +77,8 @@ public class OrganizationService implements IOrganizationService {
 
     // intern findById
     protected OrganizationEntity findById(Long id) throws NotFoundException {
-        Optional<OrganizationEntity> organization = organizationRepository.findById(id);
-        if (!organization.isPresent()) {
-            throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND + id);
-        }
-        return organization.get();
+        return organizationRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND+id));
     }
 
     public List<OrganizationPublicDTO> findAll() {
@@ -100,11 +97,7 @@ public class OrganizationService implements IOrganizationService {
     }
 
     public OrganizationPublicDTO update(Long id,OrganizationPublicDTO updates) throws NotFoundException{
-        Optional<OrganizationEntity> organization = organizationRepository.findById(id) ;
-        if(!organization.isPresent()){
-            throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND+id);
-        }
-        OrganizationEntity updatedOrganization = organization.get();
+        OrganizationEntity updatedOrganization = findById(id);
         if( isValid(updates.getFacebookUrl()) ){
             updatedOrganization.setFacebookUrl(updates.getFacebookUrl()); 
         }
