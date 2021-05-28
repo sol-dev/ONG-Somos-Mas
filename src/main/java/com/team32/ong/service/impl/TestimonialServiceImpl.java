@@ -120,8 +120,12 @@ public class TestimonialServiceImpl implements TestimonialService {
     }
 
     @Override
-    public String getTestimonials(Pageable page) {
+    public String getTestimonials(Pageable page) throws NotFoundException {
         Page<Testimonial> testimonials = testimonialRepository.findAll(page);
+
+        if(testimonials.getTotalPages() <= page.getPageNumber()){
+            throw new NotFoundException(ConstantExceptionMessage.MSG_PAGE_NOT_FOUND);
+        }
 
         return paginationComponent.changePaginationResponse(testimonials.map(this::modelToDto));
     }
