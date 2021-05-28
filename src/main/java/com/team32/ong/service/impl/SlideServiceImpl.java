@@ -49,13 +49,22 @@ public class SlideServiceImpl implements SlideService {
     }
 
     @Override
-    public SlideDto save(SlideDtoRequest slideDtoRequest, MultipartFile file, Long idOrganization) throws Throwable{
+    public SlideDto save(SlideDtoRequest slideDtoRequest, Long idOrganization) throws Throwable{
         Slide slide = dtoRequestToModel(slideDtoRequest);
-        slide.setImageUrl(amazonClient.uplodFileToS3Bucket(file).getBody());
+        slide.setImageUrl("path");
         slide.setOrganization(organizationRepository
                 .findById(idOrganization).orElseThrow(()-> new NotFoundException(ConstantExceptionMessage.MSG_ORGANIZATION_NOT_FOUD)));
 
         return modelToDto(slideRepository.save(slide));
+    }
+
+    @Override
+    public SlideDto updateImage(MultipartFile multipartFile, Long id) throws Throwable {
+
+	    Slide slide = slideRepository.findById(id).orElseThrow(()-> new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND));
+	    slide.setImageUrl(amazonClient.uplodFileToS3Bucket(multipartFile).getBody());
+	    
+        return modelToDto(slide);
     }
 
 

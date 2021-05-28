@@ -16,7 +16,9 @@ public interface SlideService {
 
     List<SlideDto> slideList();
 
-    SlideDto save(SlideDtoRequest slide, MultipartFile file, Long idOrganization) throws Throwable;
+    SlideDto save(SlideDtoRequest slide, Long idOrganization) throws Throwable;
+
+    SlideDto updateImage(MultipartFile multipartFile, Long id) throws Throwable;
 
     TreeMap<String, TreeMap<Integer, String>> imageAndOrderByOrganization();
 
