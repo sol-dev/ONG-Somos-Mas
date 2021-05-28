@@ -30,5 +30,6 @@ public class ConstantExceptionMessage {
     public static final String MSG_NEWS_NOT_FOUND = "No se encontro la noticia con el id ";
     public static final String MSG_DESCRIPTION_EMPTY = "La descripcion no puede estar vacia";
     public static final String MSG_COMMENT_BAD_REQUEST = "No puede borrar comentarios de otro usuario";
+    public static final String MSG_ERROR_TEMPLATE_INVALID = "No es un template valido";
 
 }
