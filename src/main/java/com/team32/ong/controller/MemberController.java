@@ -1,26 +1,22 @@
 package com.team32.ong.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.amazonaws.services.s3.event.S3EventNotification.ResponseElementsEntity;
 import com.team32.ong.dto.MemberDTO;
 import com.team32.ong.service.IMemberService;
 
-import io.jsonwebtoken.Claims;
 import javassist.NotFoundException;
 
 @RestController
@@ -34,11 +30,12 @@ public class MemberController {
     public ResponseEntity<MemberDTO> createActivity(@Valid @RequestBody MemberDTO newMemberDTO){
 		return new ResponseEntity<MemberDTO>(memberService.save(newMemberDTO), HttpStatus.CREATED);
     }
-	
-	@PutMapping(value="/update" , consumes = "application/json")
-	public ResponseEntity<MemberDTO> update(@RequestParam("id") Long id, @RequestBody MemberDTO member) throws NotFoundException{
-		return new ResponseEntity<MemberDTO>(memberService.update(id, member), HttpStatus.OK);
-	}
+
+	@PutMapping("update/{id}")
+    public ResponseEntity<MemberDTO> updateMember( @PathVariable Long id, @RequestBody MemberDTO memberDtoToUpdate) throws NotFoundException {
+        MemberDTO updatedMember = memberService.updateById(memberDtoToUpdate, id);
+        return new ResponseEntity<>(updatedMember, HttpStatus.OK);
+    }
 	
 	@GetMapping
 	public ResponseEntity<?> getAll(){
