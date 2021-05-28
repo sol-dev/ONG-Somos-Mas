@@ -80,11 +80,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // .antMatchers(HttpMethod.PUT,"/api/v1/contact").permitAll()
                 // .antMatchers(HttpMethod.DELETE,"/api/v1/contact").permitAll()
                 // MEMBER
-                .antMatchers(HttpMethod.GET, "/api/v1/member/{id}").permitAll()
-                .antMatchers(HttpMethod.GET,"/api/v1/member/").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST, "/api/v1/member").hasAnyRole("USER", "ADMIN")
-                .antMatchers(HttpMethod.DELETE, "/api/v1/member/{id}").hasRole("ADMIN")
-                .antMatchers(HttpMethod.PUT,"/api/v1/member/update/{id}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/api/v1/members/{id}").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/v1/members/").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/api/v1/members").hasAnyRole("USER", "ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/api/v1/members/{id}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT,"/api/v1/members/update/{id}").hasRole("ADMIN")
                 // NEWS
                 .antMatchers(HttpMethod.GET, "/api/v1/news/{id}").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/api/v1/news/new").hasRole("ADMIN")
