@@ -48,7 +48,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests().antMatchers("/**/authenticate").permitAll().antMatchers("/login")
-                .permitAll().antMatchers("/").permitAll()
+                .permitAll().antMatchers("/",
+                "/v2/api-docs/**",
+                "/swagger-ui/**",
+                "/swagger-resources/**",
+                "/configuration/**"
+                ).permitAll()
                 // ACTIVITIES
                 .antMatchers(HttpMethod.GET, "/api/v1/activities/{id}").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/activities/").permitAll()
@@ -70,7 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE, "/api/v1/comment/{id}").hasAnyRole("USER", "ADMIN")
                 // CONTACT
                 // .antMatchers(HttpMethod.GET,"/api/v1/contact/{id}").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/v1/contact/contacts").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/api/v1/contact/backoffice/contacts").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/api/v1/contact").hasAnyRole("USER", "ADMIN")
                 // .antMatchers(HttpMethod.PUT,"/api/v1/contact").permitAll()
                 // .antMatchers(HttpMethod.DELETE,"/api/v1/contact").permitAll()
@@ -78,7 +83,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/v1/member/{id}").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/v1/member/").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/api/v1/member").hasAnyRole("USER", "ADMIN")
-                .antMatchers(HttpMethod.PUT,"/api/v1/member/update{id}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT,"/api/v1/member/update/{id}").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/api/v1/member").hasAnyRole("USER", "ADMIN")
                 // NEWS
                 .antMatchers(HttpMethod.GET, "/api/v1/news/{id}").hasRole("ADMIN")
