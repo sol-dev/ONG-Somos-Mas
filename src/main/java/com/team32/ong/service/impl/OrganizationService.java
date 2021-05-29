@@ -19,8 +19,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javassist.NotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service("organizationService")
+@Transactional
 public class OrganizationService implements IOrganizationService {
 
     @Autowired

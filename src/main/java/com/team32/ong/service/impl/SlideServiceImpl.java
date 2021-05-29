@@ -1,6 +1,10 @@
 package com.team32.ong.service.impl;
 
+import java.util.Locale;
 import java.util.Optional;
+
+import com.team32.ong.dto.SlideDtoRequest;
+import com.team32.ong.model.OrganizationEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,6 +66,26 @@ public class SlideServiceImpl implements SlideService {
             throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND + id);
         }
         return slideRepository.findAllSlideUrlByOrganizationId(id);
+    }
+
+    @Override
+    public SlideDto update(Long id, SlideDtoRequest slideDtoRequest) throws NotFoundException {
+
+       Slide oldSlide = slideRepository.findById(id).orElseThrow(() ->new NotFoundException(
+                ConstantExceptionMessage.MSG_NOT_FOUND.concat(id.toString())));
+
+
+        if (!slideDtoRequest.getText().isEmpty()){
+            oldSlide.setText(slideDtoRequest.getText());
+        }
+        if (slideDtoRequest.getOrder() >= 0){
+            oldSlide.setOrder(slideDtoRequest.getOrder());
+        }
+
+        slideRepository.save(oldSlide);
+
+
+        return modelToDto(oldSlide);
     }
 
     private SlideDto modelToDto(Slide slide) {
