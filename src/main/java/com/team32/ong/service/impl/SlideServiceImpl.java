@@ -51,7 +51,7 @@ public class SlideServiceImpl implements SlideService {
     @Override
     public SlideDto save(SlideDtoRequest slideDtoRequest, Long idOrganization) throws Throwable{
         Slide slide = dtoRequestToModel(slideDtoRequest);
-        slide.setImageUrl("path");
+        slide.setImageUrl("https://www.adslzone.net/app/uploads-adslzone.net/2019/04/borrar-fondo-imagen.jpg");
         slide.setOrganization(organizationRepository
                 .findById(idOrganization).orElseThrow(()-> new NotFoundException(ConstantExceptionMessage.MSG_ORGANIZATION_NOT_FOUD)));
 

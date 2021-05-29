@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @Data
 public class SlideDtoRequest {
     private String text;
+    private int order;
 }
