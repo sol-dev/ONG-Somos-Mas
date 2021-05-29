@@ -31,5 +31,7 @@ public class ConstantExceptionMessage {
     public static final String MSG_DESCRIPTION_EMPTY = "La descripcion no puede estar vacia";
     public static final String MSG_ERROR_TEMPLATE_INVALID = "No es un template valido";
     public static final String MSG_ACCES_DENIED = "Usuario no Autorizado";
+    public static final String MSG_COMMENT_EMPTY = "Tiene que existir un comentario";
+    public static final String MSG_COMMENT_BODY_EMPTY = "El cuerpo del comentario no puede estar vacío";
 
 }

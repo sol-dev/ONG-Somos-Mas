@@ -84,9 +84,9 @@ public class CommentServiceImpl implements CommentService {
 		}
 	
 		if(commentBody == null) {
-			throw new EmptyInputException("Tiene que existir un comentario");
+			throw new EmptyInputException(ConstantExceptionMessage.MSG_COMMENT_EMPTY);
 		} else if(commentBody.getBody().isBlank() | commentBody.getBody().isEmpty()) {
-			throw new EmptyInputException("El cuerpo del comentario no puede estar vacío");
+			throw new EmptyInputException(ConstantExceptionMessage.MSG_COMMENT_BODY_EMPTY);
 		} else {
 			commentDto.setBody(commentBody.getBody());	
 		}
