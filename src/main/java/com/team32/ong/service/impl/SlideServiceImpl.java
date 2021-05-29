@@ -3,6 +3,7 @@ package com.team32.ong.service.impl;
 import com.team32.ong.component.AmazonClient;
 import com.team32.ong.dto.OrganizationPublicDTO;
 import com.team32.ong.dto.SlideDtoRequest;
+import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.repository.IOrganizationRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,13 @@ public class SlideServiceImpl implements SlideService {
 
     @Override
     public SlideDto save(SlideDtoRequest slideDtoRequest, Long idOrganization) throws Throwable{
+
+	    if (slideDtoRequest.getText().isEmpty()){
+	        throw new BadRequestException(ConstantExceptionMessage.MSG_TEXT_BAD_REQUEST);
+        }else if (slideDtoRequest.getOrder() == null){
+            throw new BadRequestException(ConstantExceptionMessage.MSG_ORDER_BAD_REQUEST);
+        }
+
         Slide slide = dtoRequestToModel(slideDtoRequest);
         slide.setImageUrl("https://www.adslzone.net/app/uploads-adslzone.net/2019/04/borrar-fondo-imagen.jpg");
         slide.setOrganization(organizationRepository
