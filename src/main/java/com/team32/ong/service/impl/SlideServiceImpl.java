@@ -1,6 +1,7 @@
 package com.team32.ong.service.impl;
 
 import com.team32.ong.component.AmazonClient;
+import com.team32.ong.constant.ConstantPathImage;
 import com.team32.ong.dto.OrganizationPublicDTO;
 import com.team32.ong.dto.SlideDtoRequest;
 import com.team32.ong.exception.custom.BadRequestException;
@@ -59,7 +60,7 @@ public class SlideServiceImpl implements SlideService {
         }
 
         Slide slide = dtoRequestToModel(slideDtoRequest);
-        slide.setImageUrl("https://www.adslzone.net/app/uploads-adslzone.net/2019/04/borrar-fondo-imagen.jpg");
+        slide.setImageUrl(ConstantPathImage.SLIDE_IMAGE);
         slide.setOrganization(organizationRepository
                 .findById(idOrganization).orElseThrow(()-> new NotFoundException(ConstantExceptionMessage.MSG_ORGANIZATION_NOT_FOUD)));
 
