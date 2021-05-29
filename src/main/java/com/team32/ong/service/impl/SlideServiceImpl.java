@@ -81,7 +81,7 @@ public class SlideServiceImpl implements SlideService {
         if (slideDtoRequest.getOrder() >= 0){
             oldSlide.setOrder(slideDtoRequest.getOrder());
         }
-
+        
         slideRepository.save(oldSlide);
 
 
