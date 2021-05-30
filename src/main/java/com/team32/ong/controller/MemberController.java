@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,7 @@ import com.team32.ong.service.IMemberService;
 import javassist.NotFoundException;
 
 @RestController
-@RequestMapping("api/v1/member")
+@RequestMapping("api/v1/members")
 public class MemberController {
     
 	@Autowired
@@ -41,4 +42,10 @@ public class MemberController {
 	public ResponseEntity<?> getAll(){
         return new ResponseEntity<>(memberService.findAll(),HttpStatus.OK);
     }
+
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<?> softDelete(@PathVariable Long id) throws NotFoundException{
+		memberService.softDelete(id);
+		return new ResponseEntity<>(HttpStatus.OK);
+	} 
 }
