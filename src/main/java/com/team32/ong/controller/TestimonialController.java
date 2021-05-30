@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/testimonials")
-@Api(value = "Testimonials microservice", tags = "Testimonial controller")
+@Api(value = "Set of endpoints for Creating, Updating and Deleting of Testimonial.", tags = "Testimonial controller")
 public class TestimonialController {
 
     @Autowired
