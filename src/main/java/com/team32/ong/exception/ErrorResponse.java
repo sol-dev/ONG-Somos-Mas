@@ -2,6 +2,7 @@ package com.team32.ong.exception;
 
 import java.util.Date;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
+@ApiModel("Error Model")
 public class ErrorResponse {
 
 	@ApiModelProperty(notes="Error Code", name="code", value="200")

@@ -16,13 +16,13 @@ import lombok.NoArgsConstructor;
 @ApiModel("Categoty Model")
 public class CategoryDTO {
 
-	@ApiModelProperty(notes="Id of the Category", name="id", value="1")
+	@ApiModelProperty(name="id", value="Id of the Category")
     private Long id;
-	@ApiModelProperty(notes="Name of the Category", name="name", required=true, value="Image")
+	@ApiModelProperty(name="name", required=true, value="Here would go the name of the Category")
     private String name;
-	@ApiModelProperty(notes="Description of the Category", name="description", value="Here would go the description")
+	@ApiModelProperty(name="description", value="Here would go the description")
     private String description;
-	@ApiModelProperty(notes="Image of the Category", name="image", value="Here would go the image")
+	@ApiModelProperty(name="image", value="Here would go the image")
     private String image;
 
 }

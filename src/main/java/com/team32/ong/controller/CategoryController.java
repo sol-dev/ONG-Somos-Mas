@@ -22,12 +22,13 @@ import com.team32.ong.exception.ErrorResponse;
 import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.service.CategoryService;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import javassist.NotFoundException;
 
-@ApiOperation(value="/api/v1/categories", tags="Category Profile Controller")
+@Api(value="/api/v1/categories", tags="Category Profile Controller")
 @RestController
 @RequestMapping("api/v1/categories")
 public class CategoryController {
@@ -64,7 +65,7 @@ public class CategoryController {
        
     @ApiOperation(value="Soft delete a Category by Id", response=CategoryDTO.class)
     @ApiResponses(value = {
-    		@ApiResponse(code = 200, message = "SUCCESS", response = CategoryDTO.class),
+    		@ApiResponse(code = 200, message = "SUCCESS"),
     		@ApiResponse(code = 401, message = "UNAUTHORIZED!", response = ErrorResponse.class),
     		@ApiResponse(code = 403, message = "FORBIDDEN!", response = ErrorResponse.class),
     		@ApiResponse(code = 404, message = "NOT FOUND", response = ErrorResponse.class)
@@ -75,7 +76,7 @@ public class CategoryController {
     	return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @ApiOperation(value="Update the Details of a Category", response=CategoryDTO.class)
+    @ApiOperation(value="Update the Details of a Category", response=ModifyCategoryDTO.class)
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "SUCCESS", response = CategoryDTO.class),
     		@ApiResponse(code = 401, message = "UNAUTHORIZED!", response = ErrorResponse.class),
@@ -95,7 +96,7 @@ public class CategoryController {
 
     @ApiOperation(value="Fetch all Category", response=Iterable.class)
     @ApiResponses(value = {
-    		@ApiResponse(code = 200, message = "SUCCESS", response = Iterable.class),
+    		@ApiResponse(code = 200, message = "SUCCESS",  response = CategoryDTO.class),
     		@ApiResponse(code = 401, message = "UNAUTHORIZED!", response = ErrorResponse.class),
     		@ApiResponse(code = 403, message = "FORBIDDEN!", response = ErrorResponse.class),
     		@ApiResponse(code = 404, message = "NOT FOUND", response = ErrorResponse.class)
