@@ -112,4 +112,11 @@ public class MemberServiceImp implements IMemberService {
         return Arrays.asList(mapper.map(repositoryMember.findAll(), MemberDTO[].class));
     }
 
+    @Override
+    public void softDelete(Long id) throws NotFoundException {
+        if(!repositoryMember.existsById(id))
+            throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND+id);
+        repositoryMember.deleteById(id);     
+    }
+
 }

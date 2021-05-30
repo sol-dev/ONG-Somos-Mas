@@ -17,4 +17,6 @@ public interface IMemberService {
 	public List<MemberDTO> findAll();
 	
 	public MemberDTO update(Long id, MemberDTO updates) throws NotFoundException;
+
+	public void softDelete(Long id) throws NotFoundException;
 }

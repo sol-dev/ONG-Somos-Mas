@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 @Table(name="member")
-@SQLDelete(sql="UPDATE activities SET deleted = true WHERE id = ?")
+@SQLDelete(sql="UPDATE member SET deleted = true WHERE member_id = ?")
 @Where(clause = "deleted = false")
 public class Member{
     @Id
