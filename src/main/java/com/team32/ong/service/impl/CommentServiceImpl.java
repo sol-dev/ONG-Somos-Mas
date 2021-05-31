@@ -20,6 +20,7 @@ import com.team32.ong.dto.CommentDto;
 import com.team32.ong.dto.NewsDto;
 import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.exception.custom.EmptyInputException;
+import com.team32.ong.exception.custom.ForbiddenException;
 import com.team32.ong.model.Comment;
 import com.team32.ong.model.User;
 import com.team32.ong.repository.CommentRepository;
@@ -93,23 +94,18 @@ public class CommentServiceImpl implements CommentService {
 	}
 	
 	@Override
-	public void delete(Long id) throws NotFoundException {
+	public void delete(Long id) throws NotFoundException{
 		String userEmail = (String)SecurityContextHolder.getContext().getAuthentication().getName();
 		User user = userRepository.findByEmail(userEmail);
-		User userComment = commentRepository.findByUserId(id);
-		boolean commentExists = commentRepository.existsById(id);
-		if(!commentExists) {
-			throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND + id);
-		}
-		
+		Comment comment = commentRepository.findById(id).orElseThrow(() -> new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND + id));
+		String emailComment = comment.getUser().getEmail();
 		if(user.getRole().getName().equalsIgnoreCase("ROLE_ADMIN")) {
 			commentRepository.deleteById(id);
-		}else if (userComment.getEmail().equals(userEmail)) {
+		}else if (emailComment.equals(userEmail)) {
 				commentRepository.deleteById(id);
 		}else {
-			throw new BadRequestException(ConstantExceptionMessage.MSG_COMMENT_BAD_REQUEST);
+			throw new ForbiddenException(ConstantExceptionMessage.MSG_COMMENT_BAD_REQUEST);
 		}
-		
 	}	
 	
 	public CommentDto modelToDto(Comment comment) {

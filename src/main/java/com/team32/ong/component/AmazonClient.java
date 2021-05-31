@@ -18,7 +18,7 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.team32.ong.exception.custom.EmptyInputException;
-import com.team32.ong.exception.custom.Forbidden;
+import com.team32.ong.exception.custom.ForbiddenException;
 import javassist.NotFoundException;
 
 
