@@ -33,6 +33,9 @@ public class TestimonialController {
     }
 
     @GetMapping
+    @ApiOperation(value = ConstantSwaggerMessage.MSG_TESTIMONIAL_CONTROLLER_APIOPERATION_PAGINATION_VALUE,
+            notes = ConstantSwaggerMessage.MSG_TESTIMONIAL_CONTROLLER_APIOPERATION_PAGINATION_NOTE,
+            response = String.class)
     public ResponseEntity<String> getTestimonials(@PageableDefault(size = 10) Pageable page) throws NotFoundException {
         return new ResponseEntity<>(testimonialService.getTestimonials(page), HttpStatus.OK);
     }

@@ -9,6 +9,8 @@ public class ConstantSwaggerMessage {
     public static final String MSG_TESTIMONIAL_CONTROLLER_API_VALUE = "Set of endpoints for Creating, Updating and Deleting of Testimonial.";
     public static final String MSG_TESTIMONIAL_CONTROLLER_API_TAGS = "Testimonial controller";
     public static final String MSG_TESTIMONIAL_CONTROLLER_APIOPERATION_CREATE_VALUE= "Create a testimonial";
+    public static final String MSG_TESTIMONIAL_CONTROLLER_APIOPERATION_PAGINATION_VALUE= "Get testimonials pagination";
+    public static final String MSG_TESTIMONIAL_CONTROLLER_APIOPERATION_PAGINATION_NOTE= "Get testimonials pagination as a String";
     public static final String MSG_TESTIMONIAL_CONTROLLER_APIOPERATION_UPDATE_VALUE= "Update a testimonial";
     public static final String MSG_TESTIMONIAL_CONTROLLER_APIOPERATION_UPDATE_NOTE= "Update a testimonial by Id";
     public static final String MSG_TESTIMONIAL_CONTROLLER_APIOPERATION_DELETE_VALUE= "Delete a testimonial";
