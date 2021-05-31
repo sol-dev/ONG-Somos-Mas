@@ -1,16 +1,17 @@
 package com.team32.ong.dto;
 
+import com.team32.ong.constant.ConstantSwaggerMessage;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
 public class TestimonialDto {
-    @ApiModelProperty(value = "the testimonial's name", required = true)
+    @ApiModelProperty(value = ConstantSwaggerMessage.MSG_TESTIMONIALDTO_NAME_VALUE, required = true)
     private String name;
 
-    @ApiModelProperty(value = "the testimonial's image", required = true)
+    @ApiModelProperty(value = ConstantSwaggerMessage.MSG_TESTIMONIALDTO_IMAGE_VALUE)
     private String image;
 
-    @ApiModelProperty(value = "the testimonial's content", required = true)
+    @ApiModelProperty(value = ConstantSwaggerMessage.MSG_TESTIMONIALDTO_CONTENT_VALUE, required = true)
     private String content;
 }
