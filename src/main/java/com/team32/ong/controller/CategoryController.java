@@ -39,9 +39,9 @@ public class CategoryController {
     @ApiOperation(value="Insert a Category", response=CategoryDTO.class)
     @ApiResponses(value = {
     		@ApiResponse(code = 201, message = "CREATED", response = CategoryDTO.class),
+    		@ApiResponse(code = 400, message = "BAD REQUEST!", response = ErrorResponse.class),
     		@ApiResponse(code = 401, message = "UNAUTHORIZED!", response = ErrorResponse.class),
-    		@ApiResponse(code = 403, message = "FORBIDDEN!", response = ErrorResponse.class),
-    		@ApiResponse(code = 404, message = "NOT FOUND", response = ErrorResponse.class)
+    		@ApiResponse(code = 403, message = "FORBIDDEN!", response = ErrorResponse.class)
     })
     @PostMapping
     public ResponseEntity<CategoryDTO> save(@RequestBody CategoryDTO categoryDTO) throws BadRequestException {
@@ -79,6 +79,7 @@ public class CategoryController {
     @ApiOperation(value="Update the Details of a Category", response=ModifyCategoryDTO.class)
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "SUCCESS", response = CategoryDTO.class),
+    		@ApiResponse(code = 400, message = "BAD REQUEST!", response = ErrorResponse.class),
     		@ApiResponse(code = 401, message = "UNAUTHORIZED!", response = ErrorResponse.class),
     		@ApiResponse(code = 403, message = "FORBIDDEN!", response = ErrorResponse.class),
     		@ApiResponse(code = 404, message = "NOT FOUND", response = ErrorResponse.class)
@@ -98,8 +99,7 @@ public class CategoryController {
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "SUCCESS",  response = CategoryDTO.class),
     		@ApiResponse(code = 401, message = "UNAUTHORIZED!", response = ErrorResponse.class),
-    		@ApiResponse(code = 403, message = "FORBIDDEN!", response = ErrorResponse.class),
-    		@ApiResponse(code = 404, message = "NOT FOUND", response = ErrorResponse.class)
+    		@ApiResponse(code = 403, message = "FORBIDDEN!", response = ErrorResponse.class)
     })
     @GetMapping
     public ResponseEntity<?> listCategories() throws Exception {
