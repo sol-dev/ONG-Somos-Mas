@@ -1,6 +1,8 @@
 package com.team32.ong.service.impl;
 
 import java.util.Optional;
+
+import com.team32.ong.component.AmazonClient;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,8 @@ public class SlideServiceImpl implements SlideService {
 
     @Autowired
     private SlideRepository slideRepository;
+    @Autowired
+    private AmazonClient amazonClient;
 
     @Override
     public SlideDto findById(Long id) throws NotFoundException {
@@ -62,6 +66,17 @@ public class SlideServiceImpl implements SlideService {
             throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND + id);
         }
         return slideRepository.findAllSlideUrlByOrganizationId(id);
+    }
+
+    @Override
+    public void deleteSlide(Long id) throws Throwable {
+        Slide slide = slideRepository.findById(id).orElseThrow(() ->
+                new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND.concat(id.toString())));
+
+        if(amazonClient.imageExists(slide.getImageUrl())){
+            amazonClient.deleteFileFromS3Bucket(slide.getImageUrl());
+        }
+        slideRepository.deleteById(id);
     }
 
     private SlideDto modelToDto(Slide slide) {

@@ -21,5 +21,6 @@ public interface SlideService {
     public TreeMap<String, TreeMap<Integer, String>> imageAndOrderByOrganization();
 
     List<String> getOrganizationSlides(Long id) throws NotFoundException;
+    public void deleteSlide(Long id) throws Throwable;
 
 }
