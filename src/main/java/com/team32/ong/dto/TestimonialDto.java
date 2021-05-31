@@ -6,12 +6,16 @@ import lombok.Data;
 
 @Data
 public class TestimonialDto {
-    @ApiModelProperty(value = ConstantSwaggerMessage.MSG_TESTIMONIALDTO_NAME_VALUE, required = true)
+    @ApiModelProperty(value = ConstantSwaggerMessage.MSG_TESTIMONIALDTO_NAME_VALUE,
+            example = ConstantSwaggerMessage.MSG_TESTIMONIALDTO_NAME_EXAMPLE ,
+            required = true)
     private String name;
 
     @ApiModelProperty(value = ConstantSwaggerMessage.MSG_TESTIMONIALDTO_IMAGE_VALUE)
     private String image;
 
-    @ApiModelProperty(value = ConstantSwaggerMessage.MSG_TESTIMONIALDTO_CONTENT_VALUE, required = true)
+    @ApiModelProperty(value = ConstantSwaggerMessage.MSG_TESTIMONIALDTO_CONTENT_VALUE,
+            example = ConstantSwaggerMessage.MSG_TESTIMONIALDTO_CONTENT_EXAMPLE,
+            required = true)
     private String content;
 }
