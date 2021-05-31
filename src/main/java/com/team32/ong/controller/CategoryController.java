@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.team32.ong.constant.ConstantSwaggerMessage;
 import com.team32.ong.dto.CategoryDTO;
 import com.team32.ong.dto.ListCategoryNameDTO;
 import com.team32.ong.dto.ModifyCategoryDTO;
@@ -36,12 +37,12 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @ApiOperation(value="Insert a Category", response=CategoryDTO.class)
+    @ApiOperation(value="Insert a Category", response=CategoryDTO.class, notes = ConstantSwaggerMessage.MSG_DESCRIPTION_ENDPOINT_SAVE)
     @ApiResponses(value = {
-    		@ApiResponse(code = 201, message = "CREATED", response = CategoryDTO.class),
+    		@ApiResponse(code = 201, message = "CREATED"),
     		@ApiResponse(code = 400, message = "BAD REQUEST!", response = ErrorResponse.class),
     		@ApiResponse(code = 401, message = "UNAUTHORIZED!", response = ErrorResponse.class),
-    		@ApiResponse(code = 403, message = "FORBIDDEN!", response = ErrorResponse.class)
+    		@ApiResponse(code = 403, message = "FORBIDDEN!", response = ErrorResponse.class),
     })
     @PostMapping
     public ResponseEntity<CategoryDTO> save(@RequestBody CategoryDTO categoryDTO) throws BadRequestException {
@@ -51,7 +52,7 @@ public class CategoryController {
     }
     
     //only for admin
-    @ApiOperation(value="Fetch Category by Id", response=CategoryDTO.class)
+    @ApiOperation(value="Fetch Category by Id", response=CategoryDTO.class, notes = ConstantSwaggerMessage.MSG_DESCRIPTION_ENDPOINT_FINDBYID)
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "SUCCESS", response = CategoryDTO.class),
     		@ApiResponse(code = 401, message = "UNAUTHORIZED!", response = ErrorResponse.class),
@@ -63,7 +64,7 @@ public class CategoryController {
         return new ResponseEntity<CategoryDTO>(categoryService.findById(id), HttpStatus.OK);
     }
        
-    @ApiOperation(value="Soft delete a Category by Id", response=CategoryDTO.class)
+    @ApiOperation(value="Soft delete a Category by Id", response=CategoryDTO.class, notes = ConstantSwaggerMessage.MSG_DESCRIPTION_ENDPOINT_DELETE)
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "SUCCESS"),
     		@ApiResponse(code = 401, message = "UNAUTHORIZED!", response = ErrorResponse.class),
@@ -76,7 +77,7 @@ public class CategoryController {
     	return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @ApiOperation(value="Update the Details of a Category", response=ModifyCategoryDTO.class)
+    @ApiOperation(value="Update the Details of a Category", response=ModifyCategoryDTO.class, notes = ConstantSwaggerMessage.MSG_DESCRIPTION_ENDPOINT_UPDATE)
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "SUCCESS", response = CategoryDTO.class),
     		@ApiResponse(code = 400, message = "BAD REQUEST!", response = ErrorResponse.class),
@@ -95,7 +96,7 @@ public class CategoryController {
         return new ResponseEntity<>(updatedCategory, HttpStatus.OK);
     }
 
-    @ApiOperation(value="Fetch all Category", response=Iterable.class)
+    @ApiOperation(value="Fetch all Category", response=Iterable.class, notes = ConstantSwaggerMessage.MSG_DESCRIPTION_ENDPOINT_FINDALL)
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "SUCCESS",  response = CategoryDTO.class),
     		@ApiResponse(code = 401, message = "UNAUTHORIZED!", response = ErrorResponse.class),
