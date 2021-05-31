@@ -30,7 +30,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @DynamicUpdate
-@SQLDelete(sql = "UPDATE news SET deleted=true WHERE id=?")
+@SQLDelete(sql = "UPDATE slides SET deleted=true WHERE id=?")
 @Where(clause = "deleted = false")
 @Table(name = "slides")
 public class Slide implements Serializable {
