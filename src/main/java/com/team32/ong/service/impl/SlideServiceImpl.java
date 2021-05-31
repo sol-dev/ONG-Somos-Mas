@@ -1,6 +1,5 @@
 package com.team32.ong.service.impl;
 
-import java.util.Locale;
 import java.util.Optional;
 
 import com.team32.ong.dto.SlideDtoRequest;
@@ -77,6 +76,11 @@ public class SlideServiceImpl implements SlideService {
 
         if (!slideDtoRequest.getText().isEmpty()){
             oldSlide.setText(slideDtoRequest.getText());
+        }
+
+        if (!slideDtoRequest.getOrder().equals(null) &&
+              slideDtoRequest.getOrder() >=0){
+            oldSlide.setOrder(slideDtoRequest.getOrder());
         }
         
         slideRepository.save(oldSlide);
