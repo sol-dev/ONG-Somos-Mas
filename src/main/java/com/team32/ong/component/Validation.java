@@ -32,4 +32,11 @@ public class Validation {
         }
         return  hasDigit;
     }
+
+    public boolean isNotBlankNotEmpty(String string){
+        boolean valid = false;
+        if(string.length() >0 || !string.isBlank())
+            valid = true;
+        return valid;
+    }
 }
