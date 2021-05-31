@@ -1,7 +1,5 @@
 package com.team32.ong.service.impl;
 
-import com.team32.ong.dto.UserDTOResponse;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,14 +9,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.AddCommentBody;
 import com.team32.ong.dto.CommentBodyDTO;
 import com.team32.ong.dto.CommentDto;
 import com.team32.ong.dto.NewsDto;
+import com.team32.ong.dto.UserDTOResponse;
 import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.exception.custom.EmptyInputException;
 import com.team32.ong.model.Comment;
 import com.team32.ong.repository.CommentRepository;
+import com.team32.ong.repository.NewsRepository;
 import com.team32.ong.service.CommentService;
 import com.team32.ong.service.NewsService;
 import com.team32.ong.service.UserService;
@@ -34,6 +36,8 @@ public class CommentServiceImpl implements CommentService {
 	private CommentRepository commentRepository;
 	@Autowired
 	private NewsService newsService;
+	@Autowired
+	private NewsRepository newsRepository;
 	@Autowired
 	private UserService userService;
 
@@ -114,5 +118,15 @@ public class CommentServiceImpl implements CommentService {
 											 				.map(this::modelToBodyDto)
 											 				.collect(Collectors.toList());
 		 return listFound;
+	}
+	
+	@Override
+	public List<CommentBodyDTO> getCommentsByNewsId(Long id) throws NotFoundException {
+		newsRepository.findById(id)
+						.orElseThrow(() -> new NotFoundException(ConstantExceptionMessage.MSG_NEWS_NOT_FOUND + id));
+		List<Comment> listFound = commentRepository.findCommentsByNewsId(id);
+		return listFound.stream()
+						.map(this::modelToBodyDto)
+						.collect(Collectors.toList());
 	}
 }
