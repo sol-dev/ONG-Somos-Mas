@@ -13,8 +13,10 @@ import javassist.NotFoundException;
 public interface IMemberService {
 
 	public MemberDTO save(MemberDTO memberDTO);
-	public MemberDTO updateById(MemberDTO  memberDTO, Long id) throws NotFoundException;
-	public List<MemberDTO> findAll();
 	
-	public MemberDTO update(Long id, MemberDTO updates) throws NotFoundException;
+	public MemberDTO updateById(MemberDTO  memberDTO, Long id) throws NotFoundException;
+	
+	public List<MemberDTO> findAll();
+
+	public void softDelete(Long id) throws NotFoundException;
 }
