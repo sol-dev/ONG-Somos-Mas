@@ -6,9 +6,11 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import com.team32.ong.constant.*;
+import com.team32.ong.component.Validation;
+import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.OrganizationDTO;
 import com.team32.ong.dto.OrganizationPublicDTO;
+import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.exception.custom.EmptyInputException;
 import com.team32.ong.model.OrganizationEntity;
 import com.team32.ong.repository.IOrganizationRepository;
@@ -27,9 +29,11 @@ public class OrganizationService implements IOrganizationService {
     @Qualifier("organizationRepository")
     private IOrganizationRepository organizationRepository;
 
-    // model mapper
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private Validation validation;
 
     // OrganizationDTO
     private OrganizationDTO convertToDto(@Valid OrganizationEntity entity) {
@@ -76,11 +80,8 @@ public class OrganizationService implements IOrganizationService {
 
     // intern findById
     protected OrganizationEntity findById(Long id) throws NotFoundException {
-        Optional<OrganizationEntity> organization = organizationRepository.findById(id);
-        if (!organization.isPresent()) {
-            throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND + id);
-        }
-        return organization.get();
+        return organizationRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND+id));
     }
 
     public List<OrganizationPublicDTO> findAll() {
@@ -96,6 +97,20 @@ public class OrganizationService implements IOrganizationService {
             throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND + id);
         }
         organizationRepository.deleteById(id);
+    }
+
+    public OrganizationPublicDTO update(Long id,OrganizationPublicDTO updates) throws NotFoundException{
+        OrganizationEntity updatedOrganization = findById(id);
+        if( validation.isNotBlankNotEmpty(updates.getFacebookUrl()) ){
+            updatedOrganization.setFacebookUrl(updates.getFacebookUrl()); 
+        }
+        if( validation.isNotBlankNotEmpty(updates.getInstagramUrl()) ){
+            updatedOrganization.setInstagramUrl(updates.getInstagramUrl());
+        }
+        if( validation.isNotBlankNotEmpty(updates.getLinkedinUrl()) ){
+            updatedOrganization.setLinkedinUrl(updates.getLinkedinUrl());
+        }
+        return convertToPublicDto(organizationRepository.save(updatedOrganization));
     }
 
 }

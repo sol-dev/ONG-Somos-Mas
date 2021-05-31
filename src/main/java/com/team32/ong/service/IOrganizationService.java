@@ -20,4 +20,6 @@ public interface IOrganizationService {
 
     public void softDelete(Long id) throws NotFoundException;
 
+    public OrganizationPublicDTO update(Long id,OrganizationPublicDTO updates) throws NotFoundException;
+
 }

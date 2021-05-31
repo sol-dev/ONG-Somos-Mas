@@ -56,5 +56,9 @@ public class OrganizationController {
         organizationService.softDelete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
+    //only for admin
+    @PutMapping(value="/update" , consumes = "application/json")
+    public ResponseEntity<OrganizationPublicDTO> update(@RequestParam("id") Long id, @RequestBody OrganizationPublicDTO updates) throws NotFoundException{
+        return new ResponseEntity<OrganizationPublicDTO>(organizationService.update(id, updates), HttpStatus.OK);
+    }
 }
