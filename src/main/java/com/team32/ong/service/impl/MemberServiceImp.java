@@ -83,33 +83,17 @@ public class MemberServiceImp implements IMemberService {
         return mapper.map(memberDTO, Member.class);
     }
 
-    //admin
-    @Override
-    public MemberDTO update(Long id, MemberDTO updates) throws NotFoundException {
-        Optional<Member> member = repositoryMember.findById(id);
-        if(!member.isPresent()){
-            throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND+id);
-        }
-        Member updatedMember = member.get();
-        if(isValid(updates.getName()) ){
-            updatedMember.setName(updates.getName());
-        }
-        if(isValid(updates.getImage()) ){
-            updatedMember.setImage(updates.getImage());
-        }
-        return modelToDTO(repositoryMember.save(updatedMember));
-    }
-
-    private boolean isValid(String string){
-        boolean valid = false;
-        if(string.length() >0 || !string.isBlank())
-            valid = true;
-        return valid;
-    }
     
     @Override
     public List<MemberDTO> findAll() {
         return Arrays.asList(mapper.map(repositoryMember.findAll(), MemberDTO[].class));
+    }
+
+    @Override
+    public void softDelete(Long id) throws NotFoundException {
+        if(!repositoryMember.existsById(id))
+            throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND+id);
+        repositoryMember.deleteById(id);     
     }
 
 }
