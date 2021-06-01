@@ -1,10 +1,14 @@
 package com.team32.ong.service.impl;
 
+
 import java.util.Optional;
 
 import com.team32.ong.component.AmazonClient;
+import com.team32.ong.constant.ConstantPathImage;
+import com.team32.ong.dto.OrganizationPublicDTO;
 import com.team32.ong.dto.SlideDtoRequest;
-import com.team32.ong.model.OrganizationEntity;
+import com.team32.ong.exception.custom.BadRequestException;
+import com.team32.ong.repository.IOrganizationRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,39 +17,59 @@ import javassist.NotFoundException;
 import com.team32.ong.constant.ConstantExceptionMessage;
 import java.util.List;
 import java.util.TreeMap;
-import java.util.stream.Collectors;
 import com.team32.ong.dto.SlideDto;
 import com.team32.ong.model.Slide;
-import com.team32.ong.repository.IOrganizationRepository;
 import com.team32.ong.repository.SlideRepository;
 import com.team32.ong.service.SlideService;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional
 public class SlideServiceImpl implements SlideService {
 
+
+	@Autowired
+    private IOrganizationRepository organizationRepository;
     @Autowired
     private SlideRepository slideRepository;
     @Autowired
     private AmazonClient amazonClient;
-    @Autowired
-    private IOrganizationRepository organizationRepository;
+
+
+	@Override
+	public SlideDto findById(Long id) throws NotFoundException{
+		Slide slideFound = slideRepository
+                .findById(id)
+                .orElseThrow(()-> new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND + id));
+		return modelToDto(slideFound);
+	}
 
     @Override
-    public SlideDto findById(Long id) throws NotFoundException {
-        Optional<Slide> slideFound = slideRepository.findById(id);
-        if (!slideFound.isPresent()) {
-            throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND + id);
+    public SlideDto save(SlideDtoRequest slideDtoRequest, Long idOrganization) throws Throwable{
+
+	    if (slideDtoRequest.getText().isEmpty()){
+	        throw new BadRequestException(ConstantExceptionMessage.MSG_TEXT_BAD_REQUEST);
+        }else if (slideDtoRequest.getOrder() == null){
+            throw new BadRequestException(ConstantExceptionMessage.MSG_ORDER_BAD_REQUEST);
         }
-        return modelToDto(slideFound.get());
+
+        Slide slide = dtoRequestToModel(slideDtoRequest);
+        slide.setImageUrl(ConstantPathImage.SLIDE_IMAGE);
+        slide.setOrganization(organizationRepository
+                .findById(idOrganization).orElseThrow(()-> new NotFoundException(ConstantExceptionMessage.MSG_ORGANIZATION_NOT_FOUD)));
+
+        return modelToDto(slideRepository.save(slide));
+    }
+    
+    @Override
+    public SlideDto updateImage(MultipartFile multipartFile, Long id) throws Throwable {
+
+	    Slide slide = slideRepository.findById(id).orElseThrow(()-> new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND));
+	    slide.setImageUrl(amazonClient.uplodFileToS3Bucket(multipartFile).getBody());
+
+        return modelToDto(slideRepository.save(slide));
     }
 
-    @Override
-    public List<SlideDto> slideList() {
-        List<Slide> slideList = slideRepository.findAll();
-        List<SlideDto> slideDtoList = mapList(slideList, SlideDto.class);
-        return slideDtoList;
-    }
 
     public TreeMap<String, TreeMap<Integer, String>> imageAndOrderByOrganization() {
         List<String> organizations = slideRepository.findAllOrganizationsName();
@@ -61,7 +85,6 @@ public class SlideServiceImpl implements SlideService {
         return result;
     }
 
-    @Override
     public List<String> getOrganizationSlides(Long id) throws NotFoundException {
         if (organizationRepository.findById(id).orElse(null) == null) {
             throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND + id);
@@ -102,19 +125,18 @@ public class SlideServiceImpl implements SlideService {
 
     private SlideDto modelToDto(Slide slide) {
         ModelMapper mapper = new ModelMapper();
-        SlideDto slideDto = mapper.map(slide, SlideDto.class);
-        return slideDto;
+        mapper.map(slide.getOrganization(), OrganizationPublicDTO.class);
+        return mapper.map(slide, SlideDto.class);
     }
 
     private Slide dtoToModel(SlideDto slideDto) {
         ModelMapper mapper = new ModelMapper();
-        Slide slide = mapper.map(slideDto, Slide.class);
-        return slide;
+        return mapper.map(slideDto, Slide.class);
     }
 
-    public static <S, T> List<T> mapList(List<S> source, Class<T> targetClass) {
-        ModelMapper mapper = new ModelMapper();
-        return source.stream().map(element -> mapper.map(element, targetClass)).collect(Collectors.toList());
+    private Slide dtoRequestToModel(SlideDtoRequest slideDtoRequest) {
+	    ModelMapper mapper = new ModelMapper();
+	    return mapper.map(slideDtoRequest, Slide.class);
     }
 
 }
