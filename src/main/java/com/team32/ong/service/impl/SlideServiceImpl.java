@@ -60,7 +60,7 @@ public class SlideServiceImpl implements SlideService {
 
         return modelToDto(slideRepository.save(slide));
     }
-    
+
     @Override
     public SlideDto updateImage(MultipartFile multipartFile, Long id) throws Throwable {
 
@@ -95,7 +95,7 @@ public class SlideServiceImpl implements SlideService {
     @Override
     public void deleteSlide(Long id) throws Throwable {
         Slide slide = slideRepository.findById(id).orElseThrow(() -> new NotFoundException(
-                ConstantExceptionMessage.MSG_NOT_FOUND.concat(id.toString())));
+                ConstantExceptionMessage.MSG_SLIDE_NOT_FOUND.concat(id.toString())));
 
         if (amazonClient.imageExists(slide.getImageUrl())) {
             amazonClient.deleteFileFromS3Bucket(slide.getImageUrl());

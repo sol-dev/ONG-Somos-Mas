@@ -34,6 +34,7 @@ public class ConstantExceptionMessage {
     public static final String MSG_ERROR_TEMPLATE_INVALID = "No es un template valido";
     public static final String MSG_TEXT_BAD_REQUEST = "Se necesita definir el campo text. ";
     public static final String MSG_ORDER_BAD_REQUEST = "Se necesita definir el campo order. ";
+    public static final String MSG_SLIDE_NOT_FOUND = "No existe el Slide con id ";
 
 
 }
