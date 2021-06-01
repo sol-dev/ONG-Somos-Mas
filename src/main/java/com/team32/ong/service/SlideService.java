@@ -14,8 +14,6 @@ public interface SlideService {
 	
 	SlideDto findById(Long id) throws NotFoundException;
 
-    List<SlideDto> slideList();
-
     SlideDto save(SlideDtoRequest slide, Long idOrganization) throws Throwable;
 
     SlideDto updateImage(MultipartFile multipartFile, Long id) throws Throwable;
@@ -23,5 +21,6 @@ public interface SlideService {
     TreeMap<String, TreeMap<Integer, String>> imageAndOrderByOrganization();
 
     List<String> getOrganizationSlides(Long id) throws NotFoundException;
+    public SlideDto update(Long id, SlideDtoRequest slideDtoRequest) throws NotFoundException;
 
 }

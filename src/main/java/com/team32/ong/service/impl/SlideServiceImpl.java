@@ -14,7 +14,6 @@ import javassist.NotFoundException;
 import com.team32.ong.constant.ConstantExceptionMessage;
 import java.util.List;
 import java.util.TreeMap;
-import java.util.stream.Collectors;
 import com.team32.ong.dto.SlideDto;
 import com.team32.ong.model.Slide;
 import com.team32.ong.repository.SlideRepository;
@@ -41,14 +40,6 @@ public class SlideServiceImpl implements SlideService {
                 .orElseThrow(()-> new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND + id));
 		return modelToDto(slideFound);
 	}
-
-    @Override
-    public List<SlideDto> slideList() {
-        List<Slide> slideList = slideRepository.findAll();
-        return slideList.stream()
-                .map(this::modelToDto)
-                .collect(Collectors.toList());
-    }
 
     @Override
     public SlideDto save(SlideDtoRequest slideDtoRequest, Long idOrganization) throws Throwable{
@@ -96,6 +87,28 @@ public class SlideServiceImpl implements SlideService {
             throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND + id);
         }
         return slideRepository.findAllSlideUrlByOrganizationId(id);
+    }
+
+    @Override
+    public SlideDto update(Long id, SlideDtoRequest slideDtoRequest) throws NotFoundException {
+
+       Slide oldSlide = slideRepository.findById(id).orElseThrow(() ->new NotFoundException(
+                ConstantExceptionMessage.MSG_NOT_FOUND.concat(id.toString())));
+
+
+        if (!slideDtoRequest.getText().isEmpty()){
+            oldSlide.setText(slideDtoRequest.getText());
+        }
+
+        if (!slideDtoRequest.getOrder().equals(null) &&
+              slideDtoRequest.getOrder() >=0){
+            oldSlide.setOrder(slideDtoRequest.getOrder());
+        }
+        
+        slideRepository.save(oldSlide);
+
+
+        return modelToDto(oldSlide);
     }
 
     private SlideDto modelToDto(Slide slide) {

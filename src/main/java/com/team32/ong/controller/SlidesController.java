@@ -6,10 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import java.util.TreeMap;
 import com.team32.ong.service.SlideService;
 import javassist.NotFoundException;
@@ -41,7 +37,17 @@ public class SlidesController {
 	@PutMapping("/image/{idSlide}")
 	public ResponseEntity<SlideDto> updateImage(@RequestPart(required=true) MultipartFile file, @PathVariable("idSlide") Long id) throws Throwable {
 
-		return new ResponseEntity<>(slideService.updateImage(file,id), HttpStatus.CREATED);
+		return new ResponseEntity<>(slideService.updateImage(file, id), HttpStatus.CREATED);
+	}
+
+	@PutMapping("/{id}")
+	public ResponseEntity<SlideDto> update(@PathVariable("id") Long id,
+									       @RequestBody SlideDtoRequest slideDtoRequest)
+			                               throws NotFoundException {
+		return new ResponseEntity<SlideDto>(slideService.update(id, slideDtoRequest),
+				HttpStatus.OK);
+
 	}
 
 }
+
