@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@SQLDelete(sql = "UPDATE categories SET deleted=true WHERE id = ?")
+@SQLDelete(sql = "UPDATE categories SET deleted=true WHERE category_id = ?")
 @Where(clause = "deleted = false")
 public class Category {
 

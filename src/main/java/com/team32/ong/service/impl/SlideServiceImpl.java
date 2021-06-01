@@ -3,6 +3,8 @@ package com.team32.ong.service.impl;
 import java.util.Optional;
 
 import com.team32.ong.component.AmazonClient;
+import com.team32.ong.dto.SlideDtoRequest;
+import com.team32.ong.model.OrganizationEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,8 @@ public class SlideServiceImpl implements SlideService {
     private SlideRepository slideRepository;
     @Autowired
     private AmazonClient amazonClient;
+    @Autowired
+    private IOrganizationRepository organizationRepository;
 
     @Override
     public SlideDto findById(Long id) throws NotFoundException {
@@ -35,9 +39,6 @@ public class SlideServiceImpl implements SlideService {
         }
         return modelToDto(slideFound.get());
     }
-
-    @Autowired
-    private IOrganizationRepository organizationRepository;
 
     @Override
     public List<SlideDto> slideList() {
@@ -73,10 +74,30 @@ public class SlideServiceImpl implements SlideService {
         Slide slide = slideRepository.findById(id).orElseThrow(() -> new NotFoundException(
                 ConstantExceptionMessage.MSG_NOT_FOUND.concat(id.toString())));
 
-        if(amazonClient.imageExists(slide.getImageUrl())){
+        if (amazonClient.imageExists(slide.getImageUrl())) {
             amazonClient.deleteFileFromS3Bucket(slide.getImageUrl());
         }
         slideRepository.deleteById(id);
+    }
+    public SlideDto update(Long id, SlideDtoRequest slideDtoRequest) throws NotFoundException {
+
+       Slide oldSlide = slideRepository.findById(id).orElseThrow(() ->new NotFoundException(
+                ConstantExceptionMessage.MSG_NOT_FOUND.concat(id.toString())));
+
+
+        if (!slideDtoRequest.getText().isEmpty()){
+            oldSlide.setText(slideDtoRequest.getText());
+        }
+
+        if (!slideDtoRequest.getOrder().equals(null) &&
+              slideDtoRequest.getOrder() >=0){
+            oldSlide.setOrder(slideDtoRequest.getOrder());
+        }
+        
+        slideRepository.save(oldSlide);
+
+
+        return modelToDto(oldSlide);
     }
 
     private SlideDto modelToDto(Slide slide) {

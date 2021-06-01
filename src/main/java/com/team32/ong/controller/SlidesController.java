@@ -1,5 +1,6 @@
 package com.team32.ong.controller;
 
+import com.team32.ong.dto.SlideDtoRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,11 +30,19 @@ public class SlidesController {
 		return new ResponseEntity<>(slideService.imageAndOrderByOrganization(), HttpStatus.OK);
 	}
 
+	@PutMapping("/{id}")
+	public ResponseEntity<SlideDto> update(@PathVariable("id") Long id,
+									       @RequestBody SlideDtoRequest slideDtoRequest)
+			                               throws NotFoundException {
+
+		return new ResponseEntity<SlideDto>(slideService.update(id, slideDtoRequest),
+				HttpStatus.OK);
+	}
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteSlide(@PathVariable("id") Long id) throws Throwable {
 
 		slideService.deleteSlide(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-
 }

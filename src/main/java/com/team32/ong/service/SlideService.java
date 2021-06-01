@@ -3,6 +3,7 @@ package com.team32.ong.service;
 import java.util.List;
 import java.util.TreeMap;
 import com.team32.ong.dto.SlideDto;
+import com.team32.ong.dto.SlideDtoRequest;
 import org.springframework.stereotype.Service;
 import javassist.NotFoundException;
 
@@ -21,6 +22,8 @@ public interface SlideService {
     public TreeMap<String, TreeMap<Integer, String>> imageAndOrderByOrganization();
 
     List<String> getOrganizationSlides(Long id) throws NotFoundException;
+    public SlideDto update(Long id, SlideDtoRequest slideDtoRequest) throws NotFoundException;
     public void deleteSlide(Long id) throws Throwable;
+
 
 }
