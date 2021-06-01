@@ -7,6 +7,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.team32.ong.dto.AddCommentBody;
 import com.team32.ong.dto.CommentBodyDTO;
 import com.team32.ong.dto.CommentDto;
@@ -19,7 +27,7 @@ import javassist.NotFoundException;
 
 @RestController
 @Validated
-@RequestMapping("api/v1/news/comment")
+@RequestMapping("api/v1/comment")
 public class CommentController {
 	
 	@Autowired
@@ -47,5 +55,10 @@ public class CommentController {
 			throws Exception {
 
 		return new ResponseEntity(commentService.update(id, commentBody, token), HttpStatus.OK);
+	}
+	
+	@GetMapping("/news/{id}/comments")
+	public ResponseEntity<List<CommentBodyDTO>> getCommentsByNews(@PathVariable Long id) throws NotFoundException {
+    	return new ResponseEntity<>(commentService.getCommentsByNewsId(id),HttpStatus.OK);	
 	}
 }
