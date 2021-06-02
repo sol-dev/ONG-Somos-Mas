@@ -5,22 +5,20 @@ import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javassist.NotFoundException;
-import java.util.Optional;
-import java.util.Arrays;
-import java.util.List;
 
+import com.team32.ong.component.PaginationComponent;
 import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.MemberDTO;
 import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.model.Member;
 import com.team32.ong.repository.MemberRepository;
 import com.team32.ong.service.IMemberService;
-
-import javassist.NotFoundException;
 
 @Service
 public class MemberServiceImp implements IMemberService {
@@ -30,6 +28,9 @@ public class MemberServiceImp implements IMemberService {
 	
     @Autowired
     private ModelMapper mapper;
+    
+    @Autowired
+    private PaginationComponent paginationComponent;
 
 	@Override
     @Transactional
@@ -85,8 +86,12 @@ public class MemberServiceImp implements IMemberService {
 
     
     @Override
-    public List<MemberDTO> findAll() {
-        return Arrays.asList(mapper.map(repositoryMember.findAll(), MemberDTO[].class));
+    public String getMembers(Pageable page) throws NotFoundException {
+    	Page<Member> members = repositoryMember.findAll(page);
+    	if(members.getTotalPages() <= page.getPageNumber()){
+            throw new NotFoundException(ConstantExceptionMessage.MSG_PAGE_NOT_FOUND);
+        }
+        return paginationComponent.changePaginationResponse(members.map(this::modelToDTO));
     }
 
     @Override
