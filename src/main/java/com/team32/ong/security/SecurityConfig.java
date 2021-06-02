@@ -1,7 +1,5 @@
 package com.team32.ong.security;
 
-import com.team32.ong.model.User;
-import com.team32.ong.repository.UserRepository;
 import com.team32.ong.security.filter.JwtFilterRequest;
 import com.team32.ong.service.impl.UserImplService;
 
@@ -32,9 +30,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JWTUtil jwtUtil;
 
-    @Autowired
-    private UserRepository userRepo;
-
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -64,8 +59,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, "/api/v1/categories").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/api/v1/categories/{id}").hasRole("ADMIN")
                 // COMMENT
-                .antMatchers(HttpMethod.GET, "/api/v1/comment/id").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/v1/comment/posts/id/comments").hasAnyRole("USER", "ADMIN")
+                .antMatchers(HttpMethod.GET, "/api/v1/comment/{id}").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/v1/comment/news/{id}/comments").hasAnyRole("USER", "ADMIN")
                 .antMatchers(HttpMethod.GET, "/api/v1/comment").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/api/v1/comment/addComment").hasAnyRole("USER", "ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/v1/comment/{id}").hasAnyRole("USER", "ADMIN")
@@ -103,6 +98,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/v1/slides/").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/api/v1/slides").hasRole("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/v1/slides/{id}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/api/v1/slides/image/{id}").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/api/v1/slides/{id}").hasRole("ADMIN")
                 // USE
                 .antMatchers(HttpMethod.GET, "/api/v1/users").hasRole("ADMIN")

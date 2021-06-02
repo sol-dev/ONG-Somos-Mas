@@ -1,5 +1,6 @@
 package com.team32.ong.service.impl;
 
+import com.team32.ong.component.PaginationComponent;
 import com.team32.ong.component.Validation;
 import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.TestimonialDto;
@@ -10,6 +11,8 @@ import com.team32.ong.service.TestimonialService;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +28,9 @@ public class TestimonialServiceImpl implements TestimonialService {
 
     @Autowired
     private Validation validations;
+
+    @Autowired
+    private PaginationComponent paginationComponent;
 
     @Override
     public TestimonialDto save(TestimonialDto testimonialDto) {
@@ -111,6 +117,17 @@ public class TestimonialServiceImpl implements TestimonialService {
             throw new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND + id);
         }
         testimonialRepository.deleteById(id);
+    }
+
+    @Override
+    public String getTestimonials(Pageable page) throws NotFoundException {
+        Page<Testimonial> testimonials = testimonialRepository.findAll(page);
+
+        if(testimonials.getTotalPages() <= page.getPageNumber()){
+            throw new NotFoundException(ConstantExceptionMessage.MSG_PAGE_NOT_FOUND);
+        }
+
+        return paginationComponent.changePaginationResponse(testimonials.map(this::modelToDto));
     }
 
     private TestimonialDto setNullsAttributes(TestimonialDto dto, Testimonial model){

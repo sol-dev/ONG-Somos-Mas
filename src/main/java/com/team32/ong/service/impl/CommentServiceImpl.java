@@ -1,7 +1,5 @@
 package com.team32.ong.service.impl;
 
-import com.team32.ong.dto.UserDTOResponse;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +16,7 @@ import com.team32.ong.dto.AddCommentBody;
 import com.team32.ong.dto.CommentBodyDTO;
 import com.team32.ong.dto.CommentDto;
 import com.team32.ong.dto.NewsDto;
+import com.team32.ong.dto.UserDTOResponse;
 import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.exception.custom.EmptyInputException;
 import com.team32.ong.exception.custom.ForbiddenException;
@@ -25,6 +24,7 @@ import com.team32.ong.model.Comment;
 import com.team32.ong.model.User;
 import com.team32.ong.repository.CommentRepository;
 import com.team32.ong.repository.UserRepository;
+import com.team32.ong.repository.NewsRepository;
 import com.team32.ong.service.CommentService;
 import com.team32.ong.service.NewsService;
 import com.team32.ong.service.UserService;
@@ -39,6 +39,8 @@ public class CommentServiceImpl implements CommentService {
 	private CommentRepository commentRepository;
 	@Autowired
 	private NewsService newsService;
+	@Autowired
+	private NewsRepository newsRepository;
 	@Autowired
 	private UserService userService;
 	@Autowired
@@ -97,7 +99,7 @@ public class CommentServiceImpl implements CommentService {
 	public void delete(Long id) throws NotFoundException{
 		String userEmail = (String)SecurityContextHolder.getContext().getAuthentication().getName();
 		User user = userRepository.findByEmail(userEmail);
-		Comment comment = commentRepository.findById(id).orElseThrow(() -> new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND + id));
+		Comment comment = commentRepository.findById(id).orElseThrow(() -> new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND_COMMENT + id));
 		String emailComment = comment.getUser().getEmail();
 		if(user.getRole().getName().equalsIgnoreCase("ROLE_ADMIN")) {
 			commentRepository.deleteById(id);
@@ -134,5 +136,15 @@ public class CommentServiceImpl implements CommentService {
 											 				.map(this::modelToBodyDto)
 											 				.collect(Collectors.toList());
 		 return listFound;
+	}
+	
+	@Override
+	public List<CommentBodyDTO> getCommentsByNewsId(Long id) throws NotFoundException {
+		newsRepository.findById(id)
+						.orElseThrow(() -> new NotFoundException(ConstantExceptionMessage.MSG_NEWS_NOT_FOUND + id));
+		List<Comment> listFound = commentRepository.findCommentsByNewsId(id);
+		return listFound.stream()
+						.map(this::modelToBodyDto)
+						.collect(Collectors.toList());
 	}
 }
