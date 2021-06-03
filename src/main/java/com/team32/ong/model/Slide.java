@@ -44,7 +44,7 @@ public class Slide implements Serializable {
 
     @URL
     @Column(name = "image_url")
-    @NotEmpty
+    @NotNull
     private String imageUrl;
 
     @Column(name = "text")
