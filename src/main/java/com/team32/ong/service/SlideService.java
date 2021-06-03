@@ -22,5 +22,7 @@ public interface SlideService {
 
     List<String> getOrganizationSlides(Long id) throws NotFoundException;
     public SlideDto update(Long id, SlideDtoRequest slideDtoRequest) throws NotFoundException;
+    public void deleteSlide(Long id) throws Throwable;
+
 
 }

@@ -49,5 +49,11 @@ public class SlidesController {
 
 	}
 
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> deleteSlide(@PathVariable("id") Long id) throws Throwable {
+
+		slideService.deleteSlide(id);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 }
 
