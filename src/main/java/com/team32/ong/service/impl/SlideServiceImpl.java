@@ -1,5 +1,8 @@
 package com.team32.ong.service.impl;
 
+
+import java.util.Optional;
+
 import com.team32.ong.component.AmazonClient;
 import com.team32.ong.constant.ConstantPathImage;
 import com.team32.ong.dto.OrganizationPublicDTO;
@@ -24,14 +27,14 @@ import org.springframework.web.multipart.MultipartFile;
 @Transactional
 public class SlideServiceImpl implements SlideService {
 
-	@Autowired
-	private AmazonClient amazonClient;
 
 	@Autowired
     private IOrganizationRepository organizationRepository;
-
     @Autowired
     private SlideRepository slideRepository;
+    @Autowired
+    private AmazonClient amazonClient;
+
 
 	@Override
 	public SlideDto findById(Long id) throws NotFoundException{
@@ -90,6 +93,15 @@ public class SlideServiceImpl implements SlideService {
     }
 
     @Override
+    public void deleteSlide(Long id) throws Throwable {
+        Slide slide = slideRepository.findById(id).orElseThrow(() -> new NotFoundException(
+                ConstantExceptionMessage.MSG_SLIDE_NOT_FOUND.concat(id.toString())));
+
+        if (amazonClient.imageExists(slide.getImageUrl())) {
+            amazonClient.deleteFileFromS3Bucket(slide.getImageUrl());
+        }
+        slideRepository.deleteById(id);
+    }
     public SlideDto update(Long id, SlideDtoRequest slideDtoRequest) throws NotFoundException {
 
        Slide oldSlide = slideRepository.findById(id).orElseThrow(() ->new NotFoundException(

@@ -37,5 +37,6 @@ public class ConstantExceptionMessage {
     public static final String MSG_COMMENT_BODY_EMPTY = "El cuerpo del comentario no puede estar vacío";
     public static final String MSG_TEXT_BAD_REQUEST = "Se necesita definir el campo text. ";
     public static final String MSG_ORDER_BAD_REQUEST = "Se necesita definir el campo order. ";
+    public static final String MSG_SLIDE_NOT_FOUND = "No existe el Slide con id ";
 
 }
