@@ -9,8 +9,12 @@ import java.util.UUID;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.team32.ong.component.PaginationComponent;
 import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.dto.NewsDto;
 import com.team32.ong.exception.custom.BadRequestException;
@@ -24,6 +28,9 @@ public class NewsServiceImpl implements NewsService {
 	
 	@Autowired
 	NewsRepository newsRepository;
+
+	@Autowired
+	private PaginationComponent paginationComponent;
 
 	@Override
 	public NewsDto save(NewsDto newsDto) {
@@ -94,6 +101,14 @@ public class NewsServiceImpl implements NewsService {
     	return modelToDto(news);
 	}
 	
+	@Override
+	public String getAll(Pageable page) throws BadRequestException{
+		Page<News> newsEntity = newsRepository.findAll(page);
+		if(newsEntity.getTotalPages() <= page.getPageNumber()){
+			throw new BadRequestException(ConstantExceptionMessage.MSG_PAGE_NOT_FOUND);
+		}
+		return paginationComponent.changePaginationResponse(newsEntity.map(this::modelToDto));
+	}
 	
 	public NewsDto modelToDto(News news) {
 		ModelMapper mapper = new ModelMapper();
