@@ -20,6 +20,8 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -159,27 +161,23 @@ public class MembersControllerTest {
     }
 
     @Test
-    public void testGetAll_ok() throws Exception{
-        dto.setMemberId(1l);
-        MemberDTO dto2 = new MemberDTO(2l,"Marita Gomez" , "facebookUrl", "instagramUrl", "linkedinUrl", "image2", "Fundadora");
-        MemberDTO dto3 = new MemberDTO(3l,"Miriam Rodriguez" , "facebookUrl", "instagramUrl", "linkedinUrl", "image3", "Terapista Ocupacional");
-        
-        List<MemberDTO> list = new ArrayList<MemberDTO>();
-        list.add(dto);
-        list.add(dto2);
-        list.add(dto3);
-    
-        Mockito.when(memberService.findAll()).thenReturn(list);
-        
+    public void testGetMembers_ok() throws Exception{
         mockMvc
-            .perform(
-                MockMvcRequestBuilders
-                    .get(url) 
-            ).andExpect(
-                MockMvcResultMatchers.status().isOk()
-            ).andExpect(
-                MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(list))
-            );
+            .perform(MockMvcRequestBuilders.get(url))
+            .andExpect(MockMvcResultMatchers.status().isOk()
+        );
+    }
+
+    @Test
+    public void testGetMembers_notFound() throws Exception{
+        url = url+ "?page=5";
+        Pageable pageable = PageRequest.of(5, 3);
+
+        Mockito.when(memberService.getMembers(pageable)).thenThrow(NotFoundException.class);
+
+        mockMvc
+            .perform(MockMvcRequestBuilders.get(url))
+            .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
     @Test
