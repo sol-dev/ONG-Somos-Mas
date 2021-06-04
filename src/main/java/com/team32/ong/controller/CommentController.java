@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,7 +42,13 @@ public class CommentController {
     	return commentService.createNewComment(newsId, userId, commentBody);
     	
 	}
-
+	
+	@DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteComment(@PathVariable Long id) throws NotFoundException{
+    	commentService.delete(id);
+    	return new ResponseEntity<>(HttpStatus.OK);
+    }
+	
 	@GetMapping("/comments")
 	public ResponseEntity<List<CommentBodyDTO>> getAllOnlyBody(){
 		return new ResponseEntity<>(commentService.getAllOnlyBody(),HttpStatus.OK);

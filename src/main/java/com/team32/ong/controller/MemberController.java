@@ -3,6 +3,8 @@ package com.team32.ong.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,8 +41,8 @@ public class MemberController {
     }
 	
 	@GetMapping
-	public ResponseEntity<?> getAll(){
-        return new ResponseEntity<>(memberService.findAll(),HttpStatus.OK);
+	public ResponseEntity<String> getMembers(@PageableDefault(size = 3) Pageable page) throws NotFoundException {
+        return new ResponseEntity<>(memberService.getMembers(page), HttpStatus.OK);
     }
 
 	@DeleteMapping(value = "/{id}")

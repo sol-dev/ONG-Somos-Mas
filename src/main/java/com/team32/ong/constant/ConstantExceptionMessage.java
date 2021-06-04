@@ -12,8 +12,9 @@ public class ConstantExceptionMessage {
     public static final String MSG_EMAIL_NOT_FOUND = "Este mail no es un usuario registrado. ";
     public static final String MSG_EMPTY_INPUT = "Debe completar el campo ";
     public static final String MSG_NOT_FOUND = "No se encontro la entidad con el id: ";
+    public static final String MSG_NOT_FOUND_COMMENT = "No se encontro el comentario con el id: ";
     public static final String MSG_DUPLICATE_KEY = "Ya existe una entidad con esa clave. ";
-    public static final String MSG_EMAIL_INVALID = "Este mail es inválido. ";
+    public static final String MSG_EMAIL_INVALID = "Este mail es inválido.";
     public static final String MSG_IO_Exception = "El nombre del archivo de destino ya existe o ha ocurrido un error de E / S.";
     public static final String MSG_NOT_FOUND_USERS = "No hay usuarios registrados";
     public static final String MSG_DELETE_OK = "Se elimino correctamente al usurio con id ";
@@ -29,6 +30,7 @@ public class ConstantExceptionMessage {
     public static final String MSG_CATEGORY_NOT_FOUND = "No se encontro la categoria con id ";
     public static final String MSG_NEWS_NOT_FOUND = "No se encontro la noticia con el id ";
     public static final String MSG_DESCRIPTION_EMPTY = "La descripcion no puede estar vacia";
+    public static final String MSG_COMMENT_BAD_REQUEST = "No puede borrar comentarios de otro usuario";
     public static final String MSG_ORGANIZATION_NOT_FOUD = "No se encontro una organizacion con ese id";
     public static final String MSG_PAGE_NOT_FOUND = "No existe esa página";
     public static final String MSG_ERROR_TEMPLATE_INVALID = "No es un template valido";

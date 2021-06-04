@@ -4,11 +4,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,18 +19,19 @@ import com.team32.ong.dto.NewsDto;
 import com.team32.ong.dto.UserDTOResponse;
 import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.exception.custom.EmptyInputException;
+import com.team32.ong.exception.custom.ForbiddenException;
 import com.team32.ong.model.Comment;
+import com.team32.ong.model.User;
 import com.team32.ong.repository.CommentRepository;
+import com.team32.ong.repository.UserRepository;
 import com.team32.ong.repository.NewsRepository;
 import com.team32.ong.service.CommentService;
 import com.team32.ong.service.NewsService;
 import com.team32.ong.service.UserService;
 
 import javassist.NotFoundException;
-import com.team32.ong.model.User;
-import com.team32.ong.repository.UserRepository;
+
 import com.team32.ong.security.JWTUtil;
-import com.team32.ong.constant.ConstantExceptionMessage;
 import org.springframework.security.access.AccessDeniedException;
 
 @Service
@@ -50,7 +50,6 @@ public class CommentServiceImpl implements CommentService {
 	private UserRepository userRepository;
 	@Autowired
 	private JWTUtil jwtUtil;
-
 
 	@Override
 	public CommentDto save(CommentDto commentDto) throws BadRequestException{
@@ -100,6 +99,21 @@ public class CommentServiceImpl implements CommentService {
 		
 		return new ResponseEntity<>(commentDto,HttpStatus.OK);
 	}
+	
+	@Override
+	public void delete(Long id) throws NotFoundException{
+		String userEmail = (String)SecurityContextHolder.getContext().getAuthentication().getName();
+		User user = userRepository.findByEmail(userEmail);
+		Comment comment = commentRepository.findById(id).orElseThrow(() -> new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND_COMMENT + id));
+		String emailComment = comment.getUser().getEmail();
+		if(user.getRole().getName().equalsIgnoreCase("ROLE_ADMIN")) {
+			commentRepository.deleteById(id);
+		}else if (emailComment.equals(userEmail)) {
+				commentRepository.deleteById(id);
+		}else {
+			throw new ForbiddenException(ConstantExceptionMessage.MSG_COMMENT_BAD_REQUEST);
+		}
+	}	
 
 	@Override
 	public AddCommentBody update(Long id, AddCommentBody commentBody, String token) throws Exception {
@@ -122,13 +136,11 @@ public class CommentServiceImpl implements CommentService {
 		return commentBody;
 	}
 
-
 	public CommentDto modelToDto(Comment comment) {
 		ModelMapper mapper = new ModelMapper();
         CommentDto commentDto = mapper.map(comment, CommentDto.class);
 		return commentDto;
 	}
-
 
 	public Comment dtoToModel(CommentDto commentDto) {
 		ModelMapper mapper = new ModelMapper();
