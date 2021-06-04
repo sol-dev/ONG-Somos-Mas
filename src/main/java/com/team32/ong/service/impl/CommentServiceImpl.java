@@ -31,6 +31,9 @@ import com.team32.ong.service.UserService;
 
 import javassist.NotFoundException;
 
+import com.team32.ong.security.JWTUtil;
+import org.springframework.security.access.AccessDeniedException;
+
 @Service
 @Transactional
 public class CommentServiceImpl implements CommentService {
@@ -45,6 +48,8 @@ public class CommentServiceImpl implements CommentService {
 	private UserService userService;
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private JWTUtil jwtUtil;
 
 	@Override
 	public CommentDto save(CommentDto commentDto) throws BadRequestException{
@@ -78,13 +83,13 @@ public class CommentServiceImpl implements CommentService {
 
 		UserDTOResponse userResponse = userService.findById(userId);
 		if(!userResponse.equals(null)) {
-			commentDto.setUser(userResponse);
+			//commentDto.setUser(userResponse);
 		}
 	
 		if(commentBody == null) {
-			throw new EmptyInputException("Tiene que existir un comentario");
+			throw new EmptyInputException(ConstantExceptionMessage.MSG_COMMENT_EMPTY);
 		} else if(commentBody.getBody().isBlank() | commentBody.getBody().isEmpty()) {
-			throw new EmptyInputException("El cuerpo del comentario no puede estar vacío");
+			throw new EmptyInputException(ConstantExceptionMessage.MSG_COMMENT_BODY_EMPTY);
 		} else {
 			commentDto.setBody(commentBody.getBody());	
 		}
@@ -109,13 +114,33 @@ public class CommentServiceImpl implements CommentService {
 			throw new ForbiddenException(ConstantExceptionMessage.MSG_COMMENT_BAD_REQUEST);
 		}
 	}	
-	
+
+	@Override
+	public AddCommentBody update(Long id, AddCommentBody commentBody, String token) throws Exception {
+
+		Comment oldComment = commentRepository.findById(id).orElse(null);
+		if (oldComment == null){
+			throw new NotFoundException(ConstantExceptionMessage.MSG_COMMENT_NOT_FOUND.concat(id.toString()));
+		}
+
+
+		User user = userRepository.findByEmail(jwtUtil.extractUsername(token.substring(7)));
+		if (oldComment.getUser().getId() != user.getId() && ! user.getRole().getName().equals("ROLE_ADMIN")){
+			throw new AccessDeniedException(ConstantExceptionMessage.MSG_ACCES_DENIED);
+		}
+
+		oldComment.setBody(commentBody.getBody());
+
+		commentRepository.save(oldComment);
+
+		return commentBody;
+	}
+
 	public CommentDto modelToDto(Comment comment) {
 		ModelMapper mapper = new ModelMapper();
         CommentDto commentDto = mapper.map(comment, CommentDto.class);
 		return commentDto;
 	}
-
 
 	public Comment dtoToModel(CommentDto commentDto) {
 		ModelMapper mapper = new ModelMapper();
@@ -137,7 +162,7 @@ public class CommentServiceImpl implements CommentService {
 											 				.collect(Collectors.toList());
 		 return listFound;
 	}
-	
+
 	@Override
 	public List<CommentBodyDTO> getCommentsByNewsId(Long id) throws NotFoundException {
 		newsRepository.findById(id)
