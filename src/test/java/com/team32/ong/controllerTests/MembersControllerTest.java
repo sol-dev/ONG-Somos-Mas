@@ -1,6 +1,7 @@
 package com.team32.ong.controllerTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.controller.MemberController;
 import com.team32.ong.dto.MemberDTO;
 import com.team32.ong.exception.custom.BadRequestException;
@@ -79,7 +80,7 @@ public class MembersControllerTest {
     }
 
     @Test
-    public void testNewMember_badRequest_emptyName() throws Exception{
+    public void testNewMember_badRequest() throws Exception{
         dto.setName("");
 
         Mockito.when(memberService.save(dto)).thenThrow(BadRequestException.class);
@@ -115,7 +116,79 @@ public class MembersControllerTest {
             );
     }
 
+    @Test
+    public void testUpdate_notFound() throws Exception{
+        Long id = 100l;
+        dto.setImage("newImage");
+        
+        Mockito.when(memberService.updateById(dto, id)).thenThrow(NotFoundException.class);
+        
+        url= url + "/update/"+id;
+        
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders
+                    .put(url)
+                    .contentType("application/json")
+                    .content(objectMapper.writeValueAsString(dto)) 
+            ).andExpect(
+                MockMvcResultMatchers.status().isNotFound()
+            );
+    }
     
+    @Test
+    public void testUpdate_badRequest() throws Exception{
+        Long id = 100l;
+        dto.setImage("");
+        
+        Mockito.when(memberService.updateById(dto, id)).thenThrow(BadRequestException.class);
+        
+        url= url + "/update/"+id;
+        
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders
+                    .put(url)
+                    .contentType("application/json")
+                    .content(objectMapper.writeValueAsString(dto)) 
+            ).andExpect(
+                MockMvcResultMatchers.status().isBadRequest()
+            );
+    }
+
+
+
+    @Test
+    public void testSoftDelete_ok()throws Exception{
+        Long id = 1l;
+        
+        Mockito.doNothing().when(memberService).softDelete(id);
+        url= url + "/"+id;
+        
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders
+                    .delete(url)
+            ).andExpect(
+                MockMvcResultMatchers.status().isOk()
+            );
+    }
+
+    @Test
+    public void testSoftDelete_notFound()throws Exception{
+        Long id = 100l;
+        
+        Mockito.doThrow(new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND)).when(memberService).softDelete(id);
+        url= url + "/"+id;
+        
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders
+                    .delete(url)
+            ).andExpect(
+                MockMvcResultMatchers.status().isNotFound()
+            );
+    }
 
 
 }
