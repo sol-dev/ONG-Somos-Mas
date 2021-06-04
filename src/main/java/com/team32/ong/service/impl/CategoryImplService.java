@@ -9,7 +9,9 @@ import com.team32.ong.dto.CategoryDTO;
 import com.team32.ong.dto.ListCategoryNameDTO;
 import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.model.Category;
+import com.team32.ong.model.User;
 import com.team32.ong.repository.CategoryRepository;
+import com.team32.ong.security.JWTUtil;
 import com.team32.ong.service.CategoryService;
 import com.team32.ong.dto.ModifyCategoryDTO;
 
@@ -30,6 +32,11 @@ public class CategoryImplService implements CategoryService {
     private CategoryRepository repo;
     @Autowired
     private  ModelMapper modelMapper;
+    @Autowired
+    JWTUtil jwtUtil;
+    @Autowired
+    UserImplService userImplService;
+
 
     private static final Logger logger = LoggerFactory.getLogger(CategoryImplService.class);
 
@@ -49,9 +56,7 @@ public class CategoryImplService implements CategoryService {
     @Override
     public CategoryDTO update(Long id, ModifyCategoryDTO categoryDTO) throws
             NotFoundException, BadRequestException {
-
-
-            //todo: validar usuario
+        
 
             Category oldcategory = repo.findById(id).orElse(null);
             if (oldcategory == null){

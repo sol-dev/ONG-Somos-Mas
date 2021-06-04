@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.client.HttpClientErrorException.Conflict;
-import org.springframework.web.client.HttpClientErrorException.Forbidden;
 import org.springframework.web.client.HttpClientErrorException.Unauthorized;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -28,6 +27,7 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
 import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.exception.custom.EmptyInputException;
+import com.team32.ong.exception.custom.ForbiddenException;
 
 import javassist.NotFoundException;
 
@@ -62,7 +62,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorFound, HttpStatus.BAD_REQUEST);
     }
     
-    @ExceptionHandler(Forbidden.class)
+    @ExceptionHandler(ForbiddenException.class)
     protected ResponseEntity<?> forbiddenException(Exception e, HttpServletRequest req){
     	ErrorResponse errorFound = new ErrorResponse(403, new Date(), e.getMessage(), req.getRequestURI());
         return new ResponseEntity<>(errorFound, HttpStatus.FORBIDDEN);
