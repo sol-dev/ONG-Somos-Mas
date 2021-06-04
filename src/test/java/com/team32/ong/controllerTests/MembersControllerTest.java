@@ -1,5 +1,9 @@
 package com.team32.ong.controllerTests;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.controller.MemberController;
@@ -82,7 +86,6 @@ public class MembersControllerTest {
     @Test
     public void testNewMember_badRequest() throws Exception{
         dto.setName("");
-
         Mockito.when(memberService.save(dto)).thenThrow(BadRequestException.class);
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -94,11 +97,10 @@ public class MembersControllerTest {
 
     @Test
     public void testUpdate_ok() throws Exception{
-        Long id = 1l;
         dto.setImage("newImage");
-        MemberDTO updatedDto = dto;
-        updatedDto.setMemberId(id);
-        
+        MemberDTO updatedDto = new MemberDTO(1l,"María Irola" , "facebookUrl", "instagramUrl", "linkedinUrl", "newImage", "Presidenta");
+        Long id = 1l;
+
         Mockito.when(memberService.updateById(dto, id)).thenReturn(updatedDto);
         
         url= url + "/update/"+id;
@@ -156,7 +158,29 @@ public class MembersControllerTest {
             );
     }
 
-
+    @Test
+    public void testGetAll_ok() throws Exception{
+        dto.setMemberId(1l);
+        MemberDTO dto2 = new MemberDTO(2l,"Marita Gomez" , "facebookUrl", "instagramUrl", "linkedinUrl", "image2", "Fundadora");
+        MemberDTO dto3 = new MemberDTO(3l,"Miriam Rodriguez" , "facebookUrl", "instagramUrl", "linkedinUrl", "image3", "Terapista Ocupacional");
+        
+        List<MemberDTO> list = new ArrayList<MemberDTO>();
+        list.add(dto);
+        list.add(dto2);
+        list.add(dto3);
+    
+        Mockito.when(memberService.findAll()).thenReturn(list);
+        
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders
+                    .get(url) 
+            ).andExpect(
+                MockMvcResultMatchers.status().isOk()
+            ).andExpect(
+                MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(list))
+            );
+    }
 
     @Test
     public void testSoftDelete_ok()throws Exception{
@@ -178,7 +202,7 @@ public class MembersControllerTest {
     public void testSoftDelete_notFound()throws Exception{
         Long id = 100l;
         
-        Mockito.doThrow(new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND)).when(memberService).softDelete(id);
+        Mockito.doThrow(new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND+id)).when(memberService).softDelete(id);
         url= url + "/"+id;
         
         mockMvc
