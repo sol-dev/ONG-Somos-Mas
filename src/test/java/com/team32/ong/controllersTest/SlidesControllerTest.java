@@ -1,7 +1,7 @@
 package com.team32.ong.controllersTest;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.team32.ong.constant.ConstantExceptionMessage;
 import com.team32.ong.controller.SlidesController;
 import com.team32.ong.dto.OrganizationPublicDTO;
 import com.team32.ong.dto.SlideDto;
@@ -18,7 +18,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -71,6 +70,14 @@ public class SlidesControllerTest {
     }
 
     @Test
+    public void getSlidesNotFoundTest() throws Exception {
+        Mockito.when(slideService.findById(20L)).thenThrow(NotFoundException.class);
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/slides/slides/20")
+                .contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
     public void getSlidesTest() throws Exception {
         image.put(1,"image 1");
         image.put(2,"image 2");
@@ -80,6 +87,8 @@ public class SlidesControllerTest {
                 .contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.status().is(200));
     }
+
+
 
     @Test
     public void saveSlidesTest() throws Throwable {
@@ -104,6 +113,14 @@ public class SlidesControllerTest {
         Mockito.doNothing().when(slideService).deleteSlide(1L);
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/slides/1"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void deleteSlideNotFoundTest() throws Throwable {
+        Mockito.doThrow(new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND))
+        .when(slideService).deleteSlide(20L);
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/slides/20"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
 }
