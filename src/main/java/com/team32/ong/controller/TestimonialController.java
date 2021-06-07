@@ -2,6 +2,7 @@ package com.team32.ong.controller;
 
 import com.team32.ong.constant.ConstantSwaggerMessage;
 import com.team32.ong.dto.TestimonialDto;
+import com.team32.ong.exception.custom.BadRequestException;
 import com.team32.ong.service.TestimonialService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,7 +37,7 @@ public class TestimonialController {
     @ApiOperation(value = ConstantSwaggerMessage.MSG_TESTIMONIAL_CONTROLLER_APIOPERATION_PAGINATION_VALUE,
             notes = ConstantSwaggerMessage.MSG_TESTIMONIAL_CONTROLLER_APIOPERATION_PAGINATION_NOTE,
             response = String.class)
-    public ResponseEntity<String> getTestimonials(@PageableDefault(size = 10) Pageable page) throws NotFoundException {
+    public ResponseEntity<String> getTestimonials(@PageableDefault(size = 10) Pageable page) throws BadRequestException {
         return new ResponseEntity<>(testimonialService.getTestimonials(page), HttpStatus.OK);
     }
 
