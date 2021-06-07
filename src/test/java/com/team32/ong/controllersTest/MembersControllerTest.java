@@ -1,4 +1,4 @@
-package com.team32.ong.controllerTests;
+package com.team32.ong.controllersTest;
 
 import java.util.ArrayList;
 import java.util.List;
