@@ -80,9 +80,9 @@ public class MembersControllerTest {
         mockMvc.perform(MockMvcRequestBuilders
             .post(url)
             .contentType("application/json")
-            .content(objectMapper.writeValueAsString(dto))
-        ).andExpect(MockMvcResultMatchers.status().isCreated())
-         .andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(dto)));
+            .content(objectMapper.writeValueAsString(dto)))
+        .andExpect(MockMvcResultMatchers.status().isCreated())
+        .andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(dto)));
     }
 
     @Test
@@ -107,17 +107,12 @@ public class MembersControllerTest {
         
         url= url + "/update/"+id;
         
-        mockMvc
-            .perform(
-                MockMvcRequestBuilders
-                    .put(url)
-                    .contentType("application/json")
-                    .content(objectMapper.writeValueAsString(dto)) 
-            ).andExpect(
-                MockMvcResultMatchers.status().isOk()
-            ).andExpect(
-                MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(updatedDto))
-            );
+        mockMvc.perform(MockMvcRequestBuilders
+            .put(url)
+            .contentType("application/json")
+            .content(objectMapper.writeValueAsString(dto)) )
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(updatedDto)));
     }
 
     @Test
@@ -129,15 +124,11 @@ public class MembersControllerTest {
         
         url= url + "/update/"+id;
         
-        mockMvc
-            .perform(
-                MockMvcRequestBuilders
-                    .put(url)
-                    .contentType("application/json")
-                    .content(objectMapper.writeValueAsString(dto)) 
-            ).andExpect(
-                MockMvcResultMatchers.status().isNotFound()
-            );
+        mockMvc.perform(MockMvcRequestBuilders
+            .put(url)
+            .contentType("application/json")
+            .content(objectMapper.writeValueAsString(dto))  )
+        .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
     
     @Test
@@ -149,23 +140,16 @@ public class MembersControllerTest {
         
         url= url + "/update/"+id;
         
-        mockMvc
-            .perform(
-                MockMvcRequestBuilders
-                    .put(url)
-                    .contentType("application/json")
-                    .content(objectMapper.writeValueAsString(dto)) 
-            ).andExpect(
-                MockMvcResultMatchers.status().isBadRequest()
-            );
+        mockMvc.perform(MockMvcRequestBuilders
+            .put(url)
+            .contentType("application/json")
+            .content(objectMapper.writeValueAsString(dto)))
+        .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @Test
     public void testGetMembers_ok() throws Exception{
-        mockMvc
-            .perform(MockMvcRequestBuilders.get(url))
-            .andExpect(MockMvcResultMatchers.status().isOk()
-        );
+        mockMvc.perform(MockMvcRequestBuilders.get(url)).andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
@@ -175,9 +159,7 @@ public class MembersControllerTest {
 
         Mockito.when(memberService.getMembers(pageable)).thenThrow(NotFoundException.class);
 
-        mockMvc
-            .perform(MockMvcRequestBuilders.get(url))
-            .andExpect(MockMvcResultMatchers.status().isNotFound());
+        mockMvc.perform(MockMvcRequestBuilders.get(url)).andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
     @Test
@@ -187,13 +169,7 @@ public class MembersControllerTest {
         Mockito.doNothing().when(memberService).softDelete(id);
         url= url + "/"+id;
         
-        mockMvc
-            .perform(
-                MockMvcRequestBuilders
-                    .delete(url)
-            ).andExpect(
-                MockMvcResultMatchers.status().isOk()
-            );
+        mockMvc.perform(MockMvcRequestBuilders.delete(url)).andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
@@ -203,13 +179,7 @@ public class MembersControllerTest {
         Mockito.doThrow(new NotFoundException(ConstantExceptionMessage.MSG_NOT_FOUND+id)).when(memberService).softDelete(id);
         url= url + "/"+id;
         
-        mockMvc
-            .perform(
-                MockMvcRequestBuilders
-                    .delete(url)
-            ).andExpect(
-                MockMvcResultMatchers.status().isNotFound()
-            );
+        mockMvc.perform(MockMvcRequestBuilders.delete(url)).andExpect( MockMvcResultMatchers.status().isNotFound());
     }
 
 
